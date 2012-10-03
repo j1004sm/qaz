@@ -485,38 +485,34 @@ public class BestPaintBoard extends View {
 		   // write data
 		   DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 		   
-		   /* utf-8로 변환하는 작업.. 아직 잘 안됨
+		   // utf-8로 변환해서 보냄
 		   StringBuffer pd = new StringBuffer();
+		   
 		   pd.append(twoHyphens + boundary + lineEnd);
-		   pd.append("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + fileName+"\"" + lineEnd);
 		   pd.append(lineEnd);
-		   */
+		   
+		   pd.append(twoHyphens + boundary + lineEnd);
+		   pd.append("Content-Disposition: form-data; name=\"name\"" + lineEnd + lineEnd + realName);
+		   pd.append(lineEnd);
+		   
+		   pd.append(twoHyphens + boundary + lineEnd);
+		   pd.append("Content-Disposition: form-data; name=\"latitude\"" + lineEnd + lineEnd + Double.toString(lat));
+		   pd.append(lineEnd);
+		   
+		   pd.append(twoHyphens + boundary + lineEnd);
+		   pd.append("Content-Disposition: form-data; name=\"longitude\"" + lineEnd + lineEnd + Double.toString(lon));
+		   pd.append(lineEnd);
+		   
+		   pd.append(twoHyphens + boundary + lineEnd);
+		   pd.append("Content-Disposition: form-data; name=\"altitude\"" + lineEnd + lineEnd + Double.toString(alt));
+		   pd.append(lineEnd);
+		   
+		   pd.append(twoHyphens + boundary + lineEnd);
+		   pd.append("Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"" + lineEnd);
+		   pd.append(lineEnd);
 		   
 		   
-		   dos.writeBytes(twoHyphens + boundary + lineEnd);
-		   dos.writeBytes("Content-Disposition: form-data; name=\"name\"" + lineEnd + lineEnd + realName);
-		   dos.writeBytes(lineEnd);
-		   
-		   
-		   dos.writeBytes(twoHyphens + boundary + lineEnd);
-		   dos.writeBytes("Content-Disposition: form-data; name=\"latitude\"" + lineEnd + lineEnd + Double.toString(lat));
-		   dos.writeBytes(lineEnd);
-		   
-		   dos.writeBytes(twoHyphens + boundary + lineEnd);
-		   dos.writeBytes("Content-Disposition: form-data; name=\"longitude\"" + lineEnd + lineEnd + Double.toString(lon));
-		   dos.writeBytes(lineEnd);
-		   
-		   dos.writeBytes(twoHyphens + boundary + lineEnd);
-		   dos.writeBytes("Content-Disposition: form-data; name=\"altitude\"" + lineEnd + lineEnd + Double.toString(alt));
-		   dos.writeBytes(lineEnd);
-		   
-		   
-		   dos.writeBytes(twoHyphens + boundary + lineEnd);
-		   dos.writeBytes("Content-Disposition: form-data; name=\"fileName\";filename=\"" + fileName + "\"" + lineEnd);
-		   dos.writeBytes(lineEnd);
-		   
-		   
-		   //dos.writeUTF(pd.toString());
+		   dos.writeUTF(pd.toString());
 		   
 		   int bytesAvailable = mFileInputStream.available();
 		   int maxBufferSize = 1024;
