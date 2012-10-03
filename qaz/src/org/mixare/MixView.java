@@ -29,6 +29,7 @@ import java.util.List;
 import com.qaz.client.R.*;
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
+import org.mixare.data.DataSource.DATASOURCE;
 import org.mixare.gui.PaintScreen;
 import org.mixare.render.Matrix;
 
@@ -129,9 +130,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 
 	// 로그에 쓰일 태그
 	public static final String TAG = "Mixare";
-	
-//	public short DrawModeFlag = 0;	//그리기모드인지 아닌지 플래그 [한만종]
-
 
 	// 리스트 뷰에 쓰일, JSON으로부터 읽어온 타이틀과 URL을 저장할 벡터들 
 //	private Vector<String> listDataVector;
@@ -920,24 +918,14 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			if (me.getAction() == MotionEvent.ACTION_UP) {
 				dataView.clickEvent(xPress, yPress);
 				
-					//DrawOnTop mDraw = new DrawOnTop(this); 
+					//DOR 기능(그림 그리기 기능)을 로드. 보드를 띄움. (데이터소스에서 Qaz에 체크되었을 경우에만.)
+					if (mixContext.isDataSourceSelected(DATASOURCE.Qaz) == true) {
 					
 					Intent myIntent = new Intent(getApplicationContext(),BestPaintBoardActivity.class);
 	        		startActivity(myIntent);
 	        		
 	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다.", 1000).show();
-					
-					//if (DrawModeFlag == 0) {
-						
-					//그리기모드가 0값이면 1값으로 변경하고 그리기 모드로 전환
-					//중첩해서 DrawOnTop 클래스를 씌운다. [한만종]
-					//DrawModeFlag = 1;
-					//Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다.", 1000).show();
-					//addContentView(mDraw, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)); 
-					
-						
-					
-					//}
+					}
 				
 			}
 
