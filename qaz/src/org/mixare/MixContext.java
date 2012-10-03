@@ -115,7 +115,7 @@ public class MixContext extends ContextWrapper {
 		// 아무것도 선택된 것이 없을 경우 위키피디아를 선택한다
 		// (위키피디아는 기본 데이터 소스로 한다)
 		if(!atLeastOneDatasourceSelected)
-			setDataSource(DATASOURCE.Wikipedia, true);
+			setDataSource(DATASOURCE.Qaz, true);
 
 		
 		// 회전행렬을 일단 단위행렬로 세팅
