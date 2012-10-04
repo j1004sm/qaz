@@ -35,6 +35,8 @@ import android.util.Log;
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
 abstract public class Marker implements Comparable<Marker> {
+	
+	//미남훈민
  
 	private String ID;	// ID값
 	protected String title;	// 타이틀
