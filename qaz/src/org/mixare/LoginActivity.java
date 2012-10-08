@@ -14,6 +14,8 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);// [영기]
 		Button startmain = (Button) findViewById(R.id.logbtn);
+		Button startjoinactivity = (Button) findViewById(R.id.joinmember);
+		
 		startmain.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -24,5 +26,16 @@ public class LoginActivity extends Activity {
 
 			}
 		});
+		
+		startjoinactivity.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(LoginActivity.this, JoinActivity.class);
+				startActivity(i);
+
+			}
+		});
+		
 	}
 }

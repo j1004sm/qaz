@@ -235,8 +235,7 @@ public class BestPaintBoardActivity extends Activity {
         	public void onClick(View v) {
         		finish();
         	}
-        });
-        
+        });   
     }
     
         
