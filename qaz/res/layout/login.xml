@@ -15,9 +15,9 @@
             android:layout_height="wrap_content"
             android:text="아이디 :"
             android:textSize="20sp" />
-
+
         <EditText
-            android:id="@+id/idet"
+            android:id="@+id/login_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,9 +35,9 @@
             android:layout_height="wrap_content"
             android:text="비밀번호 :"
             android:textSize="20sp" />
-
+
         <EditText
-            android:id="@+id/pwet"
+            android:id="@+id/login_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

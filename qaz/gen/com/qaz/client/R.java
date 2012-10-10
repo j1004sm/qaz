@@ -46,7 +46,6 @@ public final class R {
         public static final int description_text=0x7f07001a;
         public static final int eraserBtn=0x7f07001f;
         public static final int findmember=0x7f070017;
-        public static final int idet=0x7f070011;
         public static final int idtext=0x7f070010;
         public static final int join_button_cancle=0x7f07000f;
         public static final int join_button_check=0x7f07000e;
@@ -59,9 +58,10 @@ public final class R {
         public static final int list_checkbox=0x7f07001b;
         public static final int list_text=0x7f070019;
         public static final int logbtn=0x7f070014;
+        public static final int login_id=0x7f070011;
+        public static final int login_pw=0x7f070013;
         public static final int outbtn=0x7f070015;
         public static final int penBtn=0x7f07001e;
-        public static final int pwet=0x7f070013;
         public static final int pwtext=0x7f070012;
         public static final int row_layout=0x7f070018;
         public static final int saveBtn=0x7f070023;
