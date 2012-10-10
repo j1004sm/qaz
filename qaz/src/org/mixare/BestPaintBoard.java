@@ -24,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class BestPaintBoard extends View {
+	
+	//영기형 테스트
 
 	/**
 	 * Undo data
