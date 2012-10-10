@@ -70,82 +70,91 @@ public class JoinActivity extends Activity {
 				String join_id = join_id_EditText.getText().toString();
 				String join_pw_code;
 
-				if (!(join_pw.equals(join_pwc)))
-					Toast.makeText(getApplicationContext(), "비밀번호가 서로 다릅니다",
-							Toast.LENGTH_SHORT).show();
-				/*
-				 * else if (!(checkEmail(join_email)))
-				 * Toast.makeText(getApplicationContext(), "E-Mail형식에 맞지않습니다",
-				 * Toast.LENGTH_SHORT).show();
-				 */
-				
-				else {
-					join_pw_code = logAct.getMD5Hash(join_pw);
-					try {
+				if (join_pw.length() == 0 && join_id.length() == 0
+						&& join_name.length() == 0 && join_email.length() == 0) {
+					
+					Toast.makeText(getApplicationContext(), "빈칸이 없는지 확인해주십시요",
+							1000).show();
 
-						// URL설정, 접속
-						URL url = new URL(
-								"http://www.manjong.org:8255/qaz/join.jsp");
-
-						HttpURLConnection http = (HttpURLConnection) url
-								.openConnection();
-
-						// 전송모드 설정(일반적인 POST방식)
-						http.setDefaultUseCaches(false);
-						http.setDoInput(true);
-						http.setDoOutput(true);
-						http.setRequestMethod("POST");
-
-						// content-type 설정
-						http.setRequestProperty("Content-type",
-								"application/x-www-form-urlencoded");
-
-						// 전송값 설정
-						StringBuffer buffer = new StringBuffer();
-
-						buffer.append("id").append("=").append(join_id)
-								.append("&");
-						buffer.append("encpw").append("=").append(join_pw_code)
-								.append("&");
-						buffer.append("name").append("=").append(join_name)
-								.append("&");
-						buffer.append("email").append("=").append(join_email);
-
-						// 서버로 전송
-						OutputStreamWriter outStream = new OutputStreamWriter(
-								http.getOutputStream(), "UTF-8");
-
-						PrintWriter writer = new PrintWriter(outStream);
-						writer.write(buffer.toString());
-
-						writer.flush();
-
-						// 전송 결과값 받기
-						InputStreamReader inputStream = new InputStreamReader(
-								http.getInputStream(), "UTF-8");
-						BufferedReader bufferReader = new BufferedReader(
-								inputStream);
-						StringBuilder builder = new StringBuilder();
-						String str;
-						while ((str = bufferReader.readLine()) != null) {
-							builder.append(str + "\n");
-						}
-
-						String result = builder.toString();
-						Log.d("HttpPost", "전송결과 : " + result);
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
+				} else {
+					if (!(join_pw.equals(join_pwc)))
+						Toast.makeText(getApplicationContext(),
+								"비밀번호가 서로 다릅니다", Toast.LENGTH_SHORT).show();
 					/*
-					 * logAct.HttpLoginJoinReq(
-					 * "http://www.manjong.org:8255/qaz/join.jsp", "join",
-					 * join_id, join_pw_code, join_name, join_email);
+					 * else if (!(checkEmail(join_email)))
+					 * Toast.makeText(getApplicationContext(),
+					 * "E-Mail형식에 맞지않습니다", Toast.LENGTH_SHORT).show();
 					 */
 
-					finish();
+					else {
+						join_pw_code = logAct.getMD5Hash(join_pw);
+						try {
+
+							// URL설정, 접속
+							URL url = new URL(
+									"http://www.manjong.org:8255/qaz/join.jsp");
+
+							HttpURLConnection http = (HttpURLConnection) url
+									.openConnection();
+
+							// 전송모드 설정(일반적인 POST방식)
+							http.setDefaultUseCaches(false);
+							http.setDoInput(true);
+							http.setDoOutput(true);
+							http.setRequestMethod("POST");
+
+							// content-type 설정
+							http.setRequestProperty("Content-type",
+									"application/x-www-form-urlencoded");
+
+							// 전송값 설정
+							StringBuffer buffer = new StringBuffer();
+
+							buffer.append("id").append("=").append(join_id)
+									.append("&");
+							buffer.append("encpw").append("=")
+									.append(join_pw_code).append("&");
+							buffer.append("name").append("=").append(join_name)
+									.append("&");
+							buffer.append("email").append("=")
+									.append(join_email);
+
+							// 서버로 전송
+							OutputStreamWriter outStream = new OutputStreamWriter(
+									http.getOutputStream(), "UTF-8");
+
+							PrintWriter writer = new PrintWriter(outStream);
+							writer.write(buffer.toString());
+
+							writer.flush();
+
+							// 전송 결과값 받기
+							InputStreamReader inputStream = new InputStreamReader(
+									http.getInputStream(), "UTF-8");
+							BufferedReader bufferReader = new BufferedReader(
+									inputStream);
+							StringBuilder builder = new StringBuilder();
+							String str;
+							while ((str = bufferReader.readLine()) != null) {
+								builder.append(str + "\n");
+							}
+
+							String result = builder.toString();
+							Log.d("HttpPost", "전송결과 : " + result);
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						/*
+						 * logAct.HttpLoginJoinReq(
+						 * "http://www.manjong.org:8255/qaz/join.jsp", "join",
+						 * join_id, join_pw_code, join_name, join_email);
+						 */
+
+						finish();
+					}
 				}
 			}
 		});
