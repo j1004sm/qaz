@@ -33,7 +33,7 @@
 	<string name="menu_item_4">줌레벨</string>
 	<string name="menu_item_5">주변 검색</string>
 	<string name="menu_item_6">GPS 정보</string>
-	<string name="menu_item_7">저작권</string>
+	<string name="menu_item_7">개발자 정보</string>
 	
 	
 	<string name="connection_error_dialog">죄송합니다. 연결 문제가 발생했습니다. \n인터넷에 연결되어 있는지 확인해주십시요.</string>
@@ -78,5 +78,7 @@
 	<string name="search_active_2">. Touch to terminate search</string>
 	<string name="download_error">다운로드 중에 오류가 발생했습니다</string>
 	<string name="download_received">로부터 가져옵니다</string>
+	<string name="developer">강남대학교 컴퓨터미디어정보공학부 \n MAWs 10학번 안훈민, CEL 11학번 이영기, MAWs 12학번 한만종</string>
+	<string name="developer_info_title">개발자 정보</string>
 	
 </resources>

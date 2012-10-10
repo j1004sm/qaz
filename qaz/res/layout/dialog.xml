@@ -22,7 +22,7 @@
 			android:id="@+id/closeBtn"
 			android:drawableLeft="@drawable/cancel_btn"
 			android:drawablePadding="2dip"
-			android:text=" Close "
+			android:text=" 닫기 "
 		    android:layout_width="wrap_content" 
 		    android:layout_height="wrap_content"
 			/>

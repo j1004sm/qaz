@@ -37,15 +37,6 @@ public class JoinActivity extends Activity {
 
 	public static LoginActivity logAct;
 
-	/*
-	 * // -----------------------------------------------------MD5 public static
-	 * String getMD5Hash(String s) { MessageDigest m = null; String hash = null;
-	 * 
-	 * try { m = MessageDigest.getInstance("MD5"); m.update(s.getBytes(), 0,
-	 * s.length()); hash = new BigInteger(1, m.digest()).toString(16); } catch
-	 * (NoSuchAlgorithmException e) { e.printStackTrace(); } return hash; }
-	 * //-------------------------------------------------------
-	 */
 	// -------------------------------------------------------email형식체크함수
 	public boolean checkEmail(String email) {
 
@@ -87,6 +78,7 @@ public class JoinActivity extends Activity {
 				 * Toast.makeText(getApplicationContext(), "E-Mail형식에 맞지않습니다",
 				 * Toast.LENGTH_SHORT).show();
 				 */
+				
 				else {
 					join_pw_code = logAct.getMD5Hash(join_pw);
 					try {
