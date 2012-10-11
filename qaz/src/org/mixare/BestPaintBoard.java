@@ -430,7 +430,7 @@ public class BestPaintBoard extends View {
 	}
 
 	public void SaveBitmapToFileUpload(File strFilePath, String fileName,
-			double lat, double lon, double alt) {
+			double lat, double lon, double alt, String user) {
 
 		// File fileCacheItem = new File(strFilePath);
 		OutputStream out = null;
@@ -444,7 +444,7 @@ public class BestPaintBoard extends View {
 			Log.i("Qaz-PaintBoard", "save() called.");
 
 			this.HttpFileUpload("http://www.manjong.org:8255/qaz/upload.jsp",
-					strFilePath, fileName, lat, lon, alt);
+					strFilePath, fileName, lat, lon, alt, user);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -459,7 +459,7 @@ public class BestPaintBoard extends View {
 	}
 
 	public void HttpFileUpload(String urlString, File fileName,
-			String realName, double lat, double lon, double alt) {
+			String realName, double lat, double lon, double alt, String user) {
 
 		String lineEnd = "\r\n";
 		String twoHyphens = "--";
@@ -509,6 +509,11 @@ public class BestPaintBoard extends View {
 			pd.append(twoHyphens + boundary + lineEnd);
 			pd.append("Content-Disposition: form-data; name=\"altitude\""
 					+ lineEnd + lineEnd + Double.toString(alt));
+			pd.append(lineEnd);
+			
+			pd.append(twoHyphens + boundary + lineEnd);
+			pd.append("Content-Disposition: form-data; name=\"user\""
+					+ lineEnd + lineEnd + user);
 			pd.append(lineEnd);
 
 			pd.append(twoHyphens + boundary + lineEnd);

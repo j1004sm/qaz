@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.mixare.MixView;
+import org.mixare.LoginActivity;
 
 public class BestPaintBoardActivity extends Activity {
 	
@@ -33,6 +34,9 @@ public class BestPaintBoardActivity extends Activity {
 	LinearLayout addedLayout;
 	Button colorLegendBtn;
 	TextView sizeLegendTxt;
+	
+	private static LoginActivity logAct;
+	String usrId = logAct.usrId;
 	
 	int mColor = 0xff000000;
 	int mSize = 2;
@@ -215,7 +219,7 @@ public class BestPaintBoardActivity extends Activity {
         				if (value.length() == 0){
         					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요.", 1000).show();
         				} else {
-        					board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt);
+        					board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
         					Toast.makeText(getApplicationContext(), value.toString() + "이 저장되었습니다.", 1000).show();
         					finish();
         				}
