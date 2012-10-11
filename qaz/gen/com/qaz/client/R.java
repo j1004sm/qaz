@@ -45,7 +45,7 @@ public final class R {
         public static final int colorGrid=0x7f070000;
         public static final int description_text=0x7f07001c;
         public static final int eraserBtn=0x7f070021;
-        public static final int findmember=0x7f070019;
+        public static final int find_myid=0x7f070019;
         public static final int idtext=0x7f070013;
         public static final int join_button_cancel=0x7f070012;
         public static final int join_button_check=0x7f070010;

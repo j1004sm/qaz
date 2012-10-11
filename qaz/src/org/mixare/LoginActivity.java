@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +26,10 @@ import android.widget.Toast;
 import com.qaz.client.R;
 
 public class LoginActivity extends Activity {
-	
+
 	private EditText login_id;
 	private EditText login_pw;
-	
+
 	public static String usrId;
 
 	// -----------------------------------------------------MD5
@@ -51,13 +52,14 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);// [영기]
-		Button startmain = (Button) findViewById(R.id.logbtn);
-		Button startjoinactivity = (Button) findViewById(R.id.joinmember);
+		
+		Button btn_login = (Button) findViewById(R.id.logbtn);
+		Button btn_join = (Button) findViewById(R.id.joinmember);
+		Button btn_findid = (Button) findViewById(R.id.find_myid);
 		login_id = (EditText) findViewById(R.id.login_id);
 		login_pw = (EditText) findViewById(R.id.login_pw);
 
-		startmain.setOnClickListener(new View.OnClickListener() {
-
+		btn_login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
 				String server_result = null;
@@ -67,8 +69,7 @@ public class LoginActivity extends Activity {
 
 				if (usrId.length() == 0 || usrPw.length() == 0) {
 					Toast.makeText(getApplicationContext(),
-							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT)
-							.show();
+							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
 
 					// TODO qaz_pw_code 는 암호화된 비번이다 이것을 서버에 있는것과 맞추어야한다
@@ -141,10 +142,19 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		startjoinactivity.setOnClickListener(new View.OnClickListener() {
+		btn_join.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(LoginActivity.this, JoinActivity.class);
+				startActivity(i);
+
+			}
+		});
+		
+		btn_findid.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.manjong.org:8255/qaz/find_id.jsp"));
 				startActivity(i);
 
 			}
