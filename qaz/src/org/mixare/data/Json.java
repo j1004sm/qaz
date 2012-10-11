@@ -18,7 +18,6 @@
  */
 package org.mixare.data;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,7 @@ public class Json extends DataHandler {
 	public static final int MAX_JSON_OBJECTS=1000;	// JSON 객체의 최대 수
 	
 	// 각종 데이터를 로드
-	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) throws UnsupportedEncodingException {
+	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) {
 		// 데이터를 읽는데 사용할 JSON 객체와 데이터행렬, 마커들
 		JSONObject jo = null;
 		JSONArray dataArray = null;
@@ -169,7 +168,7 @@ public class Json extends DataHandler {
 	}
 
 	// 자체 데이터의 처리
-	public Marker processMixareJSONObject(JSONObject jo) throws JSONException, UnsupportedEncodingException {
+	public Marker processMixareJSONObject(JSONObject jo) throws JSONException {
 
 		Marker ma = null;	// 임시객체
 		
