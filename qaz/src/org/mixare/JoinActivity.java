@@ -5,30 +5,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import org.mixare.LoginActivity;
 
 import com.qaz.client.R;
 
 public class JoinActivity extends Activity {
-	private Button check;
-	private Button cancle;
+	private Button btn_check;
+	private Button btn_cancel;
+	private Button btn_terms;
 	private EditText join_id_EditText;
 	private EditText join_pw_EditText;
 	private EditText join_pwc_EditText;
@@ -51,8 +49,9 @@ public class JoinActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
-		check = (Button) findViewById(R.id.join_button_check);
-		cancle = (Button) findViewById(R.id.join_button_cancle);
+		btn_check = (Button) findViewById(R.id.join_button_check);
+		btn_cancel = (Button) findViewById(R.id.join_button_cancel);
+		btn_terms = (Button) findViewById(R.id.join_button_terms);
 		join_id_EditText = (EditText) findViewById(R.id.join_id);
 		join_pw_EditText = (EditText) findViewById(R.id.join_pw);
 		join_pwc_EditText = (EditText) findViewById(R.id.join_pwc);
@@ -60,7 +59,7 @@ public class JoinActivity extends Activity {
 		join_mail_EditText = (EditText) findViewById(R.id.join_mail);
 
 		// -----------------------------------------------------------확인시
-		check.setOnClickListener(new View.OnClickListener() {
+		btn_check.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 				String join_pw = join_pw_EditText.getText().toString();
@@ -158,13 +157,30 @@ public class JoinActivity extends Activity {
 				}
 			}
 		});
+		
 		// -----------------------------------------------------------취소시
-		cancle.setOnClickListener(new View.OnClickListener() {
-
+		btn_cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				finish();
-
 			}
 		});
+		
+		btn_terms.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				AlertDialog.Builder builder1 = new AlertDialog.Builder(JoinActivity.this);
+				builder1.setMessage(getString(R.string.terms_content));
+				builder1.setNegativeButton(getString(R.string.close_button), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+				
+				// 얼럿 다이얼로그 세팅 및 표시
+				AlertDialog alert1 = builder1.create();
+				alert1.setTitle(getString(R.string.terms_title));
+				alert1.show();
+			}
+		});
+		
 	}
 }

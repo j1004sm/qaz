@@ -229,7 +229,7 @@
             android:text="약관 동의 및 가입" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/join_button_terms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -237,7 +237,7 @@
             android:text="이용약관" />
 
         <Button
-            android:id="@+id/join_button_cancle"
+            android:id="@+id/join_button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

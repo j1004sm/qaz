@@ -38,7 +38,6 @@ public final class R {
         public static final int TextView05=0x7f070006;
         public static final int boardLayout=0x7f070023;
         public static final int btnLayout=0x7f070024;
-        public static final int button1=0x7f070011;
         public static final int buttonLayout=0x7f070001;
         public static final int cancelBtn=0x7f070026;
         public static final int closeBtn=0x7f070002;
@@ -48,8 +47,9 @@ public final class R {
         public static final int eraserBtn=0x7f070021;
         public static final int findmember=0x7f070019;
         public static final int idtext=0x7f070013;
-        public static final int join_button_cancle=0x7f070012;
+        public static final int join_button_cancel=0x7f070012;
         public static final int join_button_check=0x7f070010;
+        public static final int join_button_terms=0x7f070011;
         public static final int join_id=0x7f070007;
         public static final int join_mail=0x7f07000f;
         public static final int join_name=0x7f07000d;
@@ -87,7 +87,7 @@ public final class R {
         public static final int SW=0x7f050007;
         public static final int W=0x7f050008;
         public static final int accuracy=0x7f050024;
-        public static final int acurracy=0x7f050037;
+        public static final int acurracy=0x7f050039;
         public static final int altitude=0x7f050022;
         public static final int app_name=0x7f050000;
         public static final int close_button=0x7f05001d;
@@ -134,6 +134,8 @@ public final class R {
         public static final int search_hint=0x7f050001;
         public static final int source_openstreetmap=0x7f050030;
         public static final int speed=0x7f050023;
+        public static final int terms_content=0x7f050038;
+        public static final int terms_title=0x7f050037;
     }
     public static final class style {
         /**  Base application theme is the default theme. 
