@@ -15,6 +15,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +46,45 @@ public class JoinActivity extends Activity {
 		boolean isNormal = m.matches();
 		return isNormal;
 	}
+	
+	// 영문만 허용
+	protected InputFilter filterAlpha = new InputFilter() {
+	        public CharSequence filter(CharSequence source, int start, int end,
+	                                Spanned dest, int dstart, int dend) {
+
+	                Pattern ps = Pattern.compile("^[a-zA-Z]+$");
+	                if (!ps.matcher(source).matches()) {
+	                        return "";
+	                } 
+	                return null;
+	        } 
+	}; 
+	
+	// 영문만 허용 (숫자 포함)
+	protected InputFilter filterAlphaNum = new InputFilter() {
+	        public CharSequence filter(CharSequence source, int start, int end,
+	                                Spanned dest, int dstart, int dend) {
+
+	                Pattern ps = Pattern.compile("^[a-zA-Z0-9]+$");
+	                if (!ps.matcher(source).matches()) {
+	                        return "";
+	                } 
+	                return null;
+	        } 
+	}; 
+	
+	// 한글만 허용
+	public InputFilter filterKor = new InputFilter() {
+	        public CharSequence filter(CharSequence source, int start, int end,
+	                                Spanned dest, int dstart, int dend) {
+
+	                Pattern ps = Pattern.compile("^[ㄱ-가-힣]+$");
+	                if (!ps.matcher(source).matches()) {
+	                        return "";
+	                } 
+	                return null;
+	        } 
+	}; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,9 +94,12 @@ public class JoinActivity extends Activity {
 		btn_cancel = (Button) findViewById(R.id.join_button_cancel);
 		btn_terms = (Button) findViewById(R.id.join_button_terms);
 		join_id_EditText = (EditText) findViewById(R.id.join_id);
+		join_id_EditText.setFilters(new InputFilter[] {filterAlphaNum});
 		join_pw_EditText = (EditText) findViewById(R.id.join_pw);
+		join_pw_EditText.setFilters(new InputFilter[] {filterAlphaNum});
 		join_pwc_EditText = (EditText) findViewById(R.id.join_pwc);
 		join_name_EditText = (EditText) findViewById(R.id.join_name);
+		join_name_EditText.setFilters(new InputFilter[] {filterKor});
 		join_mail_EditText = (EditText) findViewById(R.id.join_mail);
 
 		// -----------------------------------------------------------확인시
