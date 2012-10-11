@@ -129,7 +129,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 	private TextView searchNotificationTxt;
 
 	// 로그에 쓰일 태그
-	public static final String TAG = "Mixare";
+	public static final String TAG = "Qaz-Mixare";
 
 	// 리스트 뷰에 쓰일, JSON으로부터 읽어온 타이틀과 URL을 저장할 벡터들 
 //	private Vector<String> listDataVector;
@@ -560,7 +560,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 						.sin(angleY), 0f, (float) Math.cos(angleY));
 				mixContext.declination = gmf.getDeclination();
 			} catch (Exception ex) {
-				Log.d("Qaz", "GPS Initialize Error", ex);	// 초기화 에러 로그
+				Log.d("Qaz-Mixare", "GPS Initialize Error", ex);	// 초기화 에러 로그
 			}
 			// 다운로드 스레드의 활성화
 			downloadThread = new Thread(mixContext.downloadManager);
@@ -1151,7 +1151,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 				// 프리뷰 형태의 팩터
 				float ff = (float)w/h;
-				Log.d("Qaz", "Screen res: w:"+ w + " h:" + h + " aspect ratio:" + ff);
+				Log.d("Qaz-Mixare", "Screen res: w:"+ w + " h:" + h + " aspect ratio:" + ff);
 
 				//holder for the best form factor and size 
 				// 최적의 형태의 팩터와 사이즈의 홀더를 구한다
@@ -1174,7 +1174,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 					float cff = (float)element.width/element.height;
 					
 					// 각 요소들의 변수값을 로그로 기록
-					Log.d("Qaz", "Candidate camera element: w:"+ element.width + " h:" + element.height + " aspect ratio:" + cff);
+					Log.d("Qaz-Mixare", "Candidate camera element: w:"+ element.width + " h:" + element.height + " aspect ratio:" + cff);
 					
 					// 현재 요소가 여태까지의 최적의 결과를 대체할 수 있는지 체크
 					// 현재 형태의 요소는 최적의 팩터에 가까울 것이고
@@ -1187,13 +1187,13 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				} 
 				// 최종적인 결과 수치를 로그에 기록한다
-				Log.d("Qaz", "Chosen camera element: w:"+ bestw + " h:" + besth + " aspect ratio:" + bff);
+				Log.d("Qaz-Mixare", "Chosen camera element: w:"+ bestw + " h:" + besth + " aspect ratio:" + bff);
 
 				// 몇몇 삼성 제품에서는 최적의 넓이와 높이가 0으로 판명날 것이다.
 				// 이는 그 제품들에서는 최소의 프리뷰 사이즈가 스크린 사이즈보다 크기 때문인데,
 				// 이런 경우에는 디폴트 값(480*800)을 주도록 한다
 				if ((bestw == 0) || (besth == 0)){
-					Log.d("Qaz", "Using default camera parameters!");
+					Log.d("Qaz-Mixare", "Using default camera parameters!");
 					//bestw = 480;
 					//besth = 800;
 				}
