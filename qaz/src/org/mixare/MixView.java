@@ -1027,7 +1027,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		if(sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD && accuracy==SensorManager.SENSOR_STATUS_UNRELIABLE && compassErrorDisplayed == 0) {
 			for(int i = 0; i <2; i++) {
 				// 나침반 데이터가 부정확합니다. 나침반을 수정하십시오 Compass data unreliable. Please recalibrate compass.
-				Toast.makeText(mixContext, "나침반 데이터가 부정확합니다. 나침반을 수정하십시오.", Toast.LENGTH_LONG).show();
+				//Toast.makeText(mixContext, "나침반 데이터가 부정확합니다. 나침반을 수정하십시오.", Toast.LENGTH_LONG).show();
 			}
 			compassErrorDisplayed++;
 		}

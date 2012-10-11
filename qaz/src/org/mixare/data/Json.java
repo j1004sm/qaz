@@ -18,6 +18,7 @@
  */
 package org.mixare.data;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class Json extends DataHandler {
 	public static final int MAX_JSON_OBJECTS=1000;	// JSON 객체의 최대 수
 	
 	// 각종 데이터를 로드
-	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) {
+	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) throws UnsupportedEncodingException {
 		// 데이터를 읽는데 사용할 JSON 객체와 데이터행렬, 마커들
 		JSONObject jo = null;
 		JSONArray dataArray = null;
@@ -168,7 +169,7 @@ public class Json extends DataHandler {
 	}
 
 	// 자체 데이터의 처리
-	public Marker processMixareJSONObject(JSONObject jo) throws JSONException {
+	public Marker processMixareJSONObject(JSONObject jo) throws JSONException, UnsupportedEncodingException {
 
 		Marker ma = null;	// 임시객체
 		
@@ -176,8 +177,9 @@ public class Json extends DataHandler {
 		if (jo.has("title") && jo.has("lat") && jo.has("lng") && jo.has("elevation") ) {
 	
 			Log.v(MixView.TAG, "processing Mixare JSON object");	// 로그 출력
-			String link=unescapeHTML(jo.getString("webpage"), 0);
 			
+			//String link = new String(jo.getString("webpage").getBytes("UTF-8"),"EUC-KR");
+			//String title = new String(unescapeHTML(jo.getString("webpage"), 0).getBytes("UTF-8"),"EUC-KR");
 			//DataSource.qazPic = link;
 	
 			// 웹페이지의 형식을 검사하고 스트링 값을 읽어온다
@@ -189,7 +191,7 @@ public class Json extends DataHandler {
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
-					link, 
+					unescapeHTML(jo.getString("webpage"), 0), 
 					DataSource.DATASOURCE.Qaz);
 		}
 		return ma;	// 마커 리턴

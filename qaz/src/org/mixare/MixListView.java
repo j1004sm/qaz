@@ -295,7 +295,7 @@ public class MixListView extends ListActivity {
 		String selectedURL = position < selectedItemURL.size() ? selectedItemURL.get(position) : null;
 		/*이 항목에 가능한 웹사이트가 없을 경우*/
 		if (selectedURL == null || selectedURL.length() <= 0)
-			Toast.makeText( this, getString(DataView.NO_WEBINFO_AVAILABLE), Toast.LENGTH_LONG ).show();			
+			Toast.makeText(this, getString(DataView.NO_WEBINFO_AVAILABLE), Toast.LENGTH_LONG).show();			
 		else if("search".equals(selectedURL)){
 			dataView.setFrozen(false);	// 데이터 뷰를 얼리고 핸들러로부터 오리지널 마커 리스트를 읽어옴
 			dataView.getDataHandler().setMarkerList(originalMarkerList);
@@ -309,6 +309,7 @@ public class MixListView extends ListActivity {
 				if (selectedURL.startsWith("webpage")) {
 					String newUrl = MixUtils.parseAction(selectedURL);
 					dataView.getContext().loadWebPage(newUrl, this);
+					//Toast.makeText(getApplicationContext(),selectedURL, 1000).show();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

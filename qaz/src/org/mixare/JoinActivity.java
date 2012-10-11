@@ -62,28 +62,27 @@ public class JoinActivity extends Activity {
 		btn_check.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
+				String server_result = null, join_pw_code;
 				String join_pw = join_pw_EditText.getText().toString();
 				String join_pwc = join_pwc_EditText.getText().toString();
 				String join_email = join_mail_EditText.getText().toString();
 				String join_name = join_name_EditText.getText().toString();
 				String join_id = join_id_EditText.getText().toString();
-				String join_pw_code;
 
-				if (join_pw.length() == 0 && join_id.length() == 0
-						&& join_name.length() == 0 && join_email.length() == 0) {
-					
-					Toast.makeText(getApplicationContext(), "빈칸이 없는지 확인해주십시요",
+				if (join_pw.length() == 0 || join_id.length() == 0
+						|| join_name.length() == 0 || join_email.length() == 0) {
+
+					Toast.makeText(getApplicationContext(), "빈칸이 없는지 확인해주세요",
 							1000).show();
 
 				} else {
 					if (!(join_pw.equals(join_pwc)))
 						Toast.makeText(getApplicationContext(),
-								"비밀번호가 서로 다릅니다", Toast.LENGTH_SHORT).show();
-					/*
-					 * else if (!(checkEmail(join_email)))
-					 * Toast.makeText(getApplicationContext(),
-					 * "E-Mail형식에 맞지않습니다", Toast.LENGTH_SHORT).show();
-					 */
+								"비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
+
+					else if (!(checkEmail(join_email)))
+						Toast.makeText(getApplicationContext(),
+								"입력하신 E-Mail주소가 형식에 맞지 않습니다", Toast.LENGTH_SHORT).show();
 
 					else {
 						join_pw_code = logAct.getMD5Hash(join_pw);
@@ -140,47 +139,52 @@ public class JoinActivity extends Activity {
 
 							String result = builder.toString();
 							Log.d("Qaz-HttpPost", "전송결과 : " + result);
+							server_result = result.trim();
 						} catch (MalformedURLException e) {
 							e.printStackTrace();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 
-						/*
-						 * logAct.HttpLoginJoinReq(
-						 * "http://www.manjong.org:8255/qaz/join.jsp", "join",
-						 * join_id, join_pw_code, join_name, join_email);
-						 */
-
-						finish();
+						if (server_result.equals("success")) {
+							Toast.makeText(getApplicationContext(),
+									"회원가입을 축하드립니다!", 1000).show();
+							finish();
+						} else {
+							Toast.makeText(getApplicationContext(),
+									"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보십시요.", 1000)
+									.show();
+						}
 					}
 				}
 			}
 		});
-		
+
 		// -----------------------------------------------------------취소시
 		btn_cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
+
 		btn_terms.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				AlertDialog.Builder builder1 = new AlertDialog.Builder(JoinActivity.this);
+				AlertDialog.Builder builder1 = new AlertDialog.Builder(
+						JoinActivity.this);
 				builder1.setMessage(getString(R.string.terms_content));
-				builder1.setNegativeButton(getString(R.string.close_button), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-				
+				builder1.setNegativeButton(getString(R.string.close_button),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+							}
+						});
+
 				// 얼럿 다이얼로그 세팅 및 표시
 				AlertDialog alert1 = builder1.create();
 				alert1.setTitle(getString(R.string.terms_title));
 				alert1.show();
 			}
 		});
-		
+
 	}
 }
