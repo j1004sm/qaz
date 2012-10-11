@@ -37,9 +37,7 @@ public class JoinActivity extends Activity {
 
 	public static LoginActivity logAct;
 
-	// -------------------------------------------------------email형식체크함수
 	public boolean checkEmail(String email) {
-
 		String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(email);
@@ -90,9 +88,11 @@ public class JoinActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
+		
 		btn_check = (Button) findViewById(R.id.join_button_check);
 		btn_cancel = (Button) findViewById(R.id.join_button_cancel);
 		btn_terms = (Button) findViewById(R.id.join_button_terms);
+		
 		join_id_EditText = (EditText) findViewById(R.id.join_id);
 		join_id_EditText.setFilters(new InputFilter[] {filterAlphaNum});
 		join_pw_EditText = (EditText) findViewById(R.id.join_pw);
@@ -102,9 +102,8 @@ public class JoinActivity extends Activity {
 		join_name_EditText.setFilters(new InputFilter[] {filterKor});
 		join_mail_EditText = (EditText) findViewById(R.id.join_mail);
 
-		// -----------------------------------------------------------확인시
+		
 		btn_check.setOnClickListener(new View.OnClickListener() {
-
 			public void onClick(View v) {
 				String server_result = null, join_pw_code;
 				String join_pw = join_pw_EditText.getText().toString();
@@ -132,24 +131,20 @@ public class JoinActivity extends Activity {
 						join_pw_code = logAct.getMD5Hash(join_pw);
 						try {
 
-							// URL설정, 접속
 							URL url = new URL(
 									"http://www.manjong.org:8255/qaz/join.jsp");
 
 							HttpURLConnection http = (HttpURLConnection) url
 									.openConnection();
 
-							// 전송모드 설정(일반적인 POST방식)
 							http.setDefaultUseCaches(false);
 							http.setDoInput(true);
 							http.setDoOutput(true);
 							http.setRequestMethod("POST");
 
-							// content-type 설정
 							http.setRequestProperty("Content-type",
 									"application/x-www-form-urlencoded");
 
-							// 전송값 설정
 							StringBuffer buffer = new StringBuffer();
 
 							buffer.append("id").append("=").append(join_id)
@@ -161,7 +156,6 @@ public class JoinActivity extends Activity {
 							buffer.append("email").append("=")
 									.append(join_email);
 
-							// 서버로 전송
 							OutputStreamWriter outStream = new OutputStreamWriter(
 									http.getOutputStream(), "UTF-8");
 
@@ -170,7 +164,6 @@ public class JoinActivity extends Activity {
 
 							writer.flush();
 
-							// 전송 결과값 받기
 							InputStreamReader inputStream = new InputStreamReader(
 									http.getInputStream(), "UTF-8");
 							BufferedReader bufferReader = new BufferedReader(
@@ -204,7 +197,6 @@ public class JoinActivity extends Activity {
 			}
 		});
 
-		// -----------------------------------------------------------취소시
 		btn_cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				finish();
@@ -223,7 +215,6 @@ public class JoinActivity extends Activity {
 							}
 						});
 
-				// 얼럿 다이얼로그 세팅 및 표시
 				AlertDialog alert1 = builder1.create();
 				alert1.setTitle(getString(R.string.terms_title));
 				alert1.show();

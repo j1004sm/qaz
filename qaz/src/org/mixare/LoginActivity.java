@@ -31,8 +31,7 @@ public class LoginActivity extends Activity {
 	private EditText login_pw;
 
 	public static String usrId;
-
-	// -----------------------------------------------------MD5
+	
 	public static String getMD5Hash(String s) {
 		MessageDigest m = null;
 		String hash = null;
@@ -47,15 +46,14 @@ public class LoginActivity extends Activity {
 		return hash;
 	}
 
-	// -------------------------------------------------------
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);// [영기]
+		setContentView(R.layout.login);
 		
-		Button btn_login = (Button) findViewById(R.id.logbtn);
-		Button btn_join = (Button) findViewById(R.id.joinmember);
-		Button btn_findid = (Button) findViewById(R.id.find_myid);
+		Button btn_login = (Button) findViewById(R.id.btn_login);
+		Button btn_join = (Button) findViewById(R.id.btn_join);
+		Button btn_findId = (Button) findViewById(R.id.btn_findId);
 		login_id = (EditText) findViewById(R.id.login_id);
 		login_pw = (EditText) findViewById(R.id.login_pw);
 
@@ -72,9 +70,6 @@ public class LoginActivity extends Activity {
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
 
-					// TODO qaz_pw_code 는 암호화된 비번이다 이것을 서버에 있는것과 맞추어야한다
-					// ID : qaz_id, PW : qaz_pw_code
-
 					try {
 						// URL설정, 접속
 						URL url = new URL(
@@ -83,24 +78,20 @@ public class LoginActivity extends Activity {
 						HttpURLConnection http = (HttpURLConnection) url
 								.openConnection();
 
-						// 전송모드 설정(일반적인 POST방식)
 						http.setDefaultUseCaches(false);
 						http.setDoInput(true);
 						http.setDoOutput(true);
 						http.setRequestMethod("POST");
 
-						// content-type 설정
 						http.setRequestProperty("Content-type",
 								"application/x-www-form-urlencoded");
 
-						// 전송값 설정
 						StringBuffer buffer = new StringBuffer();
 
 						buffer.append("id").append("=").append(usrId)
 								.append("&");
 						buffer.append("encpw").append("=").append(encPw);
 
-						// 서버로 전송
 						OutputStreamWriter outStream = new OutputStreamWriter(
 								http.getOutputStream(), "EUC-KR");
 
@@ -109,7 +100,6 @@ public class LoginActivity extends Activity {
 
 						writer.flush();
 
-						// 전송 결과값 받기
 						InputStreamReader inputStream = new InputStreamReader(
 								http.getInputStream(), "EUC-KR");
 						BufferedReader bufferReader = new BufferedReader(
@@ -151,7 +141,7 @@ public class LoginActivity extends Activity {
 			}
 		});
 		
-		btn_findid.setOnClickListener(new View.OnClickListener() {
+		btn_findId.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.manjong.org:8255/qaz/find_id.jsp"));

@@ -98,7 +98,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/logbtn"
+                android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -111,14 +111,14 @@
             android:layout_weight="1" >
 
             <Button
-                android:id="@+id/joinmember"
+                android:id="@+id/btn_join"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="회원가입" />
 
             <Button
-                android:id="@+id/find_myid"
+                android:id="@+id/btn_findId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

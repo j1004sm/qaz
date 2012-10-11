@@ -38,6 +38,9 @@ public final class R {
         public static final int TextView05=0x7f070006;
         public static final int boardLayout=0x7f070023;
         public static final int btnLayout=0x7f070024;
+        public static final int btn_findId=0x7f070019;
+        public static final int btn_join=0x7f070018;
+        public static final int btn_login=0x7f070017;
         public static final int buttonLayout=0x7f070001;
         public static final int cancelBtn=0x7f070026;
         public static final int closeBtn=0x7f070002;
@@ -45,7 +48,6 @@ public final class R {
         public static final int colorGrid=0x7f070000;
         public static final int description_text=0x7f07001c;
         public static final int eraserBtn=0x7f070021;
-        public static final int find_myid=0x7f070019;
         public static final int idtext=0x7f070013;
         public static final int join_button_cancel=0x7f070012;
         public static final int join_button_check=0x7f070010;
@@ -55,10 +57,8 @@ public final class R {
         public static final int join_name=0x7f07000d;
         public static final int join_pw=0x7f070009;
         public static final int join_pwc=0x7f07000b;
-        public static final int joinmember=0x7f070018;
         public static final int list_checkbox=0x7f07001d;
         public static final int list_text=0x7f07001b;
-        public static final int logbtn=0x7f070017;
         public static final int login_id=0x7f070014;
         public static final int login_pw=0x7f070016;
         public static final int penBtn=0x7f070020;
