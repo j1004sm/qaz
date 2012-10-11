@@ -137,7 +137,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Augmented Reality Application for Android based on Mixare, The Project Qaz."
+            android:text="Kangnam University. Division of Computer Media Information Engineering. MAWs, CEL"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
