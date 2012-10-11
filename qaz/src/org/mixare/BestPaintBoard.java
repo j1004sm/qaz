@@ -103,7 +103,7 @@ public class BestPaintBoard extends View {
 		lastX = -1;
 		lastY = -1;
 
-		Log.i("GoodPaintBoard", "initialized.");
+		Log.i("Qaz-PaintBoard", "initialized.");
 
 	}
 
@@ -141,7 +141,7 @@ public class BestPaintBoard extends View {
 
 		undos.push(img);
 
-		Log.i("GoodPaintBoard", "saveUndo() called.");
+		Log.i("Qaz-PaintBoard", "saveUndo() called.");
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class BestPaintBoard extends View {
 		try {
 			prev = (Bitmap) undos.pop();
 		} catch (Exception ex) {
-			Log.e("GoodPaintBoard", "Exception : " + ex.getMessage());
+			Log.e("Qaz-PaintBoard", "Exception : " + ex.getMessage());
 		}
 
 		if (prev != null) {
@@ -163,7 +163,7 @@ public class BestPaintBoard extends View {
 			prev.recycle();
 		}
 
-		Log.i("GoodPaintBoard", "undo() called.");
+		Log.i("Qaz-PaintBoard", "undo() called.");
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class BestPaintBoard extends View {
 
 			mBitmap.compress(CompressFormat.PNG, 100, out);
 
-			Log.i("BestPaintBoard", "save() called.");
+			Log.i("Qaz-PaintBoard", "save() called.");
 
 			this.HttpFileUpload("http://www.manjong.org:8255/qaz/upload.jsp",
 					strFilePath, fileName, lat, lon, alt);
@@ -469,7 +469,7 @@ public class BestPaintBoard extends View {
 
 			FileInputStream mFileInputStream = new FileInputStream(fileName);
 			URL connectUrl = new URL(urlString);
-			Log.d("Test", "mFileInputStream  is " + mFileInputStream);
+			Log.d("Qaz-ImageUpload", "mFileInputStream  is " + mFileInputStream);
 
 			// open connection
 			HttpURLConnection conn = (HttpURLConnection) connectUrl
@@ -525,7 +525,7 @@ public class BestPaintBoard extends View {
 			byte[] buffer = new byte[bufferSize];
 			int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
 
-			Log.d("Test", "image byte is " + bytesRead);
+			Log.d("Qaz-ImageUpload", "image byte is " + bytesRead);
 
 			// read image
 			while (bytesRead > 0) {
@@ -539,7 +539,7 @@ public class BestPaintBoard extends View {
 			dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
 			// close streams
-			Log.e("Test", "File is written");
+			Log.e("Qaz-ImageUpload", "File is written");
 			mFileInputStream.close();
 			dos.flush(); // finish upload...
 
@@ -551,12 +551,12 @@ public class BestPaintBoard extends View {
 				b.append((char) ch);
 			}
 			String s = b.toString();
-			Log.e("Test", "result = " + s);
+			Log.e("Qaz-ImageUpload", "result = " + s);
 			// mEdityEntry.setText(s);
 			dos.close();
 
 		} catch (Exception e) {
-			Log.d("Test", "exception " + e.getMessage());
+			Log.d("Qaz-ImageUpload", "exception " + e.getMessage());
 			// TODO: handle exception
 		}
 	}

@@ -140,7 +140,7 @@ public class JoinActivity extends Activity {
 							}
 
 							String result = builder.toString();
-							Log.d("HttpPost", "전송결과 : " + result);
+							Log.d("Qaz-HttpPost", "전송결과 : " + result);
 						} catch (MalformedURLException e) {
 							e.printStackTrace();
 						} catch (IOException e) {
