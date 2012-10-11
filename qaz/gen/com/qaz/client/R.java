@@ -102,8 +102,6 @@ public final class R {
         public static final int data_source_change_osm=0x7f05002e;
         public static final int data_source_change_twitter=0x7f05002c;
         public static final int data_source_change_wikipedia=0x7f05002b;
-        public static final int developer=0x7f050035;
-        public static final int developer_info_title=0x7f050036;
         public static final int download_error=0x7f050033;
         public static final int download_received=0x7f050034;
         public static final int empty_list=0x7f05000a;
@@ -128,6 +126,8 @@ public final class R {
         public static final int menu_item_7=0x7f050013;
         public static final int no_website_available=0x7f05001b;
         public static final int option_not_available=0x7f05000b;
+        public static final int qaz_info=0x7f050035;
+        public static final int qaz_info_title=0x7f050036;
         public static final int search_active_1=0x7f050031;
         public static final int search_active_2=0x7f050032;
         public static final int search_failed_notification=0x7f05002f;

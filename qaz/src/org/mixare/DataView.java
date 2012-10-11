@@ -99,8 +99,8 @@ public class DataView {
 	/*if in the listview option for a specific title no website is provided*/
 	public static final int NO_WEBINFO_AVAILABLE = R.string.no_website_available;
 	public static final int LICENSE_TEXT = R.string.license;
-	public static final int DEVELOPER_INFO = R.string.developer;
-	public static final int DEVELOPER_INFO_TITLE = R.string.developer_info_title;
+	public static final int QAZ_INFO = R.string.qaz_info;
+	public static final int QAZ_INFO_TITLE = R.string.qaz_info_title;
 	public static final int LICENSE_TITLE = R.string.license_title;
 	public static final int CLOSE_BUTTON = R.string.close_button;
 	

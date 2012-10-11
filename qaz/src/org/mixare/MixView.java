@@ -725,7 +725,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			// 얼럿 다이얼로그의 빌더를 생성
 			AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
 			// 라이센스 텍스트를 등록한다
-			builder1.setMessage(getString(DataView.DEVELOPER_INFO));	
+			builder1.setMessage(getString(DataView.QAZ_INFO));	
 			
 			/*Retry*/
 
@@ -736,7 +736,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 				}
 			});
 			AlertDialog alert1 = builder1.create();
-			alert1.setTitle(getString(DataView.DEVELOPER_INFO_TITLE));
+			alert1.setTitle(getString(DataView.QAZ_INFO_TITLE));
 			alert1.show();
 			break;
 
