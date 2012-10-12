@@ -12,7 +12,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.mixare.MixView;
 
 import android.app.Activity;
 import android.content.Intent;
