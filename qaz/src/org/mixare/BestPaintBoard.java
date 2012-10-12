@@ -18,7 +18,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Xfermode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -157,6 +160,17 @@ public class BestPaintBoard extends View {
 
 		if (prev != null) {
 			drawBackground(mCanvas);
+			
+			
+			
+			Paint clearPaint  = new Paint();
+			Xfermode xmode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+			clearPaint.setXfermode(xmode);
+			int iCnt = mCanvas.save();
+			mCanvas.drawBitmap(prev, 0,0, clearPaint);
+			mCanvas.restoreToCount(iCnt);
+			
+			
 			mCanvas.drawBitmap(prev, 0, 0, mPaint);
 			invalidate();
 
