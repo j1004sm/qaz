@@ -32,9 +32,10 @@ public class LoginActivity extends Activity {
 	EditText login_pw;
 	String usrPw;
 	String encPw;
-	String server_result;
+	String server_result = "fail";
 	remoteRequestTask server_login;
-
+	Button btn_login;
+	
 	public static String usrId;
 	
 	public static String getMD5Hash(String s) {
@@ -56,7 +57,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		
-		Button btn_login = (Button) findViewById(R.id.btn_login);
+		btn_login = (Button) findViewById(R.id.btn_login);
 		Button btn_join = (Button) findViewById(R.id.btn_join);
 		Button btn_findId = (Button) findViewById(R.id.btn_findId);
 		login_id = (EditText) findViewById(R.id.login_id);
@@ -75,8 +76,12 @@ public class LoginActivity extends Activity {
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
 					
+					btn_login.setEnabled(false);
+					btn_login.setText("로그인 중...");
+					
 					server_login = new remoteRequestTask();
 					server_login.execute();
+					
 				}
 
 			}
@@ -172,6 +177,9 @@ public class LoginActivity extends Activity {
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
+				
+				btn_login.setEnabled(true);
+				btn_login.setText("로그인");
 			}
 		}
 		

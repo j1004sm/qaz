@@ -34,8 +34,9 @@ public class JoinActivity extends Activity {
 	EditText join_pwc_EditText;
 	EditText join_name_EditText;
 	EditText join_mail_EditText;
+	Button btn_check;
 
-	String server_result;
+	int server_result = 0;
 	String join_pw;
 	String join_pwc;
 	String join_email;
@@ -97,7 +98,7 @@ public class JoinActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
 
-		Button btn_check = (Button) findViewById(R.id.join_button_check);
+		btn_check = (Button) findViewById(R.id.join_button_check);
 		Button btn_cancel = (Button) findViewById(R.id.join_button_cancel);
 		Button btn_terms = (Button) findViewById(R.id.join_button_terms);
 
@@ -111,8 +112,7 @@ public class JoinActivity extends Activity {
 
 		btn_check.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
-				server_result = null;
+
 				join_pw = join_pw_EditText.getText().toString();
 				join_pwc = join_pwc_EditText.getText().toString();
 				join_email = join_mail_EditText.getText().toString();
@@ -132,13 +132,15 @@ public class JoinActivity extends Activity {
 
 					else if (!(checkEmail(join_email)))
 						Toast.makeText(getApplicationContext(),
-								"입력하신 E-Mail주소가 형식에 맞지 않습니다",
-								Toast.LENGTH_SHORT).show();
+								"올바른 E-Mail주소를 입력해주세요", Toast.LENGTH_SHORT)
+								.show();
 
 					else {
-						
+						btn_check.setEnabled(false);
+						btn_check.setText("처리 중...");
+
 						join_pw_code = logAct.getMD5Hash(join_pw);
-						
+
 						server_join = new remoteRequestTask();
 						server_join.execute();
 
@@ -221,7 +223,7 @@ public class JoinActivity extends Activity {
 
 				String result = builder.toString();
 				Log.d("Qaz-HttpPost", "전송결과 : " + result);
-				server_result = result.trim();
+				server_result = Integer.parseInt(result.trim());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -230,17 +232,21 @@ public class JoinActivity extends Activity {
 
 			return null;
 		}
-		
+
 		protected void onPostExecute(Void params) {
-			if (server_result.equals("success")) {
+			if (server_result == 0) {
 				Toast.makeText(getApplicationContext(),
-						"회원가입을 축하드립니다!", 1000).show();
-				finish();
+						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보십시요.", 1000)
+						.show();
+
+				btn_check.setEnabled(true);
+				btn_check.setText("약관 동의 및 가입");
 			} else {
-				Toast.makeText(
-						getApplicationContext(),
-						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보십시요.",
-						1000).show();
+				Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!", 1000)
+						.show();
+
+				finish();
+
 			}
 		}
 
