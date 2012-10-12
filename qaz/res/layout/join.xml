@@ -45,14 +45,13 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical" >
-
+
                 <TextView
                     android:id="@+id/TextView05"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="아이디:"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -84,14 +83,13 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical" >
-
+
                 <TextView
                     android:id="@+id/TextView04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="암호:"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -121,14 +119,13 @@
                 android:layout_marginRight="30dip"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical" >
-
+
                 <TextView
                     android:id="@+id/TextView03"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="암호 확인:"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -157,14 +154,13 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical" >
-
+
                 <TextView
                     android:id="@+id/TextView02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="이름(실명):"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -177,8 +173,8 @@
                     android:id="@+id/join_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" 
-                    android:singleLine="true"/>
+                    android:layout_weight="1"
+                    android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>
 
@@ -193,14 +189,13 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical" >
-
+
                 <TextView
                     android:id="@+id/TextView01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="E-Mail 주소:"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -214,7 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="textEmailAddress" 
+                    android:inputType="textEmailAddress"
                     android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>

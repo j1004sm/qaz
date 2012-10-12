@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,8 +28,12 @@ import com.qaz.client.R;
 
 public class LoginActivity extends Activity {
 
-	private EditText login_id;
-	private EditText login_pw;
+	EditText login_id;
+	EditText login_pw;
+	String usrPw;
+	String encPw;
+	String server_result;
+	remoteRequestTask server_login;
 
 	public static String usrId;
 	
@@ -59,74 +64,19 @@ public class LoginActivity extends Activity {
 
 		btn_login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-
-				String server_result = null;
+				
+				server_result = null;
 				usrId = login_id.getText().toString();
-				String usrPw = login_pw.getText().toString();
-				String encPw = getMD5Hash(usrPw);
-
+				usrPw = login_pw.getText().toString();
+				encPw = getMD5Hash(usrPw);
+				
 				if (usrId.length() == 0 || usrPw.length() == 0) {
 					Toast.makeText(getApplicationContext(),
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
-
-					try {
-						// URL설정, 접속
-						URL url = new URL(
-								"http://www.manjong.org:8255/qaz/login.jsp");
-
-						HttpURLConnection http = (HttpURLConnection) url
-								.openConnection();
-
-						http.setDefaultUseCaches(false);
-						http.setDoInput(true);
-						http.setDoOutput(true);
-						http.setRequestMethod("POST");
-
-						http.setRequestProperty("Content-type",
-								"application/x-www-form-urlencoded");
-
-						StringBuffer buffer = new StringBuffer();
-
-						buffer.append("id").append("=").append(usrId)
-								.append("&");
-						buffer.append("encpw").append("=").append(encPw);
-
-						OutputStreamWriter outStream = new OutputStreamWriter(
-								http.getOutputStream(), "EUC-KR");
-
-						PrintWriter writer = new PrintWriter(outStream);
-						writer.write(buffer.toString());
-
-						writer.flush();
-
-						InputStreamReader inputStream = new InputStreamReader(
-								http.getInputStream(), "EUC-KR");
-						BufferedReader bufferReader = new BufferedReader(
-								inputStream);
-						StringBuilder builder = new StringBuilder();
-						String str;
-						while ((str = bufferReader.readLine()) != null) {
-							builder.append(str + "\n");
-						}
-
-						String result = builder.toString();
-						Log.d("Qaz-HttpPost", "전송결과 : " + result);
-						server_result = result.trim();
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-					if (server_result.equals(encPw)) {
-						Intent i = new Intent(LoginActivity.this, MixView.class);
-						startActivity(i);
-						finish();
-					} else {
-						Toast.makeText(getApplicationContext(),
-								"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
-					}
+					
+					server_login = new remoteRequestTask();
+					server_login.execute();
 				}
 
 			}
@@ -151,4 +101,81 @@ public class LoginActivity extends Activity {
 		});
 
 	}
+	
+	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			// TODO Auto-generated method stub
+			
+			try {
+				// URL설정, 접속
+				URL url = new URL(
+						"http://www.manjong.org:8255/qaz/login.jsp");
+
+				HttpURLConnection http = (HttpURLConnection) url
+						.openConnection();
+
+				http.setDefaultUseCaches(false);
+				http.setDoInput(true);
+				http.setDoOutput(true);
+				http.setRequestMethod("POST");
+
+				http.setRequestProperty("Content-type",
+						"application/x-www-form-urlencoded");
+
+				StringBuffer buffer = new StringBuffer();
+
+				buffer.append("id").append("=").append(usrId)
+						.append("&");
+				buffer.append("encpw").append("=").append(encPw);
+
+				OutputStreamWriter outStream = new OutputStreamWriter(
+						http.getOutputStream(), "EUC-KR");
+
+				PrintWriter writer = new PrintWriter(outStream);
+				writer.write(buffer.toString());
+
+				writer.flush();
+
+				InputStreamReader inputStream = new InputStreamReader(
+						http.getInputStream(), "EUC-KR");
+				BufferedReader bufferReader = new BufferedReader(
+						inputStream);
+				StringBuilder builder = new StringBuilder();
+				String str;
+				while ((str = bufferReader.readLine()) != null) {
+					builder.append(str + "\n");
+				}
+
+				String result = builder.toString();
+				Log.d("Qaz-HttpPost", "전송결과 : " + result);
+				server_result = result.trim();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
+		protected void onPostExecute(Void params) {
+			if (server_result.equals(encPw)) {
+				Intent i = new Intent(LoginActivity.this, MixView.class);
+				startActivity(i);
+				
+				Toast.makeText(getApplicationContext(),
+						usrId + "님, 환영합니다!", 1000).show();
+				
+				finish();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
+			}
+		}
+		
+	}
 }
+
+
