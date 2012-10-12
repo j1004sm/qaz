@@ -133,14 +133,15 @@ public class DataSource {
 			// 각 소스에 따른 URL 리퀘스트를 완성한다
 			switch(source) {
 			// 위키피디아
-			case Wikipedia: 
-				ret+=
-				"?lat=" + lat +
-				"&lng=" + lon + 
-				"&radius="+ radius +
-				"&maxRows=50" +
-				"&lang=" + locale; 
-			break;
+			case Wikipedia:
+				float geoNamesRadius = radius > 20 ? 20 : radius; // Free
+																	// service
+																	// limited
+																	// to 20km
+				ret += "?lat=" + lat + "&lng=" + lon + "&radius="
+						+ geoNamesRadius + "&maxRows=50" + "&lang=" + locale
+						+ "&username=mixare";
+				break;
 			
 			// 트위터
 			case Twitter: 
