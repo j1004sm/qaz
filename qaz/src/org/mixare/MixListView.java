@@ -41,7 +41,6 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -67,6 +66,7 @@ public class MixListView extends ListActivity {
 	private Vector<String> dataSourceMenu;			// 데이터 소스 메뉴
 	private Vector<String> dataSourceDescription;	// 데이터 소스 설명
 	private Vector<Boolean> dataSourceChecked;		// 데이터 소스 체크 여부
+	private Vector<Integer> dataSourceIcon;
 	// 메인 컨텍스트와 데이터 뷰
 	private MixContext mixContext;
 	private DataView dataView;
@@ -99,6 +99,10 @@ public class MixListView extends ListActivity {
 	public Vector<Boolean> getDataSourceChecked() {
 		return dataSourceChecked;
 	}
+	
+	 public Vector<Integer> getDataSourceIcon() {
+	    return dataSourceIcon;
+	  }
 
 	// 생성시 호출
 	@Override
@@ -136,6 +140,12 @@ public class MixListView extends ListActivity {
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Twitter));
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.OSM));
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Qaz));
+			
+			dataSourceIcon = new Vector<Integer>();
+			dataSourceIcon.add(R.drawable.wikipedia);
+			dataSourceIcon.add(R.drawable.twitter);
+			dataSourceIcon.add(R.drawable.osm);
+			dataSourceIcon.add(R.drawable.ic_launcher);
 
 			// 리스트 어댑터를 생성하고 설정
 			adapter = new ListItemAdapter(this);
@@ -485,8 +495,6 @@ class ListItemAdapter extends BaseAdapter {
 	private int[] textcolors = new int[] {Color.WHITE,Color.WHITE,Color.WHITE,Color.WHITE,Color.WHITE};
 	private int[] descriptioncolors = new int[] {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
 
-	public static boolean icon_clicked = false;	// 아이콘이 클릭되었는지 여부
-
 	public static int itemPosition = 0;	// 각 항목들의 위치
 
 	// 생성자. 레이아웃 전개
@@ -510,7 +518,7 @@ class ListItemAdapter extends BaseAdapter {
 			holder.text = (TextView) convertView.findViewById(R.id.list_text);
 			holder.description = (TextView) convertView.findViewById(R.id.description_text);
 			holder.checkbox = (CheckBox) convertView.findViewById(R.id.list_checkbox);
-			//holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+			holder.datasource_icon = (ImageView) convertView.findViewById(R.id.datasource_icon);
 			
 			convertView.setTag(holder);
 		}
@@ -541,6 +549,7 @@ class ListItemAdapter extends BaseAdapter {
 			holder.icon.setVisibility(View.INVISIBLE);
 		}
 		 */
+		holder.datasource_icon.setImageResource(mixListView.getDataSourceIcon().get(position));
 		
 		// 각 항목들의 체크박스의 동작등을 등록한다
 		holder.checkbox.setChecked(mixListView.getDataSourceChecked().get(position));
@@ -623,6 +632,6 @@ class ListItemAdapter extends BaseAdapter {
 		TextView text;
 		TextView description;
 		CheckBox checkbox;
-		ImageView icon;
+		ImageView datasource_icon;
 	}
 }
