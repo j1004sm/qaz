@@ -130,7 +130,6 @@ public class MixListView extends ListActivity {
 			dataSourceDescription = new Vector<String>();
 			dataSourceDescription.add("위키피디아에서 주변 정보를 가져옵니다");
 			dataSourceDescription.add("트위터로부터 주변 트윗들을 가져옵니다");
-			dataSourceDescription.add("구글 버즈로부터 주변 소식들을 가져옵니다");
 			dataSourceDescription.add("주변역 정보들을 가져옵니다");
 			dataSourceDescription.add("Qaz 프로젝트와 연결합니다");
 			
@@ -566,7 +565,7 @@ class ListItemAdapter extends BaseAdapter {
 		
 		// 텍스트와 설명의 위치 조절(여백값 설정)
 		holder.text.setPadding(20, 8, 0, 0);
-		holder.description.setPadding(20, 40, 0, 0);
+		holder.description.setPadding(20, 55, 0, 8);
 
 		// 텍스트와 설명의 내용 할당
 		holder.text.setText(mixListView.getDataSourceMenu().get(position));
