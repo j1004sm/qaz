@@ -94,7 +94,7 @@ public class MixMap extends MapActivity implements OnTouchListener{
 		map = this;
 		setMapContext(this);
 		// 구글 API키 지정. 각자 개발자 스스로 인증받은 키값을 입력해야 구글맵이 작동한다
-		mapView = new MapView(this, "0Mpg7HCh2tVhFy-ukxwCEWvxAkdMWQ0-1MpD0Vw");
+		mapView = new MapView(this, "0uxJQY8OAsB09RVLXqI4zlUXxXBtWPT4c5V2q5A");
 		// 맵뷰의 옵션 설정. 줌 컨트롤, 클릭 가능하고, 위성표시 후 활성화
 		mapView.setBuiltInZoomControls(true);
 		mapView.setClickable(true);
