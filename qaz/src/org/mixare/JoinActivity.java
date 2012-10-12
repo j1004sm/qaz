@@ -107,7 +107,6 @@ public class JoinActivity extends Activity {
 		join_pw_EditText.setFilters(new InputFilter[] { filterAlphaNum });
 		join_pwc_EditText = (EditText) findViewById(R.id.join_pwc);
 		join_name_EditText = (EditText) findViewById(R.id.join_name);
-		join_name_EditText.setFilters(new InputFilter[] { filterKor });
 		join_mail_EditText = (EditText) findViewById(R.id.join_mail);
 
 		btn_check.setOnClickListener(new View.OnClickListener() {
