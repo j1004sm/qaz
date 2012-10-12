@@ -36,7 +36,7 @@ public class JoinActivity extends Activity {
 	EditText join_mail_EditText;
 	Button btn_check;
 
-	int server_result = 0;
+	int server_result;
 	String join_pw;
 	String join_pwc;
 	String join_email;
@@ -180,6 +180,8 @@ public class JoinActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
+			
+			server_result = 0;
 
 			try {
 
@@ -224,9 +226,7 @@ public class JoinActivity extends Activity {
 				String result = builder.toString();
 				Log.d("Qaz-HttpPost", "전송결과 : " + result);
 				server_result = Integer.parseInt(result.trim());
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -236,7 +236,7 @@ public class JoinActivity extends Activity {
 		protected void onPostExecute(Void params) {
 			if (server_result == 0) {
 				Toast.makeText(getApplicationContext(),
-						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보십시요.", 1000)
+						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보세요.", 1000)
 						.show();
 
 				btn_check.setEnabled(true);

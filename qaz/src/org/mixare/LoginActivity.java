@@ -12,6 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.mixare.MixView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,12 +33,13 @@ public class LoginActivity extends Activity {
 	EditText login_pw;
 	String usrPw;
 	String encPw;
-	String server_result = "fail";
+	String server_result;
 	remoteRequestTask server_login;
 	Button btn_login;
-	
+
+	MixView mixView;
 	public static String usrId;
-	
+
 	public static String getMD5Hash(String s) {
 		MessageDigest m = null;
 		String hash = null;
@@ -56,7 +58,7 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		
+
 		btn_login = (Button) findViewById(R.id.btn_login);
 		Button btn_join = (Button) findViewById(R.id.btn_join);
 		Button btn_findId = (Button) findViewById(R.id.btn_findId);
@@ -66,22 +68,21 @@ public class LoginActivity extends Activity {
 		btn_login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				
-				server_result = null;
 				usrId = login_id.getText().toString();
 				usrPw = login_pw.getText().toString();
 				encPw = getMD5Hash(usrPw);
-				
+
 				if (usrId.length() == 0 || usrPw.length() == 0) {
 					Toast.makeText(getApplicationContext(),
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
-					
+
 					btn_login.setEnabled(false);
 					btn_login.setText("로그인 중...");
-					
+
 					server_login = new remoteRequestTask();
 					server_login.execute();
-					
+
 				}
 
 			}
@@ -95,28 +96,28 @@ public class LoginActivity extends Activity {
 
 			}
 		});
-		
+
 		btn_findId.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.manjong.org:8255/qaz/find_id.jsp"));
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("http://www.manjong.org:8255/qaz/find_id.jsp"));
 				startActivity(i);
 
 			}
 		});
 
 	}
-	
-	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
 
+	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
+		
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
-			
+			server_result = "";
 			try {
 				// URL설정, 접속
-				URL url = new URL(
-						"http://www.manjong.org:8255/qaz/login.jsp");
+				URL url = new URL("http://www.manjong.org:8255/qaz/login.jsp");
 
 				HttpURLConnection http = (HttpURLConnection) url
 						.openConnection();
@@ -131,8 +132,7 @@ public class LoginActivity extends Activity {
 
 				StringBuffer buffer = new StringBuffer();
 
-				buffer.append("id").append("=").append(usrId)
-						.append("&");
+				buffer.append("id").append("=").append(usrId).append("&");
 				buffer.append("encpw").append("=").append(encPw);
 
 				OutputStreamWriter outStream = new OutputStreamWriter(
@@ -145,8 +145,7 @@ public class LoginActivity extends Activity {
 
 				InputStreamReader inputStream = new InputStreamReader(
 						http.getInputStream(), "EUC-KR");
-				BufferedReader bufferReader = new BufferedReader(
-						inputStream);
+				BufferedReader bufferReader = new BufferedReader(inputStream);
 				StringBuilder builder = new StringBuilder();
 				String str;
 				while ((str = bufferReader.readLine()) != null) {
@@ -156,34 +155,38 @@ public class LoginActivity extends Activity {
 				String result = builder.toString();
 				Log.d("Qaz-HttpPost", "전송결과 : " + result);
 				server_result = result.trim();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			return null;
 		}
-		
+
 		protected void onPostExecute(Void params) {
-			if (server_result.equals(encPw)) {
-				Intent i = new Intent(LoginActivity.this, MixView.class);
-				startActivity(i);
-				
+			if (server_result == "") {
 				Toast.makeText(getApplicationContext(),
-						usrId + "님, 환영합니다!", 1000).show();
-				
-				finish();
-			} else {
-				Toast.makeText(getApplicationContext(),
-						"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
+						"인터넷 연결 상태를 점검해주세요", 1000).show();
 				
 				btn_login.setEnabled(true);
 				btn_login.setText("로그인");
-			}
+
+			} else
+				if (server_result.equals(encPw)) {
+					Intent i = new Intent(LoginActivity.this, MixView.class);
+					startActivity(i);
+
+					Toast.makeText(getApplicationContext(),
+							usrId + "님, 환영합니다!", 1000).show();
+
+					finish();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
+
+					btn_login.setEnabled(true);
+					btn_login.setText("로그인");
+				}
 		}
-		
 	}
+
 }
-
-
