@@ -11,22 +11,21 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int buzz=0x7f020000;
-        public static final int cancel_btn=0x7f020001;
-        public static final int colorpalette=0x7f020002;
-        public static final int eraser=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int icon=0x7f020005;
-        public static final int icon_datasource=0x7f020006;
-        public static final int icon_map=0x7f020007;
-        public static final int icon_white=0x7f020008;
-        public static final int icon_white1=0x7f020009;
-        public static final int loc_icon=0x7f02000a;
-        public static final int penpalette=0x7f02000b;
-        public static final int translucent_background=0x7f02000e;
-        public static final int transparent_background=0x7f02000f;
-        public static final int twitter=0x7f02000c;
-        public static final int undo=0x7f02000d;
+        public static final int cancel_btn=0x7f020000;
+        public static final int colorpalette=0x7f020001;
+        public static final int eraser=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int icon=0x7f020004;
+        public static final int icon_datasource=0x7f020005;
+        public static final int icon_map=0x7f020006;
+        public static final int icon_white=0x7f020007;
+        public static final int icon_white1=0x7f020008;
+        public static final int loc_icon=0x7f020009;
+        public static final int penpalette=0x7f02000a;
+        public static final int translucent_background=0x7f02000d;
+        public static final int transparent_background=0x7f02000e;
+        public static final int twitter=0x7f02000b;
+        public static final int undo=0x7f02000c;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070003;
@@ -86,7 +85,7 @@ public final class R {
         public static final int SW=0x7f050007;
         public static final int W=0x7f050008;
         public static final int accuracy=0x7f050024;
-        public static final int acurracy=0x7f050039;
+        public static final int acurracy=0x7f050038;
         public static final int altitude=0x7f050022;
         public static final int app_name=0x7f050000;
         public static final int close_button=0x7f05001d;
@@ -97,12 +96,12 @@ public final class R {
         public static final int connection_error_dialog_button1=0x7f050015;
         public static final int connection_error_dialog_button2=0x7f050016;
         public static final int connection_error_dialog_button3=0x7f050017;
-        public static final int data_source_change_buzz=0x7f05002d;
-        public static final int data_source_change_osm=0x7f05002e;
+        public static final int data_source_change_buzz=0x7f050039;
+        public static final int data_source_change_osm=0x7f05002d;
         public static final int data_source_change_twitter=0x7f05002c;
         public static final int data_source_change_wikipedia=0x7f05002b;
-        public static final int download_error=0x7f050033;
-        public static final int download_received=0x7f050034;
+        public static final int download_error=0x7f050032;
+        public static final int download_received=0x7f050033;
         public static final int empty_list=0x7f05000a;
         public static final int general_info_text=0x7f05001f;
         public static final int general_info_title=0x7f05001e;
@@ -125,16 +124,16 @@ public final class R {
         public static final int menu_item_7=0x7f050013;
         public static final int no_website_available=0x7f05001b;
         public static final int option_not_available=0x7f05000b;
-        public static final int qaz_info=0x7f050035;
-        public static final int qaz_info_title=0x7f050036;
-        public static final int search_active_1=0x7f050031;
-        public static final int search_active_2=0x7f050032;
-        public static final int search_failed_notification=0x7f05002f;
+        public static final int qaz_info=0x7f050034;
+        public static final int qaz_info_title=0x7f050035;
+        public static final int search_active_1=0x7f050030;
+        public static final int search_active_2=0x7f050031;
+        public static final int search_failed_notification=0x7f05002e;
         public static final int search_hint=0x7f050001;
-        public static final int source_openstreetmap=0x7f050030;
+        public static final int source_openstreetmap=0x7f05002f;
         public static final int speed=0x7f050023;
-        public static final int terms_content=0x7f050038;
-        public static final int terms_title=0x7f050037;
+        public static final int terms_content=0x7f050037;
+        public static final int terms_title=0x7f050036;
     }
     public static final class style {
         /**  Base application theme is the default theme. 

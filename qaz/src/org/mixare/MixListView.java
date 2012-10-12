@@ -119,7 +119,6 @@ public class MixListView extends ListActivity {
 			dataSourceMenu = new Vector<String>();
 			dataSourceMenu.add("Wikipedia");
 			dataSourceMenu.add("Twitter");
-			dataSourceMenu.add("Buzz");
 			dataSourceMenu.add(getString(DataView.SOURCE_OPENSTREETMAP));
 			dataSourceMenu.add("DrawOnReal");
 
@@ -135,7 +134,6 @@ public class MixListView extends ListActivity {
 			dataSourceChecked = new Vector<Boolean>();
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Wikipedia));
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Twitter));
-			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Buzz));
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.OSM));
 			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Qaz));
 
@@ -336,14 +334,10 @@ public class MixListView extends ListActivity {
 					menu.add(index, index, index, "We are working on it...");
 					break;
 				case 2:
-					menu.setHeaderTitle("Buzz Menu");
-					menu.add(index, index, index, "We are working on it...");
-					break;
-				case 3:
 					menu.setHeaderTitle("OpenStreetMap Menu");
 					menu.add(index, index, index, "We are working on it...");
 					break;
-				case 4:	// 커스텀 URL을 입력가능한 얼럿 다이얼로그를 생성한다
+				case 3:	// 커스텀 URL을 입력가능한 얼럿 다이얼로그를 생성한다
 					AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
 					alert.setTitle("insert your own URL:");
 
@@ -389,18 +383,13 @@ public class MixListView extends ListActivity {
 			mixContext.toogleDataSource(DATASOURCE.Twitter);
 			break;
 
-		/*BUZZ*/
-		case 2:
-			mixContext.toogleDataSource(DATASOURCE.Buzz);
-			break;
-
 		/*OSM*/
-		case 3:
+		case 2:
 			mixContext.toogleDataSource(DATASOURCE.OSM);
 			break;
 
 		/*Own URL*/
-		case 4:
+		case 3:
 			mixContext.toogleDataSource(DATASOURCE.Qaz);
 			break;
 		}
@@ -605,12 +594,10 @@ class ListItemAdapter extends BaseAdapter {
 			changeColor(0, Color.WHITE, Color.DKGRAY);
 		else if (source.equals("Twitter"))
 			changeColor(1, Color.WHITE, Color.DKGRAY);
-		else if (source.equals("Buzz"))
-			changeColor(2, Color.WHITE, Color.DKGRAY);
 		else if (source.equals("OpenStreetMap"))
-			changeColor(3, Color.WHITE, Color.DKGRAY);
+			changeColor(2, Color.WHITE, Color.DKGRAY);
 		else if (source.equals("OwnURL"))
-			changeColor(4, Color.WHITE, Color.DKGRAY);
+			changeColor(3, Color.WHITE, Color.DKGRAY);
 	}
 
 	// 데이터 소스 메뉴의 수를 리턴

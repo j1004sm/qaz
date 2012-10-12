@@ -56,9 +56,6 @@ public class Json extends DataHandler {
 			// 위키피디아
 			else if (root.has("geonames"))
 				dataArray = root.getJSONArray("geonames");
-			// 구글 버즈
-			else if (root.has("data") && root.getJSONObject("data").has("items"))
-				dataArray = root.getJSONObject("data").getJSONArray("items");
 			
 			// 데이터행렬에 데이터들이 있다면
 			if (dataArray != null) {
@@ -76,7 +73,6 @@ public class Json extends DataHandler {
 					// 데이터 포맷에 따른 처리
 					switch(dataformat) {
 						case DOR: ma = processMixareJSONObject(jo); break;
-						case Buzz: ma = processBuzzJSONObject(jo); break;
 						case Twitter: ma = processTwitterJSONObject(jo); break;
 						case Wikipedia: ma = processWikipediaJSONObject(jo); break;
 						default: ma = processMixareJSONObject(jo); break;
@@ -93,26 +89,6 @@ public class Json extends DataHandler {
 		
 		// 모든 마커가 추가된 리스트를 리턴
 		return markers;
-	}
-	
-	// 버즈 데이터의 처리
-	public Marker processBuzzJSONObject(JSONObject jo) throws NumberFormatException, JSONException {
-		Marker ma = null;	// 임시객체
-		
-		// 버즈 데이터의 형식에 맞는지 검사한다. title, geocode, links 태그가 있어야 한다.
-		if (jo.has("title") && jo.has("geocode") && jo.has("links")) {
-			Log.v(MixView.TAG, "구글 버즈 데이터 처리중");	// 로그 출력
-
-			// 확인된 태그에 따라 값을 추출하여 소셜 마커를 생성한다
-			ma = new SocialMarker(
-					jo.getString("title"), 
-					Double.valueOf(jo.getString("geocode").split(" ")[0]), 
-					Double.valueOf(jo.getString("geocode").split(" ")[1]), 
-					0, 
-					jo.getJSONObject("links").getJSONArray("alternate").getJSONObject(0).getString("href"), 
-					DataSource.DATASOURCE.Buzz);
-		}
-		return ma;	// 마커 리턴
 	}
 
 	// 트위터 데이터의 처리

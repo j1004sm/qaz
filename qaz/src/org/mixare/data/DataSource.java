@@ -41,8 +41,8 @@ public class DataSource {
 	
 	
 	// 데이터 소스와 데이터 포맷의 열거형 변수
-	public enum DATASOURCE { Wikipedia, Buzz, Twitter, OSM, Qaz};
-	public enum DATAFORMAT { Wikipedia, Buzz, Twitter, OSM, DOR};	
+	public enum DATASOURCE { Wikipedia, Twitter, OSM, Qaz};
+	public enum DATAFORMAT { Wikipedia, Twitter, OSM, DOR};	
 
 	/** 기본 URL */
 	// 위키피디아
@@ -51,9 +51,6 @@ public class DataSource {
 	
 	// 트위터
 	private static final String TWITTER_BASE_URL = "http://search.twitter.com/search.json";
-	
-	// 구글 버즈
-	private static final String BUZZ_BASE_URL = "https://www.googleapis.com/buzz/v1/activities/search?alt=json&max-results=20";
 	
 	// OSM(OpenStreetMap)
 	// OpenStreetMap API는 http://wiki.openstreetmap.org/wiki/Xapi 를 참고
@@ -68,9 +65,8 @@ public class DataSource {
 	/** URL 부분 끝 */
 	
 	
-	// 아이콘들. 트위터와 버즈 
+	// 아이콘들. 트위터
 	public static Bitmap twitterIcon;
-	public static Bitmap buzzIcon;
 	public static Bitmap qazPic;
 	
 	// 기본 생성자
@@ -81,7 +77,6 @@ public class DataSource {
 	// 리소스로부터 각 아이콘 생성
 	public static void createIcons(Resources res) {
 		twitterIcon=BitmapFactory.decodeResource(res, R.drawable.twitter);
-		buzzIcon=BitmapFactory.decodeResource(res, R.drawable.buzz);
 		
 	}
 	
@@ -90,7 +85,6 @@ public class DataSource {
 		Bitmap bitmap=null;
 		switch (ds) {
 			case Twitter: bitmap=twitterIcon; break;
-			case Buzz: bitmap=buzzIcon; break;
 			case Qaz: bitmap=qazPic; break;
 		}
 		return bitmap;
@@ -102,7 +96,6 @@ public class DataSource {
 		// 소스 형식에 따라 포맷을 할당한다
 		switch (ds) {
 			case Wikipedia: ret=DATAFORMAT.Wikipedia; break;
-			case Buzz: ret=DATAFORMAT.Buzz; break;
 			case Twitter: ret=DATAFORMAT.Twitter; break;
 			case OSM: ret=DATAFORMAT.OSM; break;
 			case Qaz: ret=DATAFORMAT.DOR; break;
@@ -120,10 +113,6 @@ public class DataSource {
 		
 			case Wikipedia: 
 				ret = WIKI_BASE_URL;
-			break;
-			
-			case Buzz: 
-				ret = BUZZ_BASE_URL;
 			break;
 			
 			case Twitter: 
@@ -153,14 +142,6 @@ public class DataSource {
 				"&radius="+ radius +
 				"&maxRows=50" +
 				"&lang=" + locale; 
-			break;
-			
-			// 버즈
-			case Buzz: 
-				ret+= 
-				"&lat=" + lat+
-				"&lon=" + lon + 
-				"&radius="+ radius*1000;
 			break;
 			
 			// 트위터
@@ -195,7 +176,6 @@ public class DataSource {
 	public static int getColor(DATASOURCE datasource) {
 		int ret;
 		switch(datasource) {
-			case Buzz:		ret = Color.rgb(4, 228, 20); break;
 			case Twitter:	ret = Color.rgb(50, 204, 255); break;
 			case OSM:		ret = Color.rgb(255, 168, 0); break;
 			case Wikipedia:	ret = Color.RED; break;
