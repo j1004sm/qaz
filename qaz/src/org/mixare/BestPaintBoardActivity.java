@@ -217,10 +217,10 @@ public class BestPaintBoardActivity extends Activity {
         				double lat = curLoc.getLatitude(), lon = curLoc.getLongitude(), alt = curLoc.getAltitude();
         				
         				if (value.length() == 0){
-        					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요.", 1000).show();
+        					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요", 1000).show();
         				} else {
         					board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
-        					Toast.makeText(getApplicationContext(), value.toString() + "이 저장되었습니다.", 1000).show();
+        					Toast.makeText(getApplicationContext(), value.toString() + "이 저장되었습니다", 1000).show();
         					finish();
         				}
         			}
@@ -257,18 +257,5 @@ public class BestPaintBoardActivity extends Activity {
     	
     	addedLayout.invalidate();
     }
-    
-    public void onDestroy() {
-    	   if (isFinishing()) {
-    	   	 //--- 화면이 종료될 때, Thread 처리 등을 한다.
-    	 	 //---   worker.interrupt();
-    	        //---   worker = null;
-    		   
-    		   Toast.makeText(getApplicationContext(),"그리기 모드에서 나갑니다.", 1000).show();
-    	    } else {
-    	      	 //--- 화면이 회전할 때
-    	    }
-    	    super.onDestroy();
-    	}
     
 }

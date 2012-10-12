@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">DrawOnReal</string>
-    <string name="search_hint">검색하려는 장소 입력</string>
+    <string name="search_hint">현재 위치에서 검색</string>
     <string name="N">N</string>
     <string name="NE">NE</string>
     <string name="E">E</string>
@@ -11,7 +11,7 @@
     <string name="SW">SW</string>
     <string name="W">W</string>
     <string name="NW">NW</string>
-    <string name="empty_list">죄송합니다. 현재 설정된 반경으로는 위치 정보가 \n없습니다. 좀 더 넓은 반경으로 설정해주십시요.</string>
+    <string name="empty_list">죄송합니다. 현재 설정된 반경으로는 위치 정보가 없습니다.\n 좀 더 넓은 반경으로 설정해주십시요.</string>
     <string name="option_not_available">Sorry, We are working on it... \nThis option will be available soon!</string>
     <string name="license">Copyright (C) 2010- Peer internet solutions 
 		\n\nThis program is free software: 	you can redistribute it and/or modify it under the terms of the 
@@ -33,7 +33,7 @@
     <string name="connection_error_dialog_button1">재시도</string>
     <string name="connection_error_dialog_button2">설정 열기</string>
     <string name="connection_error_dialog_button3">앱 종료</string>
-    <string name="connection_GPS_dialog_text">GPS 위치를 업데이트할 수 없습니다. \n알맞은 위치 정보가 표시되지 않을 수 있습니다.</string>
+    <string name="connection_GPS_dialog_text">GPS 위치를 업데이트할 수 없습니다. \n올바른 위치 정보가 표시되지 않을 수 있습니다.</string>
     <string name="connection_GPS_dialog_button1">계속</string>
     <string name="connection_GPS_dialog_button2">종료</string>
     <string name="no_website_available">죄송합니다. 더 이상 정보가 존재하지 않습니다.</string>
@@ -46,7 +46,7 @@
     <string name="altitude">고도 : </string>
     <string name="speed">속도 : </string>
     <string name="accuracy">정확성 : </string>
-    <string name="gps_last_fix">마지막으로 GPS로부터 업데이트 : </string>
+    <string name="gps_last_fix">마지막으로 GPS 업데이트 : </string>
     <string name="map_menu_normal_mode">지도</string>
     <string name="map_menu_satellite_mode">위성</string>
     <string name="map_menu_cam_mode">카메라</string>
@@ -61,7 +61,7 @@
     <string name="search_active_1">Search on data source</string>
     <string name="search_active_2">. Touch to terminate search</string>
     <string name="download_error">다운로드 중에 오류가 발생했습니다</string>
-    <string name="download_received">로부터 가져옵니다</string>
+    <string name="download_received">에서 데이터를 받았습니다</string>
     <string name="qaz_info">오픈소스 증강현실 엔진 Mixare를 기반으로 한 안드로이드용 증강현실 어플리케이션 DrawOnReal 입니다. 따라서, GPLv3 라이센스를 따릅니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n MAWs 10학번 안훈민, CEL 11학번 이영기, MAWs 12학번 한만종</string>
     <string name="qaz_info_title">어플리케이션 정보</string>
     <string name="terms_title">이용약관</string>

@@ -331,7 +331,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			
 			// 정확한 위치를 찾지 못했을 경우(GPS 관련)
 			if(mixContext.isActualLocation()==false){
-				Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+				//Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
 			}	
 			
 		} catch (Exception ex) {
@@ -924,7 +924,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 					Intent myIntent = new Intent(getApplicationContext(),BestPaintBoardActivity.class);
 	        		startActivity(myIntent);
 	        		
-	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다.", 1000).show();
+	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다", 1000).show();
 					}
 				
 			}
@@ -952,6 +952,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 				} else {
 					return super.onKeyDown(keyCode, event);
 				}
+				
 			} else if (keyCode == KeyEvent.KEYCODE_MENU) {
 				return super.onKeyDown(keyCode, event);
 			}

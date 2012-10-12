@@ -319,7 +319,7 @@ public class DataView {
 					dataHandler.onLocationChanged(curFix);	// 위치를 재설정
 					
 					// 특정 데이터 소스로부터 다운로드 받았음을 알림 
-					Toast.makeText(mixContext, dRes.source + mixContext.getResources().getString(R.string.download_received), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(mixContext, dRes.source + mixContext.getResources().getString(R.string.download_received), Toast.LENGTH_SHORT).show();
 
 				}
 			}
