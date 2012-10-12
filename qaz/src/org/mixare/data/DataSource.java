@@ -57,9 +57,7 @@ public class DataSource {
 	// 예를 들어, 철도만 사용할 경우:
 	//private static final String OSM_BASE_URL =	"http://www.informationfreeway.org/api/0.6/node[railway=station]";
 	//private static final String OSM_BASE_URL =	"http://xapi.openstreetmap.org/api/0.6/node[railway=station]";
-	private static final String OSM_BASE_URL =		"http://osmxapi.hypercube.telascience.org/api/0.6/node[railway=station]";
-	// 모든 객체들은 이름이 명명되어 있다
-	//String OSM_URL = "http://xapi.openstreetmap.org/api/0.6/node[name=*]"; 
+	private static final String OSM_BASE_URL =		"http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
 	
 	// 주의할것! 방대한 양의 데이터(MB단위 이상)을 산출할 때에는, 작은 반경이나 특정한 쿼리만을 사용해야한다
 	/** URL 부분 끝 */
