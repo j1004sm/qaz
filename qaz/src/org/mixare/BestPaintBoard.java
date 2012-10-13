@@ -560,7 +560,7 @@ public class BestPaintBoard extends View {
 			dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
 			// close streams
-			Log.e("Qaz-ImageUpload", "File is written");
+			Log.d("Qaz-ImageUpload", "File is written");
 			mFileInputStream.close();
 			dos.flush(); // finish upload...
 
@@ -570,7 +570,7 @@ public class BestPaintBoard extends View {
 					conn.getInputStream(), "UTF-8"));
 			String line = null;
 			while ((line = rd.readLine()) != null) {
-				Log.d("Qaz-ImageUpload: ", line);
+				Log.d("Qaz-ImageUpload", line);
 			}
 			  
 			dos.close();
