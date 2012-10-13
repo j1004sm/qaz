@@ -576,7 +576,7 @@ public class BestPaintBoard extends View {
 			dos.close();
 
 		} catch (Exception e) {
-			Log.d("Qaz-ImageUpload", "exception " + e.getMessage());
+			Log.e("Qaz-ImageUpload", "exception " + e.getMessage());
 			// TODO: handle exception
 		}
 	}
