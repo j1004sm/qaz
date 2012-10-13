@@ -1,11 +1,13 @@
 package org.mixare;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -563,15 +565,14 @@ public class BestPaintBoard extends View {
 			dos.flush(); // finish upload...
 
 			// get response
-			int ch;
-			InputStream is = conn.getInputStream();
-			StringBuffer b = new StringBuffer();
-			while ((ch = is.read()) != -1) {
-				b.append((char) ch);
+			BufferedReader rd = null;
+			rd = new BufferedReader(new InputStreamReader(
+					conn.getInputStream(), "UTF-8"));
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				Log.d("Qaz-ImageUpload: ", line);
 			}
-			String s = b.toString();
-			Log.e("Qaz-ImageUpload", "result = " + s);
-			// mEdityEntry.setText(s);
+			  
 			dos.close();
 
 		} catch (Exception e) {
