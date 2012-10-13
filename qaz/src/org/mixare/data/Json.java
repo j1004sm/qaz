@@ -18,6 +18,10 @@
  */
 package org.mixare.data;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +31,15 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mixare.ImageMarker;
 import org.mixare.Marker;
-import org.mixare.MixContext;
 import org.mixare.MixView;
 import org.mixare.POIMarker;
 import org.mixare.SocialMarker;
 import org.mixare.data.DataSource.DATAFORMAT;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 // JSON 파일을 다루는 클래스
@@ -160,16 +166,36 @@ public class Json extends DataHandler {
 			// 웹페이지의 형식을 검사하고 스트링 값을 읽어온다
 			//if(jo.has("has_detail_page") && jo.getInt("has_detail_page")!=0 && jo.has("webpage"))
 			
+			Bitmap image = null;
+			String link = unescapeHTML(jo.getString("webpage"), 0); 
+			image = getBitmapFromURL(link);
+			
 			// 할당된 값들로 마커 생성
-			ma = new POIMarker(
+			ma = new ImageMarker(
 					unescapeHTML(jo.getString("title"), 0), 
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
-					unescapeHTML(jo.getString("webpage"), 0), 
-					DataSource.DATASOURCE.Qaz);
+					link,
+					DataSource.DATASOURCE.Qaz,
+					image);
 		}
 		return ma;	// 마커 리턴
+	}
+	
+	public static Bitmap getBitmapFromURL(String src) {
+		try {
+			URL url = new URL(src);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoInput(true);
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			return myBitmap;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// 위키피디아 데이터 처리

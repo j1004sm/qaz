@@ -41,8 +41,8 @@ public class DataSource {
 	
 	
 	// 데이터 소스와 데이터 포맷의 열거형 변수
-	public enum DATASOURCE { Wikipedia, Twitter, OSM, Qaz};
-	public enum DATAFORMAT { Wikipedia, Twitter, OSM, DOR};	
+	public enum DATASOURCE {Wikipedia, Twitter, OSM, Qaz};
+	public enum DATAFORMAT {Wikipedia, Twitter, OSM, DOR};	
 
 	/** 기본 URL */
 	// 위키피디아
@@ -65,7 +65,6 @@ public class DataSource {
 	
 	// 아이콘들. 트위터
 	public static Bitmap twitterIcon;
-	public static Bitmap qazPic;
 	
 	// 기본 생성자
 	public DataSource() {
@@ -83,7 +82,6 @@ public class DataSource {
 		Bitmap bitmap=null;
 		switch (ds) {
 			case Twitter: bitmap=twitterIcon; break;
-			case Qaz: bitmap=qazPic; break;
 		}
 		return bitmap;
 	}
@@ -134,13 +132,14 @@ public class DataSource {
 			switch(source) {
 			// 위키피디아
 			case Wikipedia:
-				float geoNamesRadius = radius > 20 ? 20 : radius; // Free
-																	// service
-																	// limited
-																	// to 20km
-				ret += "?lat=" + lat + "&lng=" + lon + "&radius="
-						+ geoNamesRadius + "&maxRows=50" + "&lang=" + locale
-						+ "&username=mixare";
+				float geoNamesRadius = radius > 20 ? 20 : radius; // Free service limited to 20km
+				ret += 
+				"?lat=" + lat + 
+				"&lng=" + lon +
+				"&radius=" + geoNamesRadius + 
+				"&maxRows=50" + 
+				"&lang=" + locale + 
+				"&username=mixare";
 				break;
 			
 			// 트위터
