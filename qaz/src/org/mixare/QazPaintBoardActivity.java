@@ -162,10 +162,6 @@ public class QazPaintBoardActivity extends Activity {
                     
                     oldColor = mColor;
                     oldSize = mSize;
-                    
-                    Paint clearPaint  = new Paint();
-        			Xfermode xmode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-        			clearPaint.setXfermode(xmode);
         			
                     mColor = Color.WHITE;
                     mSize = 2;
