@@ -1,7 +1,5 @@
 package org.mixare;
 
-import com.qaz.client.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,17 +7,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.mixare.MixView;
-import org.mixare.LoginActivity;
+
+import com.qaz.client.R;
 
 public class BestPaintBoardActivity extends Activity {
 	
@@ -34,9 +32,8 @@ public class BestPaintBoardActivity extends Activity {
 	LinearLayout addedLayout;
 	Button colorLegendBtn;
 	TextView sizeLegendTxt;
-	
-	private static LoginActivity logAct;
-	String usrId = logAct.usrId;
+
+	String usrId = LoginActivity.usrId;
 	
 	int mColor = 0xff000000;
 	int mSize = 2;
@@ -212,16 +209,26 @@ public class BestPaintBoardActivity extends Activity {
 
         		alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
         			public void onClick(DialogInterface dialog, int whichButton) {
+        				
         				String value = input.getText().toString();
         				Location curLoc = MixView.mixContext.getCurrentGPSInfo();
         				double lat = curLoc.getLatitude(), lon = curLoc.getLongitude(), alt = curLoc.getAltitude();
         				
         				if (value.length() == 0){
-        					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요", 1000).show();
+        					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요", Toast.LENGTH_LONG).show();
         				} else {
-        					board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
-        					Toast.makeText(getApplicationContext(), value.toString() + "이 저장되었습니다", 1000).show();
-        					finish();
+        				
+        					String resServer = new String();
+        					resServer = board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
+        					
+        					if (resServer.equals("success")) {
+        						Toast.makeText(getApplicationContext(), value.toString() + "이(가) 저장되었습니다", Toast.LENGTH_SHORT).show();
+        						finish();
+        					} else {
+        						Toast.makeText(getApplicationContext(), "서버와의 연결에 실패했습니다", Toast.LENGTH_LONG).show();
+        					}
+        					
+  
         				}
         			}
         		});

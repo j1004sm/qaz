@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Stack;
 
@@ -24,6 +25,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Xfermode;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -445,44 +447,41 @@ public class BestPaintBoard extends View {
 		}
 	}
 
-	public void SaveBitmapToFileUpload(File strFilePath, String fileName,
+	public String SaveBitmapToFileUpload(File strFilePath, String fileName,
 			double lat, double lon, double alt, String user) {
 
-		// File fileCacheItem = new File(strFilePath);
-		OutputStream out = null;
+		String response = "fail";
 
 		try {
-			// fileCacheItem.createNewFile();
-			out = new FileOutputStream(strFilePath);
+			OutputStream out = new FileOutputStream(strFilePath);
 
 			mBitmap.compress(CompressFormat.PNG, 100, out);
+			out.close();
 
-			Log.i("Qaz-PaintBoard", "save() called.");
-
-			this.HttpFileUpload("http://www.manjong.org:8255/qaz/upload.jsp",
+			response = this.HttpFileUpload("http://www.manjong.org:8255/qaz/upload.jsp",
 					strFilePath, fileName, lat, lon, alt, user);
 
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
+		
+		return response;
 
 	}
 
-	public void HttpFileUpload(String urlString, File fileName,
+	public String HttpFileUpload(String urlString, File fileName,
 			String realName, double lat, double lon, double alt, String user) {
 
 		String lineEnd = "\r\n";
 		String twoHyphens = "--";
 		String boundary = "*****";
+		String response = "fail";
+		
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
 
 		try {
-
+		
 			FileInputStream mFileInputStream = new FileInputStream(fileName);
 			URL connectUrl = new URL(urlString);
 			Log.d("Qaz-ImageUpload", "mFileInputStream  is " + mFileInputStream);
@@ -563,6 +562,7 @@ public class BestPaintBoard extends View {
 			Log.d("Qaz-ImageUpload", "File is written");
 			mFileInputStream.close();
 			dos.flush(); // finish upload...
+			dos.close();
 
 			// get response
 			BufferedReader rd = null;
@@ -571,14 +571,20 @@ public class BestPaintBoard extends View {
 			String line = null;
 			while ((line = rd.readLine()) != null) {
 				Log.d("Qaz-ImageUpload", line);
+				response = line.trim();
 			}
-			  
-			dos.close();
-
-		} catch (Exception e) {
-			Log.e("Qaz-ImageUpload", "exception " + e.getMessage());
-			// TODO: handle exception
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	
+			return response;
 	}
 
 }

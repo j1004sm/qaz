@@ -76,6 +76,8 @@ public class LoginActivity extends Activity {
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
 
+					login_id.setEnabled(false);
+					login_pw.setEnabled(false);
 					btn_login.setEnabled(false);
 					btn_login.setText("로그인 중...");
 
@@ -164,8 +166,11 @@ public class LoginActivity extends Activity {
 		protected void onPostExecute(Void params) {
 			if (server_result == "") {
 				Toast.makeText(getApplicationContext(),
-						"인터넷 연결 상태를 점검해주세요", 1000).show();
+						"인터넷 연결 상태를 점검해주세요", Toast.LENGTH_LONG).show();
 				
+				login_id.setEnabled(true);
+				login_pw.setEnabled(true);
+				btn_login.setEnabled(true);
 				btn_login.setEnabled(true);
 				btn_login.setText("로그인");
 
@@ -175,13 +180,16 @@ public class LoginActivity extends Activity {
 					startActivity(i);
 
 					Toast.makeText(getApplicationContext(),
-							usrId + "님, 환영합니다!", 1000).show();
+							usrId + "님, 환영합니다!", Toast.LENGTH_LONG).show();
 
 					finish();
 				} else {
 					Toast.makeText(getApplicationContext(),
-							"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", 1000).show();
-
+							"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", Toast.LENGTH_LONG).show();
+					
+					login_id.setEnabled(true);
+					login_pw.setEnabled(true);
+					btn_login.setEnabled(true);
 					btn_login.setEnabled(true);
 					btn_login.setText("로그인");
 				}

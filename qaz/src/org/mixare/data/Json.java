@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mixare.DownloadImage;
 import org.mixare.ImageMarker;
 import org.mixare.Marker;
 import org.mixare.MixView;
@@ -44,6 +45,8 @@ import android.util.Log;
 
 // JSON 파일을 다루는 클래스
 public class Json extends DataHandler {
+	
+	MixView mixView;
 
 	public static final int MAX_JSON_OBJECTS=1000;	// JSON 객체의 최대 수
 	
@@ -167,21 +170,28 @@ public class Json extends DataHandler {
 			//if(jo.has("has_detail_page") && jo.getInt("has_detail_page")!=0 && jo.has("webpage"))
 			
 			Bitmap image = null;
-			String link = unescapeHTML(jo.getString("webpage"), 0); 
-			image = getBitmapFromURL(link);
+			String title = unescapeHTML(jo.getString("title"), 0); 
+			
+			DownloadImage imgThread = new DownloadImage(mixView.mixContext, title);
+			imgThread.start();
+
+			image = imgThread.retImg;
+			
+			//image = getBitmapFromURL(link);
 			
 			// 할당된 값들로 마커 생성
 			ma = new ImageMarker(
-					unescapeHTML(jo.getString("title"), 0), 
+					title, 
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
-					link,
+					unescapeHTML(jo.getString("webpage"), 0),
 					DataSource.DATASOURCE.Qaz,
 					image);
 		}
 		return ma;	// 마커 리턴
 	}
+
 	
 	public static Bitmap getBitmapFromURL(String src) {
 		try {

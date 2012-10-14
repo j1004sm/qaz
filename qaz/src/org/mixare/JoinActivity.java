@@ -44,8 +44,6 @@ public class JoinActivity extends Activity {
 	String join_id;
 	String join_pw_code;
 
-	public static LoginActivity logAct;
-
 	public boolean checkEmail(String email) {
 		String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
 		Pattern p = Pattern.compile(regex);
@@ -123,7 +121,7 @@ public class JoinActivity extends Activity {
 						|| join_name.length() == 0 || join_email.length() == 0) {
 
 					Toast.makeText(getApplicationContext(), "빈칸이 없는지 확인해주세요",
-							1000).show();
+							Toast.LENGTH_SHORT).show();
 
 				} else {
 					if (!(join_pw.equals(join_pwc)))
@@ -139,7 +137,7 @@ public class JoinActivity extends Activity {
 						btn_check.setEnabled(false);
 						btn_check.setText("처리 중...");
 
-						join_pw_code = logAct.getMD5Hash(join_pw);
+						join_pw_code = LoginActivity.getMD5Hash(join_pw);
 
 						server_join = new remoteRequestTask();
 						server_join.execute();
@@ -236,13 +234,13 @@ public class JoinActivity extends Activity {
 		protected void onPostExecute(Void params) {
 			if (server_result == 0) {
 				Toast.makeText(getApplicationContext(),
-						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보세요.", 1000)
+						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보세요.", Toast.LENGTH_LONG)
 						.show();
 
 				btn_check.setEnabled(true);
 				btn_check.setText("약관 동의 및 가입");
 			} else {
-				Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!", 1000)
+				Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!", Toast.LENGTH_LONG)
 						.show();
 
 				finish();
