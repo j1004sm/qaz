@@ -180,14 +180,13 @@ public class Json extends DataHandler {
 			//image = getBitmapFromURL(link);
 			
 			// 할당된 값들로 마커 생성
-			ma = new ImageMarker(
+			ma = new POIMarker(
 					unescapeHTML(jo.getString("title"), 0), 
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
 					link,
-					DataSource.DATASOURCE.Qaz,
-					image);
+					DataSource.DATASOURCE.Qaz);
 		}
 		return ma;	// 마커 리턴
 	}

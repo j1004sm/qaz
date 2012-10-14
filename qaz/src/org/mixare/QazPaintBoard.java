@@ -451,6 +451,11 @@ public class QazPaintBoard extends View {
 			double lat, double lon, double alt, String user) {
 
 		String response = "fail";
+		
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		.permitDiskWrites()
+		.detectDiskReads()
+        .permitNetwork().build());					//안드로이드 3.0 이상 지원
 
 		try {
 			OutputStream out = new FileOutputStream(strFilePath);
@@ -477,9 +482,6 @@ public class QazPaintBoard extends View {
 		String boundary = "*****";
 		String response = "fail";
 		
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
-
 		try {
 		
 			FileInputStream mFileInputStream = new FileInputStream(fileName);

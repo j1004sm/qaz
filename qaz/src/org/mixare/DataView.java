@@ -304,7 +304,7 @@ public class DataView {
 					mixContext.getDownloader().submitJob(dRes.errorRequest);
 					
 					// 토스트로 에러 상황을 알림
-					Toast.makeText(mixContext,mixContext.getResources().getString(R.string.download_error) +" "+ dRes.errorRequest.url, Toast.LENGTH_SHORT).show();
+					Toast.makeText(mixContext, dRes.errorRequest.url + " " + mixContext.getResources().getString(R.string.download_error), Toast.LENGTH_SHORT).show();
 					
 				}
 				
