@@ -1,12 +1,10 @@
 package org.mixare;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,11 +124,11 @@ public class JoinActivity extends Activity {
 				} else {
 					if (!(join_pw.equals(join_pwc)))
 						Toast.makeText(getApplicationContext(),
-								"비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
+								"비밀번호를 다시 확인해주세요", Toast.LENGTH_LONG).show();
 
 					else if (!(checkEmail(join_email)))
 						Toast.makeText(getApplicationContext(),
-								"올바른 E-Mail주소를 입력해주세요", Toast.LENGTH_SHORT)
+								"올바른 E-Mail주소를 입력해주세요", Toast.LENGTH_LONG)
 								.show();
 
 					else {

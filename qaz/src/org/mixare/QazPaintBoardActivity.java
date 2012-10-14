@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,9 +18,9 @@ import android.widget.Toast;
 
 import com.qaz.client.R;
 
-public class BestPaintBoardActivity extends Activity {
+public class QazPaintBoardActivity extends Activity {
 	
-	BestPaintBoard board;
+	QazPaintBoard board;
 	Button colorBtn;
 	Button penBtn;
 	Button eraserBtn;
@@ -61,7 +60,7 @@ public class BestPaintBoardActivity extends Activity {
         		LinearLayout.LayoutParams.FILL_PARENT,
         		LinearLayout.LayoutParams.FILL_PARENT);
         
-        board = new BestPaintBoard(this);
+        board = new QazPaintBoard(this);
         board.setLayoutParams(params);
         board.setPadding(2, 2, 2, 2);
         
@@ -198,13 +197,13 @@ public class BestPaintBoardActivity extends Activity {
         	public void onClick(View v) {
         	
         		
-        		AlertDialog.Builder alert = new AlertDialog.Builder(BestPaintBoardActivity.this);
+        		AlertDialog.Builder alert = new AlertDialog.Builder(QazPaintBoardActivity.this);
 
         		alert.setTitle("그림 저장");
         		alert.setMessage("그림 제목을 입력해주세요 :");
 
         		// Set an EditText view to get user input
-        		final EditText input = new EditText(BestPaintBoardActivity.this);
+        		final EditText input = new EditText(QazPaintBoardActivity.this);
         		alert.setView(input);
 
         		alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -219,7 +218,7 @@ public class BestPaintBoardActivity extends Activity {
         				} else {
         				
         					String resServer = new String();
-        					resServer = board.SaveBitmapToFileUpload(BestPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
+        					resServer = board.SaveBitmapToFileUpload(QazPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
         					
         					if (resServer.equals("success")) {
         						Toast.makeText(getApplicationContext(), value.toString() + "이(가) 저장되었습니다", Toast.LENGTH_SHORT).show();

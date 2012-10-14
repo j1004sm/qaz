@@ -204,6 +204,7 @@ public class DownloadManager implements Runnable {
 
 						// 인자로 받은 리퀘스트로부터 포맷과 소스를 할당한다
 						result.format = request.format;
+						result.source = request.source;
 						result.error = false;
 						result.errorMsg = null;
 					} catch (Exception e1) {

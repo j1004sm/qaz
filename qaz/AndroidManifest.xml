@@ -62,7 +62,7 @@
                    	android:resource="@xml/searchable"/>
 		</activity>
 		
-		<activity android:name="org.mixare.BestPaintBoardActivity"
+		<activity android:name="org.mixare.QazPaintBoardActivity"
                   android:label="@string/app_name"
                   android:theme="@style/Theme.Transparent"
                   android:launchMode="singleTop">

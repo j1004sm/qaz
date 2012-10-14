@@ -20,7 +20,6 @@ package org.mixare;
 
 import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -40,7 +39,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -921,7 +919,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 					//DOR 기능(그림 그리기 기능)을 로드. 보드를 띄움. (데이터소스에서 Qaz에 체크되었을 경우에만.)
 					if (mixContext.isDataSourceSelected(DATASOURCE.Qaz) == true) {
 					
-					Intent myIntent = new Intent(getApplicationContext(),BestPaintBoardActivity.class);
+					Intent myIntent = new Intent(getApplicationContext(),QazPaintBoardActivity.class);
 	        		startActivity(myIntent);
 	        		
 	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다", 1000).show();

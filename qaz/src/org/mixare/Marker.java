@@ -31,7 +31,6 @@ import org.mixare.render.Camera;
 import org.mixare.render.MixVector;
 
 import android.location.Location;
-import android.util.Log;
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
 abstract public class Marker implements Comparable<Marker> {

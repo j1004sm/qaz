@@ -1,7 +1,7 @@
 package org.mixare;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,11 +61,9 @@ public class DownloadImage extends Thread {
 					.openConnection();
 			conn.setDoInput(true);
 			conn.connect();
-			int nSize = conn.getContentLength();
-			BufferedInputStream bis = new BufferedInputStream(
-					conn.getInputStream(), nSize);
-			downImg = BitmapFactory.decodeStream(bis);
-			bis.close();
+			InputStream is = conn.getInputStream();
+			downImg = BitmapFactory.decodeStream(is);
+			is.close();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

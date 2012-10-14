@@ -41,12 +41,11 @@ import org.mixare.data.DataSource.DATAFORMAT;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.util.Log;
 
 // JSON 파일을 다루는 클래스
 public class Json extends DataHandler {
-	
-	MixView mixView;
 
 	public static final int MAX_JSON_OBJECTS=1000;	// JSON 객체의 최대 수
 	
@@ -170,22 +169,23 @@ public class Json extends DataHandler {
 			//if(jo.has("has_detail_page") && jo.getInt("has_detail_page")!=0 && jo.has("webpage"))
 			
 			Bitmap image = null;
-			String title = unescapeHTML(jo.getString("title"), 0); 
+			//String title = unescapeHTML(jo.getString("title"), 0); 
+			String link = unescapeHTML(jo.getString("webpage"), 0);
 			
-			DownloadImage imgThread = new DownloadImage(mixView.mixContext, title);
-			imgThread.start();
+			//DownloadImage imgThread = new DownloadImage(MixView.mixContext, title);
+			//imgThread.start();
 
-			image = imgThread.retImg;
+			//image = imgThread.retImg;
 			
 			//image = getBitmapFromURL(link);
 			
 			// 할당된 값들로 마커 생성
 			ma = new ImageMarker(
-					title, 
+					unescapeHTML(jo.getString("title"), 0), 
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
-					unescapeHTML(jo.getString("webpage"), 0),
+					link,
 					DataSource.DATASOURCE.Qaz,
 					image);
 		}
@@ -195,12 +195,17 @@ public class Json extends DataHandler {
 	
 	public static Bitmap getBitmapFromURL(String src) {
 		try {
+			
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+	        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
+			
 			URL url = new URL(src);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);
 			connection.connect();
 			InputStream input = connection.getInputStream();
 			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			
 			return myBitmap;
 		} catch (IOException e) {
 			e.printStackTrace();

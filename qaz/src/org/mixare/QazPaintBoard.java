@@ -30,7 +30,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class BestPaintBoard extends View {
+public class QazPaintBoard extends View {
 	
 	//영기형 테스트
 
@@ -94,7 +94,7 @@ public class BestPaintBoard extends View {
 	 * 
 	 * @param c
 	 */
-	public BestPaintBoard(Context context) {
+	public QazPaintBoard(Context context) {
 		super(context);
 
 		// create a new paint object

@@ -3,7 +3,6 @@
  */
 package org.mixare;
 
-import org.mixare.data.DataSource;
 import org.mixare.data.DataSource.DATASOURCE;
 import org.mixare.gui.PaintScreen;
 
@@ -19,7 +18,6 @@ public class ImageMarker extends Marker{
 
 	public static final int MAX_OBJECTS = 20;
 	private Bitmap image = null; 
-	public static final int OSM_URL_MAX_OBJECTS = 5;
 	private int rectangleBackgroundColor = Color.argb(155, 255, 255, 255);
 
 
@@ -42,7 +40,7 @@ public class ImageMarker extends Marker{
 
 	@Override
 	public void draw(PaintScreen dw) {
-		drawTextBlock(dw);
+		super.drawTextBlock(dw);
 		
 		if (isVisible) {
 			if (image != null){
