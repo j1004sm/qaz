@@ -86,13 +86,11 @@ public class QazPaintBoard extends View {
 	private static final boolean RENDERING_ANTIALIAS = true;
 	private static final boolean DITHER_FLAG = true;
 
-	private int mCertainColor = 0xFF000000;
+	private int mCertainColor = 0xffffffff;		//초기 펜 색상 
 	private float mStrokeWidth = 2.0f;
 
-	/**
+	/*
 	 * Initialize paint object and coordinates
-	 * 
-	 * @param c
 	 */
 	public QazPaintBoard(Context context) {
 		super(context);
