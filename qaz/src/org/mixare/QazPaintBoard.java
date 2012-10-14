@@ -201,15 +201,17 @@ public class QazPaintBoard extends View {
 	 * @param canvas
 	 */
 	public void updatePaintProperty(int color, int size) {
+		mPaint.setXfermode(null);
 		mPaint.setColor(color);
 		mPaint.setStrokeWidth(size);
 	}
 	
-	public void erasePaintProperty() {
-		mPaint.setAlpha(0xFF);
+	public void erasePaintProperty(int size) {
+		mPaint.setStrokeWidth(size);
 		mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		
 		invalidate();
+		
 	}
 
 	/**

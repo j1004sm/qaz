@@ -164,9 +164,9 @@ public class QazPaintBoardActivity extends Activity {
                     oldSize = mSize;
         			
                     mColor = Color.WHITE;
-                    mSize = 2;
+                    mSize = 15;
                     
-                    board.erasePaintProperty();
+                    board.erasePaintProperty(mSize);
                     displayPaintProperty();
                     
                 } else {
