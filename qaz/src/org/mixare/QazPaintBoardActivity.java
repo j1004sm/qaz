@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -159,10 +163,14 @@ public class QazPaintBoardActivity extends Activity {
                     oldColor = mColor;
                     oldSize = mSize;
                     
+                    Paint clearPaint  = new Paint();
+        			Xfermode xmode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+        			clearPaint.setXfermode(xmode);
+        			
                     mColor = Color.WHITE;
-                    mSize = 15;
+                    mSize = 2;
                     
-                    board.updatePaintProperty(mColor, mSize);
+                    board.erasePaintProperty();
                     displayPaintProperty();
                     
                 } else {

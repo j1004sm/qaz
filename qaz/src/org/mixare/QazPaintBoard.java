@@ -204,6 +204,13 @@ public class QazPaintBoard extends View {
 		mPaint.setColor(color);
 		mPaint.setStrokeWidth(size);
 	}
+	
+	public void erasePaintProperty() {
+		mPaint.setAlpha(0xFF);
+		mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		
+		invalidate();
+	}
 
 	/**
 	 * Create a new image
