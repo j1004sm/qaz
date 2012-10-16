@@ -7,13 +7,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class DownloadImage extends Thread {
-	private final Context mContext;
 	private String mUrl;
 	public Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
 
@@ -23,11 +21,8 @@ public class DownloadImage extends Thread {
 	 * @param context 어플의 context
 	 * @param url 다운 받을 이미지 주소
 	 */
-	public DownloadImage(Context context, String title) {
-		
-		mContext = context;
+	public DownloadImage(String title) {
 		mUrl = title;
-		
 		/*
 		try {
 			String utf_title;
@@ -39,7 +34,6 @@ public class DownloadImage extends Thread {
 			mUrl = "http://manjong.org:8255/qaz/upload/" + title + ".png";
 		}
 		*/
-
 		setDaemon(true);
 	}
 

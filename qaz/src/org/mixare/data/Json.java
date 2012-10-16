@@ -18,10 +18,7 @@
  */
 package org.mixare.data;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +37,6 @@ import org.mixare.SocialMarker;
 import org.mixare.data.DataSource.DATAFORMAT;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.StrictMode;
 import android.util.Log;
 
 // JSON 파일을 다루는 클래스
@@ -173,7 +168,7 @@ public class Json extends DataHandler {
 			
 			//Log.e("getEncoding",link.getBytes());
 			
-			DownloadImage imgThread = new DownloadImage(MixView.mixContext, title);
+			DownloadImage imgThread = new DownloadImage(title);
 			imgThread.start();
 
 			while (imgThread.downImg == null){
