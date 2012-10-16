@@ -916,6 +916,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			if (me.getAction() == MotionEvent.ACTION_UP) {
 				dataView.clickEvent(xPress, yPress);
 				
+				//if (dataView.handleClickEvent(null) == true){
 					//DOR 기능(그림 그리기 기능)을 로드. 보드를 띄움. (데이터소스에서 Qaz에 체크되었을 경우에만.)
 					if (mixContext.isDataSourceSelected(DATASOURCE.Qaz) == true) {
 					
@@ -924,7 +925,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 	        		
 	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다", 1000).show();
 					}
-				
+				//}
 			}
 
 			return true;

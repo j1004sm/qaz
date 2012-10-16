@@ -169,24 +169,26 @@ public class Json extends DataHandler {
 			//if(jo.has("has_detail_page") && jo.getInt("has_detail_page")!=0 && jo.has("webpage"))
 			
 			Bitmap image = null;
-			//String title = unescapeHTML(jo.getString("title"), 0); 
-			String link = unescapeHTML(jo.getString("webpage"), 0);
+			String title = unescapeHTML(jo.getString("title"), 0); 
+			
+			//Log.e("getEncoding",link.getBytes());
 			
 			//DownloadImage imgThread = new DownloadImage(MixView.mixContext, title);
 			//imgThread.start();
 
 			//image = imgThread.retImg;
 			
-			//image = getBitmapFromURL(link);
+			image = getBitmapFromURL(title);
 			
 			// 할당된 값들로 마커 생성
-			ma = new POIMarker(
-					unescapeHTML(jo.getString("title"), 0), 
+			ma = new ImageMarker(
+					title, 
 					jo.getDouble("lat"), 
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
-					link,
-					DataSource.DATASOURCE.Qaz);
+					unescapeHTML(jo.getString("webpage"), 0),
+					DataSource.DATASOURCE.Qaz,
+					image);
 		}
 		return ma;	// 마커 리턴
 	}
@@ -198,12 +200,23 @@ public class Json extends DataHandler {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 	        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
 			
+			src = java.net.URLEncoder.encode(new String(src.getBytes("UTF-8")));
+			src = "http://manjong.org:8255/qaz/upload/" + src + ".png";
 			URL url = new URL(src);
+			
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);
 			connection.connect();
+			
+			int status = connection.getResponseCode();
+			Log.e("Image Download ErrorCode", Integer.toString(status));
+			
 			InputStream input = connection.getInputStream();
-			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 4;
+			Bitmap myBitmap = BitmapFactory.decodeStream(input, null, options);
 			
 			return myBitmap;
 		} catch (IOException e) {

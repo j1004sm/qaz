@@ -22,8 +22,6 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 
 // 화면에 표시될 텍스트 클래스
 public class TextObj implements ScreenObj {

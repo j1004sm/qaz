@@ -40,7 +40,7 @@ public class ImageMarker extends Marker{
 
 	@Override
 	public void draw(PaintScreen dw) {
-		super.drawTextBlock(dw);
+		drawTextBlock(dw);
 		
 		if (isVisible) {
 			if (image != null){
