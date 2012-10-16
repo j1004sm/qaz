@@ -73,7 +73,7 @@ public class DownloadImage extends Thread {
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
 			
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 3;				//이미지 사이즈를 줄임 : 1/3로
+			options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
 			downImg = BitmapFactory.decodeStream(input, null, options);
 			
 		} catch (MalformedURLException e) {
