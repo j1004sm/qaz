@@ -44,7 +44,7 @@ public class ImageMarker extends Marker {
 	}
 
 	public void drawImage(PaintScreen dw) {
-		int rectangleBackgroundColor = Color.argb(155, 255, 255, 255);
+		int rectangleBackgroundColor = Color.argb(255, 255, 255, 255);
 		dw.setColor(rectangleBackgroundColor);
 		
 		if (isVisible) {
