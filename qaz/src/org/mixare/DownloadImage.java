@@ -2,6 +2,7 @@ package org.mixare;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,15 +10,12 @@ import java.net.URL;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.util.Log;
 
 public class DownloadImage extends Thread {
-	final Context mContext;
+	private final Context mContext;
 	private String mUrl;
-	private Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
-	public Bitmap retImg = null;
+	public Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
 
 	/**
 	 * 웹에서 이미지를 다운로드
@@ -28,7 +26,7 @@ public class DownloadImage extends Thread {
 	public DownloadImage(Context context, String title) {
 		
 		mContext = context;
-		mUrl = "http://manjong.org:8255/qaz/upload/" + title + ".png";
+		mUrl = title;
 		
 		/*
 		try {
@@ -51,37 +49,52 @@ public class DownloadImage extends Thread {
 		URL myFileUrl = null;
 		
 		try {
+			mUrl = java.net.URLEncoder.encode(new String(mUrl.getBytes("UTF-8")));	//UTF-8로 인코딩 
+			mUrl = "http://manjong.org:8255/qaz/upload/" + mUrl + ".png";
+			
 			myFileUrl = new URL(mUrl);
 		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
-			HttpURLConnection conn = (HttpURLConnection) myFileUrl
-					.openConnection();
-			conn.setDoInput(true);
-			conn.connect();
-			InputStream is = conn.getInputStream();
-			downImg = BitmapFactory.decodeStream(is);
-			is.close();
+			
+			HttpURLConnection connection = (HttpURLConnection) myFileUrl.openConnection();
+			connection.setDoInput(true);
+			connection.connect();
+			
+			int status = connection.getResponseCode();
+			Log.e("Image Download ErrorCode", Integer.toString(status));
+			
+			InputStream input = connection.getInputStream();
+			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 3;				//이미지 사이즈를 줄임 : 1/3로
+			downImg = BitmapFactory.decodeStream(input, null, options);
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-			
 		}
 		// 핸들러에 완료 알림
-		mHandler.sendEmptyMessage(0);
+		//mHandler.sendEmptyMessage(0);
+		//setDaemon(false);
 	}
-
-	// 내부 핸들러
-	Handler mHandler = new Handler(Looper.getMainLooper()) {
-		@Override
-		public void handleMessage(Message msg) {
-			if (msg.what == 0) {
-				retImg = downImg;
-			}
-		}
-	};
+//
+//	// 내부 핸들러
+//	Handler mHandler = new Handler(Looper.getMainLooper()) {
+//		public Bitmap retImg = null;
+//		@Override
+//		public void handleMessage(Message msg) {
+//			if (msg.what == 0) {
+//				retImg = downImg;
+//			}
+//		}
+//	};
 
 }

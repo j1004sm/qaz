@@ -173,12 +173,14 @@ public class Json extends DataHandler {
 			
 			//Log.e("getEncoding",link.getBytes());
 			
-			//DownloadImage imgThread = new DownloadImage(MixView.mixContext, title);
-			//imgThread.start();
+			DownloadImage imgThread = new DownloadImage(MixView.mixContext, title);
+			imgThread.start();
 
-			//image = imgThread.retImg;
+			while (imgThread.downImg == null){
+				image = imgThread.downImg;
+			}
 			
-			image = getBitmapFromURL(title);
+			//image = getBitmapFromURL(title);
 			
 			// 할당된 값들로 마커 생성
 			ma = new ImageMarker(
@@ -194,36 +196,36 @@ public class Json extends DataHandler {
 	}
 
 	
-	public static Bitmap getBitmapFromURL(String src) {
-		try {
-			
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-	        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
-			
-			src = java.net.URLEncoder.encode(new String(src.getBytes("UTF-8")));
-			src = "http://manjong.org:8255/qaz/upload/" + src + ".png";
-			URL url = new URL(src);
-			
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.connect();
-			
-			int status = connection.getResponseCode();
-			Log.e("Image Download ErrorCode", Integer.toString(status));
-			
-			InputStream input = connection.getInputStream();
-			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
-			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 4;
-			Bitmap myBitmap = BitmapFactory.decodeStream(input, null, options);
-			
-			return myBitmap;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	public static Bitmap getBitmapFromURL(String src) {
+//		try {
+//			
+//			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//	        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
+//			
+//			src = java.net.URLEncoder.encode(new String(src.getBytes("UTF-8")));	//UTF-8로 인코딩 
+//			src = "http://manjong.org:8255/qaz/upload/" + src + ".png";
+//			URL url = new URL(src);
+//			
+//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//			connection.setDoInput(true);
+//			connection.connect();
+//			
+//			int status = connection.getResponseCode();
+//			Log.e("Image Download ErrorCode", Integer.toString(status));
+//			
+//			InputStream input = connection.getInputStream();
+//			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
+//			
+//			BitmapFactory.Options options = new BitmapFactory.Options();
+//			options.inSampleSize = 3;				//이미지 사이즈를 줄임 : 1/3로
+//			Bitmap myBitmap = BitmapFactory.decodeStream(input, null, options);
+//			
+//			return myBitmap;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 
 	// 위키피디아 데이터 처리
 	public Marker processWikipediaJSONObject(JSONObject jo) throws JSONException {
