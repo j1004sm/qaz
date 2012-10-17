@@ -511,8 +511,8 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 				//				hardFix.setLongitude(0);
 
 				// 기본 위치의 값을 수정
-				hardFix.setLatitude(46.480302);
-				hardFix.setLongitude(11.296005);
+				hardFix.setLatitude(37.2762412);
+				hardFix.setLongitude(127.1311332);
 				hardFix.setAltitude(300);
 
 				/*New York*/
