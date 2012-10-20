@@ -171,7 +171,7 @@ public class Json extends DataHandler {
 			DownloadImage imgThread = new DownloadImage(title);
 			imgThread.start();
 
-			while (imgThread.downImg == null){
+			while (!(imgThread.doneFlg)){
 				image = imgThread.downImg;
 			}
 			
