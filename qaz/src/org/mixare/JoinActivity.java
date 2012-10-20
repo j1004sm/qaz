@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -19,7 +19,11 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qaz.client.R;
@@ -95,9 +99,6 @@ public class JoinActivity extends Activity {
 		setContentView(R.layout.join);
 
 		btn_check = (Button) findViewById(R.id.join_button_check);
-		Button btn_cancel = (Button) findViewById(R.id.join_button_cancel);
-		Button btn_terms = (Button) findViewById(R.id.join_button_terms);
-
 		join_id_EditText = (EditText) findViewById(R.id.join_id);
 		join_id_EditText.setFilters(new InputFilter[] { filterAlphaNum });
 		join_pw_EditText = (EditText) findViewById(R.id.join_pw);
@@ -105,6 +106,43 @@ public class JoinActivity extends Activity {
 		join_pwc_EditText = (EditText) findViewById(R.id.join_pwc);
 		join_name_EditText = (EditText) findViewById(R.id.join_name);
 		join_mail_EditText = (EditText) findViewById(R.id.join_mail);
+		
+		TextView txtTerms = (TextView) findViewById(R.id.txtTerms);
+		TextView txtPriv = (TextView) findViewById(R.id.txtPriv);
+		
+		CheckBox chkAgree = (CheckBox) findViewById(R.id.chkAgree);
+		
+		btn_check.setEnabled(false);
+		
+		chkAgree.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	btn_check.setEnabled(true);
+		        } else {
+		        	btn_check.setEnabled(false);
+		        }
+
+		    }
+		});
+
+		
+		txtTerms.setOnClickListener(new TextView.OnClickListener(){
+        	public void onClick(View v) {
+        		Intent i = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("http://www.manjong.org:8255/qaz/terms.jsp"));
+				startActivity(i);
+        	}
+        });
+		
+		txtPriv.setOnClickListener(new TextView.OnClickListener(){
+        	public void onClick(View v) {
+        		Intent i = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("http://www.manjong.org:8255/qaz/privacy.jsp"));
+				startActivity(i);
+        	}
+        });
 
 		btn_check.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -145,29 +183,7 @@ public class JoinActivity extends Activity {
 			}
 		});
 
-		btn_cancel.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
-
-		btn_terms.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				AlertDialog.Builder builder1 = new AlertDialog.Builder(
-						JoinActivity.this);
-				builder1.setMessage(getString(R.string.terms_content));
-				builder1.setNegativeButton(getString(R.string.close_button),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.dismiss();
-							}
-						});
-
-				AlertDialog alert1 = builder1.create();
-				alert1.setTitle(getString(R.string.terms_title));
-				alert1.show();
-			}
-		});
+		
 
 	}
 

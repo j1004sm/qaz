@@ -28,7 +28,7 @@
     <string name="menu_item_4">줌레벨</string>
     <string name="menu_item_5">주변 검색</string>
     <string name="menu_item_6">GPS 정보</string>
-    <string name="menu_item_7">개발자 정보</string>
+    <string name="menu_item_7">DrawOnReal 정보</string>
     <string name="connection_error_dialog">죄송합니다. 연결 문제가 발생했습니다. \n인터넷에 연결되어 있는지 확인해주십시요.</string>
     <string name="connection_error_dialog_button1">재시도</string>
     <string name="connection_error_dialog_button2">설정 열기</string>
@@ -61,7 +61,7 @@
     <string name="search_active_2">. Touch to terminate search</string>
     <string name="download_error">에서 다운받던 중 약간 문제가 생겼습니다.</string>
     <string name="download_received">에서 데이터를 받았습니다</string>
-    <string name="qaz_info">오픈소스 증강현실 엔진 Mixare를 기반으로 한 안드로이드용 증강현실 어플리케이션 DrawOnReal 입니다. 따라서, GPLv3 라이센스를 따릅니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n MAWs 10학번 안훈민, CEL 11학번 이영기, MAWs 12학번 한만종</string>
+    <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따르며, 소스코드도 공개되어 있습니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n 한만종, 안훈민, 이영기</string>
     <string name="qaz_info_title">어플리케이션 정보</string>
     <string name="terms_title">이용약관</string>
     <string name="terms_content">이용약관 내용 작성중</string>
