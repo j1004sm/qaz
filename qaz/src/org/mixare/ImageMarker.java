@@ -50,8 +50,6 @@ public class ImageMarker extends Marker {
 				dw.setColor(rectangleBackgroundColor);
 				dw.paintBitmap(image, signMarker.x - (image.getWidth() / 2),
 						signMarker.y - (image.getHeight() / 2));
-			} else {
-				drawCircle(dw);
 			}
 		}
 	}

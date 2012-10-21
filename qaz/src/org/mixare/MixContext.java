@@ -112,10 +112,11 @@ public class MixContext extends ContextWrapper {
 			if(selectedDataSources.get(source))
 				atLeastOneDatasourceSelected = true;
 		}
-		// 아무것도 선택된 것이 없을 경우 위키피디아를 선택한다
-		// (위키피디아는 기본 데이터 소스로 한다)
-		if(!atLeastOneDatasourceSelected)
+		// 아무것도 선택된 것이 없을 경우 위키피디아와 Qaz를 기본으로 선택
+		if(!atLeastOneDatasourceSelected) {
 			setDataSource(DATASOURCE.Qaz, true);
+			setDataSource(DATASOURCE.Wikipedia, true);
+		}
 
 		
 		// 회전행렬을 일단 단위행렬로 세팅
