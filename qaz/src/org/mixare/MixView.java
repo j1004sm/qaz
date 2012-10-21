@@ -327,7 +327,10 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 				AlertDialog alert1 = builder1.create();
 				alert1.setTitle(getString(DataView.LICENSE_TITLE));
 				alert1.show();
+				
 				editor.putBoolean("firstAccess", true);
+				editor.putString("id", LoginActivity.usrId);
+				editor.putString("pw", LoginActivity.usrPw);
 				editor.commit();	// 변경 사항이 완료되었으면 commit
 			} 
 			

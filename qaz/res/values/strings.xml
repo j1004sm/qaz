@@ -62,7 +62,7 @@
     <string name="search_active_2">. Touch to terminate search</string>
     <string name="download_error">에서 다운받던 중 약간 문제가 생겼습니다.</string>
     <string name="download_received">에서 데이터를 받았습니다</string>
-    <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따르며, 소스코드도 공개되어 있습니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n 한만종, 안훈민, 이영기</string>
+    <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따릅니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n 한만종, 안훈민, 이영기 \n\n 어플리케이션에 관한 문의는 aksmj8855@hotmail.com으로 해주시기 바랍니다.</string>
     <string name="qaz_info_title">어플리케이션 정보</string>
     <string name="askExit">정말로 탈퇴하시겠습니까?</string>
     <string name="exitTitle">회원탈퇴</string>

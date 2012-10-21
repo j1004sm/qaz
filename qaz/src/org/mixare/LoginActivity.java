@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,6 +65,12 @@ public class LoginActivity extends Activity {
 		Button btn_findId = (Button) findViewById(R.id.btn_findId);
 		login_id = (EditText) findViewById(R.id.login_id);
 		login_pw = (EditText) findViewById(R.id.login_pw);
+		
+		String strId, strPw;
+		
+		SharedPreferences settings = getSharedPreferences("MyPrefsFileForMenuItems", 0);
+		strId = settings.getString("id", "");
+		strPw = settings.getString("pw", "");
 
 		btn_login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -90,6 +97,13 @@ public class LoginActivity extends Activity {
 
 			}
 		});
+		
+		if(!(strId.equals(""))){
+			login_id.setText(strId);
+			login_pw.setText(strPw);
+			
+			btn_login.performClick();
+		}
 
 		btn_join.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
