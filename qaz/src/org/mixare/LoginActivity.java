@@ -28,7 +28,6 @@ public class LoginActivity extends Activity {
 
 	EditText login_id;
 	EditText login_pw;
-	String usrPw;
 	String encPw;
 	String server_result;
 	remoteRequestTask server_login;
@@ -36,6 +35,8 @@ public class LoginActivity extends Activity {
 
 	MixView mixView;
 	public static String usrId;
+	public static String usrPw;
+	
 
 	public static String getMD5Hash(String s) {
 		MessageDigest m = null;
@@ -69,7 +70,6 @@ public class LoginActivity extends Activity {
 				
 				usrId = login_id.getText().toString();
 				usrPw = login_pw.getText().toString();
-				encPw = getMD5Hash(usrPw);
 
 				if (usrId.length() == 0 || usrPw.length() == 0) {
 					Toast.makeText(getApplicationContext(),
@@ -80,6 +80,8 @@ public class LoginActivity extends Activity {
 					login_pw.setEnabled(false);
 					btn_login.setEnabled(false);
 					btn_login.setText("로그인 중...");
+					
+					encPw = getMD5Hash(usrPw);
 
 					server_login = new remoteRequestTask();
 					server_login.execute();

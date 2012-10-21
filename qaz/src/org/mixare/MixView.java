@@ -76,6 +76,8 @@ import android.widget.Toast;
 // 메인에 보여지게 될 믹스뷰(액티비티) 클래스
 public class MixView extends Activity implements SensorEventListener,LocationListener, OnTouchListener{
 
+	public static Activity mixView;
+	
 	// 카메라 스크린과 증강된 뷰
 	private CameraSurface camScreen;
 	private AugmentedView augScreen;
@@ -233,6 +235,8 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		mixView = MixView.this;
 		
 		// 데이터 소스로부터 아이콘 생성
 		DataSource.createIcons(getResources());
@@ -623,6 +627,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		MenuItem item5 =menu.add(base, base+4, base+4,  getString(DataView.MENU_ITEM_5));
 		MenuItem item6 =menu.add(base, base+5, base+5,  getString(DataView.MENU_ITEM_6));
 		MenuItem item7 =menu.add(base, base+6, base+6,  getString(DataView.MENU_ITEM_7));
+		MenuItem item8 =menu.add(base, base+7, base+7,  getString(DataView.MENU_ITEM_8));
 
 		// 각 메뉴에 쓰일 아이콘 
 		/*assign icons to the menu items*/
@@ -633,6 +638,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		item5.setIcon(android.R.drawable.ic_menu_search);
 		item6.setIcon(android.R.drawable.ic_menu_info_details);
 		item7.setIcon(android.R.drawable.ic_menu_share);
+		item7.setIcon(android.R.drawable.ic_menu_edit);
 
 		return true;
 	}
@@ -737,8 +743,15 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			alert1.setTitle(getString(DataView.QAZ_INFO_TITLE));
 			alert1.show();
 			break;
-
+			
+		  case 8:
+			Intent i = new Intent(MixView.this, ProfileActivity.class);
+			startActivity(i);
+			break;
 		}
+		
+		
+			
 		return true;
 	}
 	

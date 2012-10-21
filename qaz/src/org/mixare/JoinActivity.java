@@ -131,7 +131,7 @@ public class JoinActivity extends Activity {
 		txtTerms.setOnClickListener(new TextView.OnClickListener(){
         	public void onClick(View v) {
         		Intent i = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.manjong.org:8255/qaz/terms.jsp"));
+						.parse("http://www.manjong.org:8255/qaz/terms.html"));
 				startActivity(i);
         	}
         });
@@ -139,7 +139,7 @@ public class JoinActivity extends Activity {
 		txtPriv.setOnClickListener(new TextView.OnClickListener(){
         	public void onClick(View v) {
         		Intent i = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.manjong.org:8255/qaz/privacy.jsp"));
+						.parse("http://www.manjong.org:8255/qaz/privacy.html"));
 				startActivity(i);
         	}
         });

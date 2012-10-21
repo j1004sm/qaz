@@ -46,7 +46,7 @@ public class DownloadImage extends Thread {
 			connection.connect();
 			
 			int status = connection.getResponseCode();
-			Log.e("Image Download ErrorCode", Integer.toString(status));
+			//Log.e("Image Download ErrorCode", Integer.toString(status));
 			
 			InputStream input = connection.getInputStream();
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
