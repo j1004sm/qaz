@@ -21,13 +21,15 @@ public final class R {
         public static final int icon_white=0x7f020007;
         public static final int icon_white1=0x7f020008;
         public static final int loc_icon=0x7f020009;
-        public static final int osm=0x7f02000a;
-        public static final int penpalette=0x7f02000b;
-        public static final int translucent_background=0x7f02000f;
-        public static final int transparent_background=0x7f020010;
-        public static final int twitter=0x7f02000c;
-        public static final int undo=0x7f02000d;
-        public static final int wikipedia=0x7f02000e;
+        public static final int mini=0x7f02000a;
+        public static final int mini2=0x7f02000b;
+        public static final int osm=0x7f02000c;
+        public static final int penpalette=0x7f02000d;
+        public static final int translucent_background=0x7f020011;
+        public static final int transparent_background=0x7f020012;
+        public static final int twitter=0x7f02000e;
+        public static final int undo=0x7f02000f;
+        public static final int wikipedia=0x7f020010;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070003;
