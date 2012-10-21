@@ -16,7 +16,7 @@ import android.location.Location;
  */
 public class ImageMarker extends Marker {
 
-	public static final int MAX_OBJECTS = 10;
+	public static final int MAX_OBJECTS = 15;
 	private Bitmap image = null;
 
 	public ImageMarker(String title, double latitude, double longitude,
@@ -50,6 +50,8 @@ public class ImageMarker extends Marker {
 				dw.setColor(rectangleBackgroundColor);
 				dw.paintBitmap(image, signMarker.x - (image.getWidth() / 2),
 						signMarker.y - (image.getHeight() / 2));
+			} else {
+				drawCircle(dw);
 			}
 		}
 	}

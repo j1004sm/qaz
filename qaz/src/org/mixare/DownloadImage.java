@@ -1,5 +1,6 @@
 package org.mixare;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -15,10 +16,11 @@ import android.util.Log;
 public class DownloadImage extends Thread {
 	private String mUrl;
 	public Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
-	public boolean doneFlg = false;
+	public int doneFlg = 0;
 
 	public DownloadImage(String title) {
 		mUrl = title;
+		doneFlg = 0;
 		setDaemon(true);
 	}
 
@@ -55,12 +57,17 @@ public class DownloadImage extends Thread {
 			options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
 			downImg = BitmapFactory.decodeStream(input, null, options);
 			
-			doneFlg = true;
+			doneFlg = 1;
 			
+		}catch (FileNotFoundException e) {
+			e.printStackTrace();
+			doneFlg = 2;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			doneFlg = 0;
 		} catch (IOException e) {
 			e.printStackTrace();
+			doneFlg = 0;
 		}
 		// 핸들러에 완료 알림
 		//mHandler.sendEmptyMessage(0);
