@@ -3,7 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mini2"
+    android:background="@drawable/mini3"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -76,6 +76,7 @@
 
                             <requestFocus />
                         </EditText>
+
                     </LinearLayout>
                 </LinearLayout>
 
