@@ -41,7 +41,7 @@
     <string name="license_title">저작권</string>
     <string name="close_button">닫기</string>
     <string name="general_info_title">정보</string>
-    <string name="general_info_text">GPS 정보 :</string>
+    <string name="general_info_text">GPS 정보 : </string>
     <string name="longitude">경도 : </string>
     <string name="latitude">위도 : </string>
     <string name="altitude">고도 : </string>
@@ -53,13 +53,13 @@
     <string name="map_menu_cam_mode">카메라</string>
     <string name="map_my_location">내 위치</string>
     <string name="map_current_location_click">현재 위치</string>
-    <string name="data_source_change_wikipedia">Changed to Wikipedia as data source</string>
-    <string name="data_source_change_twitter">Changed to Twitter as data source</string>
-    <string name="data_source_change_osm">Changed to OpenStreetMap as data source</string>
+    <string name="data_source_change_wikipedia">위키피디아로 데이터 소스 변경</string>
+    <string name="data_source_change_twitter">트위터로 데이터 소스 변경</string>
+    <string name="data_source_change_osm">OpenStreetMap으로 데이터 소스 변경</string>
     <string name="search_failed_notification">검색 결과가 없습니다</string>
     <string name="source_openstreetmap">OpenStreetMap</string>
-    <string name="search_active_1">Search on data source</string>
-    <string name="search_active_2">. Touch to terminate search</string>
+    <string name="search_active_1">데이터 소스에서 검색</string>
+    <string name="search_active_2">. 검색을 종료하려면 터치하세요</string>
     <string name="download_error">에서 다운받던 중 약간 문제가 생겼습니다.</string>
     <string name="download_received">에서 데이터를 받았습니다</string>
     <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따릅니다. \n\n 강남대학교 컴퓨터미디어정보공학부 \n 한만종, 안훈민, 이영기 \n\n 어플리케이션에 관한 문의는 aksmj8855@hotmail.com으로 해주시기 바랍니다.</string>
