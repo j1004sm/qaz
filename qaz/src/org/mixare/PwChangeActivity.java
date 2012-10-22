@@ -24,7 +24,7 @@ public class PwChangeActivity extends Activity {
 	EditText txtNowPw;
 	EditText txtNewPw;
 	EditText txtNewPwChk;
-	
+
 	Button btnCheck;
 
 	int server_result = 0;
@@ -48,21 +48,27 @@ public class PwChangeActivity extends Activity {
 				String usrNewPw = txtNewPw.getText().toString();
 				String usrNewPwChk = txtNewPwChk.getText().toString();
 
-				if (!(usrNowPw.equals(LoginActivity.usrPw))) {
-					Toast.makeText(getApplicationContext(), "현재 비밀번호를 틀렸습니다",
-							Toast.LENGTH_LONG).show();
-				} else if (!(usrNewPw.equals(usrNewPwChk))) {
-					Toast.makeText(getApplicationContext(), "새 비밀번호 확인이 맞지 않습니다",
+				if (usrNowPw.length() == 0 || usrNewPw.length() == 0
+						|| usrNewPwChk.length() == 0) {
+					Toast.makeText(getApplicationContext(), "빈칸을 모두 채워주세요",
 							Toast.LENGTH_LONG).show();
 				} else {
-					btnCheck.setEnabled(false);
-					btnCheck.setText("처리 중...");
-					encPw = LoginActivity.getMD5Hash(usrNewPw);
-					
-					server_request = new remoteRequestTask();
-					server_request.execute();
-				}
 
+					if (!(usrNowPw.equals(LoginActivity.usrPw))) {
+						Toast.makeText(getApplicationContext(),
+								"현재 비밀번호를 틀렸습니다", Toast.LENGTH_LONG).show();
+					} else if (!(usrNewPw.equals(usrNewPwChk))) {
+						Toast.makeText(getApplicationContext(),
+								"새 비밀번호 확인이 맞지 않습니다", Toast.LENGTH_LONG).show();
+					} else {
+						btnCheck.setEnabled(false);
+						btnCheck.setText("처리 중...");
+						encPw = LoginActivity.getMD5Hash(usrNewPw);
+
+						server_request = new remoteRequestTask();
+						server_request.execute();
+					}
+				}
 			}
 		});
 	}
@@ -124,8 +130,9 @@ public class PwChangeActivity extends Activity {
 
 		protected void onPostExecute(Void params) {
 			if (server_result == 0) {
-				Toast.makeText(getApplicationContext(), "비밀번호 변경에 실패했습니다. 나중에 다시시도 해주십시요.",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"비밀번호 변경에 실패했습니다. 나중에 다시시도 해주십시요.", Toast.LENGTH_LONG)
+						.show();
 
 				btnCheck.setEnabled(true);
 				btnCheck.setText("확인");
