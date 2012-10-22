@@ -34,7 +34,7 @@
     <string name="connection_error_dialog_button1">재시도</string>
     <string name="connection_error_dialog_button2">설정 열기</string>
     <string name="connection_error_dialog_button3">앱 종료</string>
-    <string name="connection_GPS_dialog_text">GPS 위치를 업데이트할 수 없습니다. \n올바른 위치 정보가 표시되지 않을 수 있습니다.</string>
+    <string name="connection_GPS_dialog_text">GPS가 켜져 있는지 점검해주세요</string>
     <string name="connection_GPS_dialog_button1">계속</string>
     <string name="connection_GPS_dialog_button2">종료</string>
     <string name="no_website_available">죄송합니다. 더 이상 정보가 존재하지 않습니다.</string>

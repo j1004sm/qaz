@@ -336,7 +336,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			
 			// 정확한 위치를 찾지 못했을 경우(GPS 관련)
 			if(mixContext.isActualLocation()==false){
-				//Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+				Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
 			}	
 			
 		} catch (Exception ex) {
