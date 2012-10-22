@@ -641,7 +641,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		item5.setIcon(android.R.drawable.ic_menu_search);
 		item6.setIcon(android.R.drawable.ic_menu_info_details);
 		item7.setIcon(android.R.drawable.ic_menu_share);
-		item7.setIcon(android.R.drawable.ic_menu_edit);
+		item8.setIcon(android.R.drawable.ic_menu_edit);
 
 		return true;
 	}
@@ -835,7 +835,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			Context ctx = seekBar.getContext();
 			// 토스트의 텍스트를 변경
-			t = Toast.makeText(ctx, "Radius: ", Toast.LENGTH_LONG);
+			t = Toast.makeText(ctx, "반경: ", Toast.LENGTH_LONG);
 //			zoomChanging= true;
 		}
 
@@ -1196,7 +1196,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 					// 현재 형태의 요소는 최적의 팩터에 가까울 것이고
 					// 프리뷰의 넓이는 스크린 넓이보다 작고, 최적의 넓이보다는 넓어야 한다
 					// * 이 조합은 보다 나은 해법을 보장하게 될 것이다
-					if ((ff-cff <= ff-bff) && (element.width <= w) && (element.width >= bestw)) {
+					if ((cff >= ff) && ((element.width >= bestw) && (element.width >= besth))) {
 						bff=cff;
 						bestw = element.width;
 						besth = element.height;
@@ -1210,12 +1210,12 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 				// 이런 경우에는 디폴트 값(480*800)을 주도록 한다
 				if ((bestw == 0) || (besth == 0)){
 					Log.d("Qaz-Mixare", "Using default camera parameters!");
-					//bestw = 480;
-					//besth = 800;
+					bestw = 800;
+					besth = 480;
 				}
 				parameters.setPreviewSize(bestw, besth);	// 프리뷰 사이즈 최종 설정
 			} catch (Exception ex) {	// 예외 발생시에도 디폴트 값으로...
-				//parameters.setPreviewSize(480 , 800);
+				parameters.setPreviewSize(800,480);
 			}
 
 			// 모든 값이 입력된 파라메터를 카메라에 적용하고
