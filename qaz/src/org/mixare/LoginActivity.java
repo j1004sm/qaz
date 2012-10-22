@@ -29,12 +29,18 @@ public class LoginActivity extends Activity {
 
 	EditText login_id;
 	EditText login_pw;
+	
 	String encPw;
 	String server_result;
+	
 	remoteRequestTask server_login;
+	
 	Button btn_login;
+	Button btn_join;
+	Button btn_findId;
 
 	MixView mixView;
+	
 	public static String usrId;
 	public static String usrPw;
 	
@@ -61,8 +67,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login);
 		
 		btn_login = (Button) findViewById(R.id.btn_login);
-		Button btn_join = (Button) findViewById(R.id.btn_join);
-		Button btn_findId = (Button) findViewById(R.id.btn_findId);
+		btn_join = (Button) findViewById(R.id.btn_join);
+		btn_findId = (Button) findViewById(R.id.btn_findId);
 		login_id = (EditText) findViewById(R.id.login_id);
 		login_pw = (EditText) findViewById(R.id.login_pw);
 		
@@ -83,6 +89,8 @@ public class LoginActivity extends Activity {
 							"아이디, 비밀번호 모두 입력해주세요", Toast.LENGTH_SHORT).show();
 				} else {
 
+					btn_findId.setEnabled(false);
+					btn_join.setEnabled(false);
 					login_id.setEnabled(false);
 					login_pw.setEnabled(false);
 					btn_login.setEnabled(false);
@@ -184,6 +192,8 @@ public class LoginActivity extends Activity {
 				Toast.makeText(getApplicationContext(),
 						"인터넷 연결 상태를 점검해주세요", Toast.LENGTH_LONG).show();
 				
+				btn_findId.setEnabled(true);
+				btn_join.setEnabled(true);
 				login_id.setEnabled(true);
 				login_pw.setEnabled(true);
 				btn_login.setEnabled(true);
@@ -203,6 +213,8 @@ public class LoginActivity extends Activity {
 					Toast.makeText(getApplicationContext(),
 							"아이디와 비밀번호를 올바로 입력했는지 확인해주세요", Toast.LENGTH_LONG).show();
 					
+					btn_findId.setEnabled(true);
+					btn_join.setEnabled(true);
 					login_id.setEnabled(true);
 					login_pw.setEnabled(true);
 					btn_login.setEnabled(true);
