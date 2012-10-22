@@ -92,7 +92,6 @@ public final class R {
         public static final int SW=0x7f050007;
         public static final int W=0x7f050008;
         public static final int accuracy=0x7f050025;
-        public static final int acurracy=0x7f05003b;
         public static final int altitude=0x7f050023;
         public static final int app_name=0x7f050000;
         public static final int askExit=0x7f050037;
@@ -105,7 +104,6 @@ public final class R {
         public static final int connection_error_dialog_button1=0x7f050016;
         public static final int connection_error_dialog_button2=0x7f050017;
         public static final int connection_error_dialog_button3=0x7f050018;
-        public static final int data_source_change_buzz=0x7f05003c;
         public static final int data_source_change_osm=0x7f05002e;
         public static final int data_source_change_twitter=0x7f05002d;
         public static final int data_source_change_wikipedia=0x7f05002c;

@@ -42,7 +42,7 @@ import android.util.Log;
 // JSON 파일을 다루는 클래스
 public class Json extends DataHandler {
 
-	public static final int MAX_JSON_OBJECTS=1000;	// JSON 객체의 최대 수
+	public static final int MAX_JSON_OBJECTS=500;	// JSON 객체의 최대 수
 	
 	// 각종 데이터를 로드
 	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) {
@@ -129,7 +129,7 @@ public class Json extends DataHandler {
 			}
 			// 위치를 찾았을 경우
 			if(lat!=null) {
-				Log.v(MixView.TAG, "트위터 데이터 처리중");	// 로그 출력
+				//Log.v(MixView.TAG, "트위터 데이터 처리중");	// 로그 출력
 				// 유저와 정보 url 을 지정하기 위한 스트링 
 				String user=jo.getString("from_user");
 				String url="http://twitter.com/"+user;
@@ -154,7 +154,7 @@ public class Json extends DataHandler {
 		// 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다
 		if (jo.has("title") && jo.has("lat") && jo.has("lng") && jo.has("elevation") ) {
 	
-			Log.v(MixView.TAG, "Qaz 데이터 처리중");	// 로그 출력
+			//Log.v(MixView.TAG, "Qaz 데이터 처리중");	// 로그 출력
 			
 			//String link = new String(jo.getString("webpage").getBytes("UTF-8"),"EUC-KR");
 			//String title = new String(unescapeHTML(jo.getString("webpage"), 0).getBytes("UTF-8"),"EUC-KR");
@@ -230,7 +230,7 @@ public class Json extends DataHandler {
 		// 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다 
 		if (jo.has("title") && jo.has("lat") && jo.has("lng") && jo.has("elevation") && jo.has("wikipediaUrl")) {
 
-			Log.v(MixView.TAG, "위키피디아 데이터 처리중");	// 로그 출력
+			//Log.v(MixView.TAG, "위키피디아 데이터 처리중");	// 로그 출력
 	
 			// 할당된 값들로 마커 생성
 			ma = new POIMarker(
