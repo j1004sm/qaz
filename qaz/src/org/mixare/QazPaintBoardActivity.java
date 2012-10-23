@@ -210,7 +210,7 @@ public class QazPaintBoardActivity extends Activity {
         			public void onClick(DialogInterface dialog, int whichButton) {
         				
         				String value = input.getText().toString();
-        				Location curLoc = MixView.mixContext.getCurrentGPSInfo();
+        				Location curLoc = MixView.mixContext.getCurrentLocation();
         				double lat = curLoc.getLatitude(), lon = curLoc.getLongitude(), alt = curLoc.getAltitude();
         				
         				if (value.length() == 0){

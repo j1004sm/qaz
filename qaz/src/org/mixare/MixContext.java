@@ -29,20 +29,17 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Random;
 
-//adding support for https connections
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.X509TrustManager;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
 
 import org.mixare.data.DataSource;
 import org.mixare.data.DataSource.DATASOURCE;
@@ -57,20 +54,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 // 컨텍스트랩퍼를 확장하는 컨텍스트 클래스
 public class MixContext extends ContextWrapper {
 
+	public static final String TAG = "Qaz-Mixare";
+	
 	// 뷰와 컨텍스트
 	public MixView mixView;
 	Context ctx;
@@ -85,9 +90,8 @@ public class MixContext extends ContextWrapper {
 	Matrix rotationM = new Matrix();	// 회전연산에 사용될 행렬
 
 	float declination = 0f;	// 경사, 적위
-	private boolean actualLocation = false;
-
-	LocationManager locationMgr;		// 위치 관리자
+	
+	private LocationManager lm;
 	
 	// 각 데이터소스의 선택 여부를 저장할 해쉬맵
 	private HashMap<DataSource.DATASOURCE,Boolean> selectedDataSources=new HashMap<DataSource.DATASOURCE,Boolean>();
@@ -121,73 +125,97 @@ public class MixContext extends ContextWrapper {
 		
 		// 회전행렬을 일단 단위행렬로 세팅
 		rotationM.toIdentity();
-
-		int locationHash = 0;	// 위치 해쉬값
 		
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		Criteria c = new Criteria();
+		//try to use the coarse provider first to get a rough position
+		c.setAccuracy(Criteria.ACCURACY_COARSE);
+		String coarseProvider = lm.getBestProvider(c, true);
 		try {
-			// 메인 컨텍스트의 위치 제공자로부터 위치 관리자 등록
-			locationMgr = (LocationManager) appCtx.getSystemService(Context.LOCATION_SERVICE);
-			
-			// GPS 로부터 마지막으로 선택된 위치값을 등록
-			Location lastFix = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			
-			// 설정된 위치값이 없다면 네트워크로부터 마지막으로 선택된 위치값을 등록
-			if (lastFix == null){
-				lastFix = locationMgr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			}
-			
-			// lastFix 값이 할당되었을 경우
-			if (lastFix != null){
-				// 위치 해쉬값을 이용하여
-				locationHash = ("HASH_" + lastFix.getLatitude() + "_" + lastFix.getLongitude()).hashCode();
+			lm.requestLocationUpdates(coarseProvider, 0 , 0, lcoarse);
+		} catch (Exception e) {
+			Log.d(TAG, "Could not initialize the coarse provider");
+		}
 
-				// 실 시간과 시차 등을 계산
-				long actualTime= new Date().getTime();
-				long lastFixTime = lastFix.getTime();
-				long timeDifference = actualTime-lastFixTime;
+		//need to be precise
+		c.setAccuracy(Criteria.ACCURACY_FINE);				
+		//fineProvider will be used for the initial phase (requesting fast updates)
+		//as well as during normal program usage
+		//NB: using "true" as second parameters means we get the provider only if it's enabled
+		String fineProvider = lm.getBestProvider(c, true);
+		try {
+			lm.requestLocationUpdates(fineProvider, 0 , 0, lbounce);
+		} catch (Exception e) {
+			Log.d(TAG, "Could not initialize the bounce provider");
+		}
 
-				actualLocation = timeDifference <= 1200000;	//20 min --- 300000 milliseconds = 5 min
-			}
-			else
-				actualLocation = false;
-			
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		//fallback for the case where GPS and network providers are disabled
+		Location hardFix = new Location("reverseGeocoded");
+
+		//Frangart, Eppan, Bozen, Italy
+		hardFix.setLatitude(46.480302);
+		hardFix.setLongitude(11.296005);
+		hardFix.setAltitude(300);
+
+		/*New York*/
+//		hardFix.setLatitude(40.731510);
+//		hardFix.setLongitude(-73.991547);
+
+		// TU Wien
+//		hardFix.setLatitude(48.196349);
+//		hardFix.setLongitude(16.368653);
+//		hardFix.setAltitude(180);
+
+		//frequency and minimum distance for update
+		//this values will only be used after there's a good GPS fix
+		//see back-off pattern discussion 
+		//http://stackoverflow.com/questions/3433875/how-to-force-gps-provider-to-get-speed-in-android
+		//thanks Reto Meier for his presentation at gddde 2010
+		long lFreq = 60000;	//60 seconds
+		float lDist = 50;		//20 meters
+		try {
+			lm.requestLocationUpdates(fineProvider, lFreq , lDist, lnormal);
+		} catch (Exception e) {
+			Log.d(TAG, "Could not initialize the normal provider");
+			Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
 		}
 		
-		// 계산된 위치 해쉬값으로 랜덤값 발생
-		rand = new Random(System.currentTimeMillis() + locationHash);
-	}
-	
-	// 현재의 GPS 정보를 리턴. 위치 관리자로부터 현재의 위치를 반환한다
-	public Location getCurrentGPSInfo() {
-		return curLoc != null ? curLoc : locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-	}
-
-	// GPS 사용 가능 여부 리턴
-	public boolean isGpsEnabled() {
-		return mixView.isGpsEnabled();
+		try {
+			
+			Location lastFinePos=lm.getLastKnownLocation(fineProvider);
+			Location lastCoarsePos=lm.getLastKnownLocation(coarseProvider);
+			if(lastFinePos!=null)
+				curLoc = lastFinePos;
+			else if (lastCoarsePos!=null)
+				curLoc = lastCoarsePos;
+			else
+				curLoc = hardFix;
+			
+		} catch (Exception ex2) {
+			ex2.printStackTrace();
+			curLoc = hardFix;
+			
+			Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+		}
+		
+		setLocationAtLastDownload(curLoc);
+		
 	}
 
 	// 정확한 위치가 맞는지 리턴
-	public boolean isActualLocation(){
-		return actualLocation;
+	public void unregisterLocationManager() {
+	if (lm != null) {
+		lm.removeUpdates(lnormal);
+		lm.removeUpdates(lcoarse);
+		lm.removeUpdates(lbounce);
+		lm = null;
 	}
+}
 
 	// 사용중인 다운로드 관리자 리턴
 	public DownloadManager getDownloader() {
 		return downloadManager;
-	}
-	
-	// 위치 관리자를 지정
-	public void setLocationManager(LocationManager locationMgr){
-		this.locationMgr = locationMgr;
-	}
-	
-	// 사용중인 위치 관리자를 리턴
-	public LocationManager getLocationManager(){
-		return locationMgr;
 	}
 
 	// 시작 Url 경로를 리턴한다
@@ -221,6 +249,10 @@ public class MixContext extends ContextWrapper {
 	throws Exception {
 		InputStream is = null;	// 내용을 읽어올 인풋 스트림
 		URLConnection conn = null;	// URL 과의 통신을 위한 URLConnection 객체  
+		
+		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+          System.setProperty("http.keepAlive", "false");
+		}
 
 		// 각 파일, 컨텐트, 네트워크 주소등에 따른 스트림을 읽을 준비
 		if (urlStr.startsWith("file://"))			
@@ -447,6 +479,8 @@ public class MixContext extends ContextWrapper {
 	public void loadWebPage(String url, Context context) throws Exception {
 		// TODO
 		WebView webview = new WebView(context);	// 웹 뷰
+		webview.getSettings().setJavaScriptEnabled(true);
+		webview.setBackgroundColor(0x99FFFFFF);
 		
 		webview.setWebViewClient(new WebViewClient() {
 			public boolean  shouldOverrideUrlLoading  (WebView view, String url) {
@@ -522,5 +556,80 @@ public class MixContext extends ContextWrapper {
 	public void setLocationAtLastDownload(Location locationAtLastDownload) {
 		this.locationAtLastDownload = locationAtLastDownload;
 	}
+	
+	private LocationListener lbounce = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			Log.d(TAG, "bounce Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
+			Toast.makeText(ctx, "BOUNCE: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
+
+			if (location.getAccuracy() < 40) {
+				lm.removeUpdates(lcoarse);
+				lm.removeUpdates(lbounce);			
+			}
+		}
+
+		@Override
+		public void onProviderDisabled(String arg0) {
+			Log.d(TAG, "bounce disabled");
+		}
+
+		@Override
+		public void onProviderEnabled(String arg0) {
+			Log.d(TAG, "bounce enabled");
+
+		}
+
+		@Override
+		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {}
+
+	};
+
+	private LocationListener lcoarse = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			Log.d(TAG, "coarse Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
+			Toast.makeText(ctx, "COARSE: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
+			lm.removeUpdates(lcoarse);
+		}
+
+		@Override
+		public void onProviderDisabled(String arg0) {}
+
+		@Override
+		public void onProviderEnabled(String arg0) {}
+
+		@Override
+		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {}
+
+	};
+
+	private LocationListener lnormal = new LocationListener() {
+		public void onProviderDisabled(String provider) {}
+
+		public void onProviderEnabled(String provider) {}
+
+		public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		public void onLocationChanged(Location location) {
+			Log.d(TAG, "normal Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
+			Toast.makeText(ctx, "NORMAL: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
+			try {
+				Log.v(TAG,"Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
+					synchronized (curLoc) {
+						curLoc = location;
+					}
+					mixView.repaint();
+					Location lastLoc=getLocationAtLastDownload();
+					if(lastLoc==null)
+						setLocationAtLastDownload(location);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	};
 	
 }

@@ -74,7 +74,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // 메인에 보여지게 될 믹스뷰(액티비티) 클래스
-public class MixView extends Activity implements SensorEventListener,LocationListener, OnTouchListener{
+public class MixView extends Activity implements SensorEventListener, OnTouchListener{
 
 	public static Activity mixView;
 	
@@ -99,8 +99,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 	private SensorManager sensorMgr;
 	private List<Sensor> sensors;
 	private Sensor sensorGrav, sensorMag;
-	private LocationManager locationMgr;
-	private boolean isGpsEnabled;
 
 	// 연산에 사용될 매트릭스 객체들
 	private int rHistIdx = 0;
@@ -137,11 +135,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 
 	// 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
 	public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
-
-	// GPS 사용이 가능한지 여부를 리턴
-	public boolean isGpsEnabled() {
-		return isGpsEnabled;
-	}
 	
 	// 줌 바가 보이는지 리턴
 	public boolean isZoombarVisible() {
@@ -250,10 +243,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			// 화면이 꺼지지 않게 하기위한 웨이크 락
 			this.mWakeLock = pm.newWakeLock(
 					PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
-			// 위치관리자의 설정
-			locationMgr = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-			// 위치정보 업데이트 설정. 2번째 인자 시간(1/1000s), 3번째 인자 거리(m)에 따라 갱신한다
-			locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,10, this);
 
 			killOnError();	// 에러 여부를 체크한다
 			requestWindowFeature(Window.FEATURE_NO_TITLE);	// 타이틀 바가 없는 윈도우 형태로
@@ -334,11 +323,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 				editor.commit();	// 변경 사항이 완료되었으면 commit
 			} 
 			
-			// 정확한 위치를 찾지 못했을 경우(GPS 관련)
-			if(mixContext.isActualLocation()==false){
-				Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
-			}	
-			
 		} catch (Exception ex) {
 			doError(ex);	// 예외 발생시 에러 처리
 		}
@@ -405,23 +389,11 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			// 각 센서 관리자의 등록을 해제
 			try {
 				sensorMgr.unregisterListener(this, sensorGrav);
-			} catch (Exception ignore) {
-			}
-			try {
 				sensorMgr.unregisterListener(this, sensorMag);
-			} catch (Exception ignore) {
-			}
-			sensorMgr = null;
-
-			// 위치 관리자의 등록을 해제
-			try {
-				locationMgr.removeUpdates(this);
-			} catch (Exception ignore) {
-			}
-			locationMgr = null;
+				sensorMgr = null;
 
 			// 다운로드 관리자를 중지
-			try {
+				mixContext.unregisterLocationManager();
 				mixContext.downloadManager.stop();
 			} catch (Exception ignore) {
 			}
@@ -494,64 +466,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 			sensorMgr.registerListener(this, sensorMag, SENSOR_DELAY_GAME);
 
 			try {
-				// 위치제공자의 기준(Criteria)
-				// http://developer.android.com/reference/android/location/Criteria.html
-				Criteria c = new Criteria();
-
-				// 정확도 설정
-				c.setAccuracy(Criteria.ACCURACY_FINE);
-				//c.setBearingRequired(true);
-
-				// 위치관리자를 할당 후
-				locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-				// 인자 값에 따라 위치 갱신을 요청한다. 2번째가 시간, 3번째가 거리  
-				locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,10, this);
-
-				// 최적의 위치제공자를 찾고, 할당 가능한지 파악한다
-				String bestP = locationMgr.getBestProvider(c, true);
-				isGpsEnabled = locationMgr.isProviderEnabled(bestP);
-
-				// gps, 네트워크가 먹통일 때의 기본 위치 설정
-				Location hardFix = new Location("reverseGeocoded");
-
-				//				hardFix.setLatitude(0);
-				//				hardFix.setLongitude(0);
-
-				// 기본 위치의 값을 수정
-				hardFix.setLatitude(37.2762412);
-				hardFix.setLongitude(127.1311332);
-				hardFix.setAltitude(300);
-
-				/*New York*/
-				//				hardFix.setLatitude(40.731510);
-				//				hardFix.setLongitude(-73.991547);
-				
-				// TU Wien
-//				hardFix.setLatitude(48.196349);
-//				hardFix.setLongitude(16.368653);
-//				hardFix.setAltitude(180);
-
-				try {
-					// 위치 관리자로부터 gps, 네트워크의 마지막으로 알려진 장소를 얻어 옮
-					Location gps = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-					Location network = locationMgr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-					
-					// 위치 값을 얻어오게 되면 현재 위치를 지정
-					// 우선순위는 gps > 네트워크 > 기본값
-					if(gps!=null)
-						mixContext.curLoc = gps;
-					else if (network!=null)
-						mixContext.curLoc = network;
-					else
-						mixContext.curLoc = hardFix;
-					
-				} catch (Exception ex2) {	// 예외 발생 시
-					ex2.printStackTrace();	// 메세지를 내보내고
-					mixContext.curLoc = hardFix;	// 현재 위치는 기본값으로
-				}
-				// 최종적으로 지정된 값으로 컨텍스트의 위치를 세팅
-				mixContext.setLocationAtLastDownload(mixContext.curLoc);
-
 				// 지자기장의 설정. 밀리초 단위로 지정된 위치를 기준으로 삼는다
 				GeomagneticField gmf = new GeomagneticField((float) mixContext.curLoc
 						.getLatitude(), (float) mixContext.curLoc.getLongitude(),
@@ -580,13 +494,10 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 					sensorMgr.unregisterListener(this, sensorMag);
 					sensorMgr = null;
 				}
-				// 위치 관리자도 해제 해 준다
-				if (locationMgr != null) {
-					locationMgr.removeUpdates(this);
-					locationMgr = null;
-				}
+
 				// 컨텍스트의 다운로드 관리자도 정지
 				if (mixContext != null) {
+					mixContext.unregisterLocationManager();
 					if (mixContext.downloadManager != null)
 						mixContext.downloadManager.stop();
 				}
@@ -704,7 +615,7 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		/*GPS Information*/
 		case 6:
 			// 현재 GPS정보를 읽어오고
-			Location currentGPSInfo = mixContext.getCurrentGPSInfo();
+			Location currentGPSInfo = mixContext.getCurrentLocation();
 			// 얼럿 다이얼로그 빌더를 생성,
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			// 각 값들을 보여줄 메세지를 세팅한다
@@ -979,61 +890,6 @@ public class MixView extends Activity implements SensorEventListener,LocationLis
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return super.onKeyDown(keyCode, event);
-		}
-	}
-
-	// 위치제공자가 불능의 경우
-	public void onProviderDisabled(String provider) {
-		isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	}
-
-	// 위치제공자가 사용 가능한 경우. 굳이 따로 나눌 필요가 있었을까?
-	public void onProviderEnabled(String provider) {
-		isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	}
-
-	// 상태 변화시 처리. 일단은 비워둔다
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-
-	}
-
-	// 위치가 변경되었을 경우
-	public void onLocationChanged(Location location) {
-		try {
-			killOnError();	// 에러 여부 체크
-			// 변경된 위치의 로그를 생성한다. 위도와 경도를 기록
-			Log.v(TAG,"Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
-			
-			// 위치 제공자가 동일할 경우
-			if (LocationManager.GPS_PROVIDER.equals(location.getProvider())) {
-				// 현재의 위치를 변경된 위치로 지정
-				synchronized (mixContext.curLoc) {
-					mixContext.curLoc = location;
-				}
-				// 데이터 뷰가 얼어있지 않다면
-				if(!dataView.isFrozen())	// 데이터뷰의 데이터 핸들러에 위치변경 통보
-					dataView.getDataHandler().onLocationChanged(location);
-				
-				/* 만약 마지막으로 데이터를 다운로드한 곳으로부터 반경 3km 이상 *
-				 * 떨어진 곳으로 이동한다면, 데이터를 새로 다운로드 해야 한다	 */
-				// 마지막으로 다운로드된 위치를 저장 
-				Location lastLoc = mixContext.getLocationAtLastDownload();
-				if(lastLoc==null)	// 기록된 위치가 없다면
-					mixContext.setLocationAtLastDownload(location);	// 변경된 위치를 마지막 위치로 지정
-				else {
-					// 경계 설정
-					float threshold = dataView.getRadius()*1000f/3f;
-					Log.v(TAG,"Location Change: "+" threshold "+threshold+" distanceto "+location.distanceTo(lastLoc));
-					// 설정 경계를 넘어가면 데이터를 다시 다운로드한다
-					if(location.distanceTo(lastLoc)>threshold)  {
-						Log.d(TAG,"Restarting download due to location change");
-						dataView.doStart();
-					}	
-				}
-				isGpsEnabled = true;	// GPS는 가능한 상태로
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 

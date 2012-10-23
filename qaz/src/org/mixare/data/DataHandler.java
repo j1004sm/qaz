@@ -86,7 +86,7 @@ public class DataHandler {
 			map.put(mClass, (map.get(mClass)!=null)?map.get(mClass)+1:1);
 			
 			// 최대 객체수보다 밑인지 판단
-			boolean belowMax = (map.get(mClass) <= ma.getMaxObjects());
+			boolean belowMax = (map.get(mClass) < ma.getMaxObjects());
 			// 데이터 소스가 선택 되었는지 판단
 			boolean dataSourceSelected = mixContext.isDataSourceSelected(ma.getDatasource());
 			
