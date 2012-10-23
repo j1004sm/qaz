@@ -57,17 +57,15 @@ public class DownloadImage extends Thread {
 			options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
 			downImg = BitmapFactory.decodeStream(input, null, options);
 			
-			doneFlg = 1;
-			
 		}catch (FileNotFoundException e) {
 			e.printStackTrace();
 			doneFlg = 2;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-			doneFlg = 0;
 		} catch (IOException e) {
 			e.printStackTrace();
-			doneFlg = 0;
+		} finally {
+			doneFlg = 1;
 		}
 		// 핸들러에 완료 알림
 		//mHandler.sendEmptyMessage(0);
