@@ -318,10 +318,12 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 				alert1.show();
 				
 				editor.putBoolean("firstAccess", true);
-				editor.putString("id", LoginActivity.usrId);
-				editor.putString("pw", LoginActivity.usrPw);
 				editor.commit();	// 변경 사항이 완료되었으면 commit
 			} 
+			
+			editor.putString("id", LoginActivity.usrId);
+			editor.putString("pw", LoginActivity.usrPw);
+			editor.commit();
 			
 		} catch (Exception ex) {
 			doError(ex);	// 예외 발생시 에러 처리
