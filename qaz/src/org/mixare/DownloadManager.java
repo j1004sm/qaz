@@ -28,10 +28,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mixare.data.Json;
-import org.mixare.data.XMLHandler;
 import org.mixare.data.DataSource.DATAFORMAT;
 import org.mixare.data.DataSource.DATASOURCE;
+import org.mixare.data.Json;
+import org.mixare.data.XMLHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -151,6 +151,9 @@ public class DownloadManager implements Runnable {
 		result.error = true;
 		
 		try {
+			String strOSMOriUrl = request.OSMOriUrl;
+			int intOSMOriID = request.OSMOriID;
+			
 			// 컨텍스트, 리퀘스트가 있고 리퀘스트의 url 이 존재할 때 
 			if(ctx!=null && request!=null && ctx.getHttpGETInputStream(request.url)!=null){
 
@@ -199,7 +202,8 @@ public class DownloadManager implements Runnable {
 						Log.i(MixView.TAG, "loading XML data");	
 						
 						// 도큐먼트로부터 파싱된 XML을 읽어 마커를 생성한다
-						List<Marker> markers = xml.load(doc);
+						List<Marker> markers = xml.load(doc, strOSMOriUrl,
+								intOSMOriID);
 						result.setMarkers(markers);	// 다운로드 결과에 마커를 할당
 
 						// 인자로 받은 리퀘스트로부터 포맷과 소스를 할당한다
@@ -243,7 +247,10 @@ public class DownloadManager implements Runnable {
 		if(job!=null) {
 			String jobId = "ID_" + (id++);	// ID를 할당. 'ID_번호' 형태이다
 			todoList.put(jobId, job);	// ID와 함께 작업을 요청 리스트에 등록
-			Log.i(MixView.TAG,"Submitted Job with "+jobId+", format: " +job.format+", params: "+job.params+", url: "+job.url);
+			Log.i(MixView.TAG, "Submitted Job with " + jobId + ", format: "
+					+ job.format + ", params: " + job.params + ", url: "
+					+ job.url + ", OSMOriginalURL  " + job.OSMOriUrl + "||"
+					+ job.OSMOriID);
 			return jobId;	// 할당된 ID를 리턴한다
 		}
 		return null;
@@ -308,6 +315,8 @@ class DownloadRequest {
 	public DATASOURCE source;
 	String url;
 	String params;
+	String OSMOriUrl; 
+	int OSMOriID;
 }
 
 // 다운로드 결과 클래스
@@ -320,7 +329,7 @@ class DownloadResult {
 
 	// 에러 처리시 사용될 변수들
 	boolean error;
-	String errorMsg;
+	String errorMsg="";
 	DownloadRequest errorRequest;
 	
 	// 마커를 리턴

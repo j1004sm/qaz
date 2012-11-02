@@ -57,7 +57,7 @@ public class DataSource {
 	// 예를 들어, 철도만 사용할 경우:
 	//private static final String OSM_BASE_URL =	"http://www.informationfreeway.org/api/0.6/node[railway=station]";
 	//private static final String OSM_BASE_URL =	"http://xapi.openstreetmap.org/api/0.6/node[railway=station]";
-	private static final String OSM_BASE_URL =		"http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
+	//private static final String OSM_BASE_URL =		"http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
 	
 	// 주의할것! 방대한 양의 데이터(MB단위 이상)을 산출할 때에는, 작은 반경이나 특정한 쿼리만을 사용해야한다
 	/** URL 부분 끝 */
@@ -114,10 +114,11 @@ public class DataSource {
 			case Twitter: 
 				ret = TWITTER_BASE_URL;			
 			break;
-				
+			/*
 			case OSM: 
 				ret = OSM_BASE_URL;
 			break;
+			*/
 			
 			case Qaz:
 				ret = MixListView.customizedURL;
@@ -149,10 +150,12 @@ public class DataSource {
 				Math.max(radius, 1.0) + "km" ;				
 			break;
 			
+			/*
 			// OSM(OpenStreetMap)
 			case OSM: 
 				ret+= XMLHandler.getOSMBoundingBox(lat, lon, radius);
 			break;
+			*/
 			
 			// 자체 URL
 			case Qaz:
@@ -170,12 +173,24 @@ public class DataSource {
 		return ret;
 	}
 	
+	public static String createRequestOSMURL(String sourceURL, double lat,
+			double lon, double alt, float radius, String locale) {
+
+		String ret = sourceURL;
+
+		if (!ret.startsWith("file://")) {
+			ret += XMLHandler.getOSMBoundingBox(lat, lon, radius);
+		}
+
+		return ret;
+	}
+	
 	// 각 소스에 따른 색을 리턴
 	public static int getColor(DATASOURCE datasource) {
 		int ret;
 		switch(datasource) {
 			case Twitter:	ret = Color.rgb(50, 204, 255); break;
-			case OSM:		ret = Color.rgb(255, 168, 0); break;
+			//case OSM:		ret = Color.rgb(255, 168, 0); break;
 			case Wikipedia:	ret = Color.RED; break;
 			default:		ret = Color.WHITE; break;
 		}

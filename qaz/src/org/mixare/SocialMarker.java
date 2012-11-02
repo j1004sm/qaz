@@ -37,8 +37,8 @@ public class SocialMarker extends Marker {
 
 	// 생성자. 타이틀과 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public SocialMarker(String title, double latitude, double longitude,
-			double altitude, String URL, DATASOURCE datasource) {
-		super(title, latitude, longitude, altitude, URL, datasource);
+			double altitude, String URL, DATASOURCE datasource, String iOSMurl, int iOSMUrlID) {
+		super(title, latitude, longitude, altitude, URL, datasource,iOSMurl,iOSMUrlID);
 	}
 
 	// 마커 갱신
@@ -89,6 +89,11 @@ public class SocialMarker extends Marker {
 	@Override
 	public int getMaxObjects() {
 		return MAX_OBJECTS;
+	}
+	
+	@Override
+	public int getOsmUrlMaxObject(){
+		return 0;
 	}
 
 }

@@ -140,7 +140,7 @@ public class Json extends DataHandler {
 						lat, 
 						lon, 
 						0, url, 
-						DataSource.DATASOURCE.Twitter);
+						DataSource.DATASOURCE.Twitter, "", 0);
 			}
 		}
 		return ma;	// 마커 리턴
@@ -185,7 +185,7 @@ public class Json extends DataHandler {
 					jo.getDouble("elevation"), 
 					unescapeHTML(jo.getString("webpage"), 0),
 					DataSource.DATASOURCE.Qaz,
-					image);
+					image, "", 0);
 		}
 		return ma;	// 마커 리턴
 	}
@@ -239,7 +239,7 @@ public class Json extends DataHandler {
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
 					"http://"+jo.getString("wikipediaUrl"),		// 위키의 url 을 입력
-					DataSource.DATASOURCE.Wikipedia);
+					DataSource.DATASOURCE.Wikipedia, "", 0);
 		}
 		return ma;	// 마커 리턴
 	}

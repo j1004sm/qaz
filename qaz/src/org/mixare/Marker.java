@@ -30,6 +30,7 @@ import org.mixare.reality.PhysicalPlace;
 import org.mixare.render.Camera;
 import org.mixare.render.MixVector;
 
+import android.graphics.Color;
 import android.location.Location;
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
@@ -39,7 +40,7 @@ abstract public class Marker implements Comparable<Marker> {
  
 	private String ID;	// ID값
 	protected String title;	// 타이틀
-	private boolean underline = false;	// 밑줄 여부
+	protected boolean underline = false;	// 밑줄 여부
 	private String URL;	// 연동될 URL
 	protected PhysicalPlace mGeoLoc;	// 물리적 공간 객체. 실제 장소값을 저장
 	// 유저와 물리적 공간 간의 거리(미터 단위)
@@ -67,8 +68,11 @@ abstract public class Marker implements Comparable<Marker> {
 	protected Label txtLab = new Label();	// Label 클래스는 하단에서 정의한다
 	protected TextObj textBlock;
 	
+	private String OSMUrlMarker = "";
+	private int OSMUrlID=0;
+	
 	// 생성자. 타이틀과 위도, 경고, 고도값, 링크될 주소와 데이터 소스를 인자로 받는다 
-	public Marker(String title, double latitude, double longitude, double altitude, String link, DataSource.DATASOURCE datasource) {
+	public Marker(String title, double latitude, double longitude, double altitude, String link, DataSource.DATASOURCE datasource,String iOSMurl, int iOSMUrlID) {
 		super();
 
 		this.active = false;	// 일단 비활성화 상태로
@@ -85,6 +89,15 @@ abstract public class Marker implements Comparable<Marker> {
 		
 		// 마커의 ID는 '데이터소스##타이틀' 형태이다
 		this.ID = datasource+"##"+title; //mGeoLoc.toString();
+		// the details of OSM url
+				if (iOSMurl != null && iOSMurl.length() > 0) {
+					this.OSMUrlMarker = iOSMurl;
+				}
+				OSMUrlID = iOSMUrlID;
+			}
+
+			public String getOSMOriUrl() {
+				return this.OSMUrlMarker;
 	}
 	
 	// 타이틀을 리턴
@@ -371,6 +384,30 @@ abstract public class Marker implements Comparable<Marker> {
 
 	// 아직 미사용
 	abstract public int getMaxObjects();
+	
+	abstract public int getOsmUrlMaxObject();
+
+	public int getOSMUrlId() {
+		return OSMUrlID;
+	}
+
+	//to get colour of marker for each OSM url
+	public int getColour() {
+		switch (this.OSMUrlID) {
+		case 0:
+			return Color.rgb(153, 255, 204);//green
+		case 1:
+			return Color.rgb(255, 153, 204);//pink
+		case 2:
+			return Color.rgb(255, 255, 51);//yellow
+		case 3:
+			return Color.rgb(255, 0, 204);//magenta
+		case 4:
+			return Color.rgb(153, 102, 51);//brown
+		default:
+			return Color.rgb(255, 168, 0);//orange
+		}
+	}
  
 }
 

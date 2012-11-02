@@ -33,6 +33,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 import javax.net.ssl.HostnameVerifier;
@@ -95,7 +96,8 @@ public class MixContext extends ContextWrapper {
 	
 	// 각 데이터소스의 선택 여부를 저장할 해쉬맵
 	private HashMap<DataSource.DATASOURCE,Boolean> selectedDataSources=new HashMap<DataSource.DATASOURCE,Boolean>();
-	
+	private LinkedHashMap <String, Boolean> OSMSources=new LinkedHashMap <String,Boolean>();
+
 	// 생성자. 어플리케이션의 컨텍스트를 받는다
 	public MixContext(Context appCtx) {
 		super(appCtx);
@@ -555,6 +557,25 @@ public class MixContext extends ContextWrapper {
 	// 마지막으로 다운로드된 위치를 세팅
 	public void setLocationAtLastDownload(Location locationAtLastDownload) {
 		this.locationAtLastDownload = locationAtLastDownload;
+	}
+	
+	public LinkedHashMap <String, Boolean> getOSMURLList() {
+		// HashMap<String, Boolean> OSMSources=new HashMap<String,Boolean>();
+		SharedPreferences settings = getSharedPreferences(
+				OSMDataSource.SHARED_PREFS, 0);
+
+		int size = settings.getAll().size();
+		OSMSources.clear();//clear the Hashmap before get the newest URL
+		for (int i = 0; i < (size / 2); i++) {
+			String s = settings.getString("URLStr" + i, "");
+			Boolean b = settings.getBoolean("URLBool" + i, false);
+			OSMSources.put(s, b);// hold string and boolean value
+		}
+		return OSMSources;
+	}
+
+	public Boolean isOSMUrlSelected(String iKey){
+		return OSMSources.get(iKey)!=null ?OSMSources.get(iKey):false;
 	}
 	
 	private LocationListener lbounce = new LocationListener() {

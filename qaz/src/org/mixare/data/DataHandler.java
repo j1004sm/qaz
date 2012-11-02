@@ -77,21 +77,31 @@ public class DataHandler {
 	public void updateActivationStatus(MixContext mixContext) {
 		// 클래스와 정수형 변수의 해쉬테이블 맵
 		Hashtable<Class, Integer> map = new Hashtable<Class, Integer>();
-		
-		// 모든 마커에 적용
-		for(Marker ma: markerList) {
-
+		Hashtable<String, Integer> url = new Hashtable<String, Integer>();
+		//update for marker 
+		for (Marker ma : markerList) {
 			Class mClass = ma.getClass();
-			// 맵의 클래스가 null 이 아닐 경우에 클래스를 대입. null 일 경우엔 1
-			map.put(mClass, (map.get(mClass)!=null)?map.get(mClass)+1:1);
-			
-			// 최대 객체수보다 밑인지 판단
-			boolean belowMax = (map.get(mClass) < ma.getMaxObjects());
-			// 데이터 소스가 선택 되었는지 판단
-			boolean dataSourceSelected = mixContext.isDataSourceSelected(ma.getDatasource());
-			
-			// 판단된 boolean 값으로 상태를 지정한다(모두 참일 시에 활성)
-			ma.setActive((belowMax && dataSourceSelected));
+			map.put(mClass, (map.get(mClass) != null) ? map.get(mClass) + 1 : 1);
+
+			//additional for OSM marker
+			String strURL=ma.getOSMOriUrl();
+			url.put(strURL, (url.get(strURL) != null) ? url.get(strURL) + 1 : 1);
+			boolean belowURLMax = (url.get(strURL)<=ma.getOsmUrlMaxObject());
+
+			boolean belowMax = (map.get(mClass) <= ma.getMaxObjects());
+			boolean dataSourceSelected = mixContext.isDataSourceSelected(ma
+					.getDatasource());
+
+			/*Log.d("DataHandler","DataHandler " + ma.getOSMOriUrl());
+			Log.d("DataHandler", "DataHandler " + mixContext
+						.isOSMUrlSelected(strURL));*/
+
+			if (ma.getDatasource().equals(DataSource.DATASOURCE.OSM)) {
+				ma.setActive((belowURLMax  && dataSourceSelected && mixContext
+						.isOSMUrlSelected(strURL)));
+			} else {
+				ma.setActive((belowMax && dataSourceSelected));
+			}
 		}
 	}
 	

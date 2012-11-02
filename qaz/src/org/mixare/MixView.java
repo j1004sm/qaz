@@ -25,11 +25,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.qaz.client.R.*;
-import com.qaz.dor.LoginActivity;
-import com.qaz.dor.ProfileActivity;
-import com.qaz.dor.QazPaintBoardActivity;
-
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
 import org.mixare.data.DataSource.DATASOURCE;
@@ -52,10 +47,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -76,6 +68,11 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.qaz.client.R.drawable;
+import com.qaz.dor.LoginActivity;
+import com.qaz.dor.ProfileActivity;
+import com.qaz.dor.QazPaintBoardActivity;
 
 // 메인에 보여지게 될 믹스뷰(액티비티) 클래스
 public class MixView extends Activity implements SensorEventListener, OnTouchListener{
@@ -139,6 +136,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 
 	// 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
 	public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
+	public static  int osmMaxObject=5;
 	
 	// 줌 바가 보이는지 리턴
 	public boolean isZoombarVisible() {
@@ -254,6 +252,14 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			/*내부 메모리에 저장된 프레퍼런스를 불러온다*/
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();	// 변경사항을 기록할 에디터
+			
+			/*
+			 * Get the preference file PREFS_NAME stored in the internal memory
+			 * of the phone to set the OSM URL
+			 */
+			SharedPreferences osmSetting = getSharedPreferences(
+					OSMDataSource.SHARED_PREFS, 0);
+			SharedPreferences.Editor osmEditor = osmSetting.edit();
 
 			// 줌 바의 생성과 설정
 			myZoomBar = new SeekBar(this);
@@ -322,7 +328,16 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 				alert1.show();
 				
 				editor.putBoolean("firstAccess", true);
+				//value for maximum POI for each selected OSM URL to be active by default is 5
+				editor.putInt("osmMaxObject",5);
 				editor.commit();	// 변경 사항이 완료되었으면 commit
+				
+				// this is to set one URL in the OSM Shared preference
+				osmEditor.putString("URLStr0",
+						"http://geometa.hsr.ch/xapi/api/0.6/node[indoor=yes]");
+				osmEditor.putBoolean("URLBool0", true);
+
+				osmEditor.commit();
 			} 
 			
 			editor.putString("id", LoginActivity.usrId);
@@ -422,6 +437,8 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			this.mWakeLock.acquire();	// 웨이크 록
 
 			killOnError();	// 에러 여부를 체크한다
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			osmMaxObject = settings.getInt("osmMaxObject", 5);
 			mixContext.mixView = this;	// 컨텍스트의 믹스뷰를 설정하고
 			dataView.doStart();			// 데이터뷰 활성화
 			dataView.clearEvents();		// 이벤트 클리어

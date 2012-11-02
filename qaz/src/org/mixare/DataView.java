@@ -19,14 +19,17 @@
 package org.mixare;
 
 import static android.view.KeyEvent.KEYCODE_CAMERA;
+import static android.view.KeyEvent.KEYCODE_DPAD_CENTER;
 import static android.view.KeyEvent.KEYCODE_DPAD_DOWN;
 import static android.view.KeyEvent.KEYCODE_DPAD_LEFT;
 import static android.view.KeyEvent.KEYCODE_DPAD_RIGHT;
 import static android.view.KeyEvent.KEYCODE_DPAD_UP;
-import static android.view.KeyEvent.KEYCODE_DPAD_CENTER;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
@@ -37,12 +40,12 @@ import org.mixare.gui.RadarPoints;
 import org.mixare.gui.ScreenLine;
 import org.mixare.render.Camera;
 
-import com.qaz.client.R;
-
 import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.qaz.client.R;
 
 
 /**
@@ -230,12 +233,14 @@ public class DataView {
 	}
 	
 	// 데이터 요청
-	public void requestData(String url,DATAFORMAT dataformat, DATASOURCE datasource) {
-		DownloadRequest request = new DownloadRequest();	// 다운로드 요청 객체
-		// 데이터 포맷과 소스, url 등을 할당한다
+	public void requestData(String url,DATAFORMAT dataformat, DATASOURCE datasource, String iOSMOriUrl, int iOSMOriID) {
+		DownloadRequest request = new DownloadRequest();
 		request.format = dataformat;
 		request.source = datasource;
 		request.url = url;
+		request.OSMOriID=iOSMOriID;
+		request.OSMOriUrl=iOSMOriUrl;
+		
 		// 완성된 요청을 다운로더에 제출한다
 		mixContext.getDownloader().submitJob(request);
 		state.nextLStatus = MixState.PROCESSING;	// 다음 상태는 처리중으로
@@ -257,7 +262,7 @@ public class DataView {
 			// 컨텍스트의 시작 URL 이 할당 되었을 경우
 			if (mixContext.getStartUrl().length() > 0){
 				// 자체 포맷과 소스로 데이터를 요청한다
-				requestData(mixContext.getStartUrl(),DATAFORMAT.DOR,DATASOURCE.Qaz);
+				requestData(mixContext.getStartUrl(),DATAFORMAT.DOR,DATASOURCE.Qaz, "", 0);
 				isLauncherStarted = true;	// 런쳐는 시작된 상태로
 
 				// 자체 URL이 선택되지 않은 상태라면 선택된 상태로 토글한다
@@ -273,9 +278,42 @@ public class DataView {
 				// 각각의 데이터 소스들 모두에 적용
 				for(DataSource.DATASOURCE source: DataSource.DATASOURCE.values()) {
 					// 선택된 데이터 소스로 데이터 요청을 한다
-					if(mixContext.isDataSourceSelected(source)) {
-						requestData(DataSource.createRequestURL(source,lat,lon,alt,radius,Locale.getDefault().getLanguage()),DataSource.dataFormatFromDataSource(source),source);
+					if (mixContext.isDataSourceSelected(source)) {
+						if (source.toString().equals("OSM")) {
+							// Get a set of the entries
+							Set set = mixContext.getOSMURLList().entrySet();
+							// Get an iterator
+							Iterator i = set.iterator();
+							int id = 0;
+							while (i.hasNext()) {
+								Map.Entry me = (Map.Entry) i.next();
+								Log.d("DataView", "DataVIew "
+										+ me.getKey().toString());
+								if ((Boolean) me.getValue()) {
+									requestData(
+											DataSource.createRequestOSMURL(
+													(String) me.getKey(),
+													lat, lon, alt, radius,
+													Locale.getDefault()
+															.getLanguage()),
+											DataSource
+													.dataFormatFromDataSource(source),
+											source, me.getKey().toString(),
+											id);
+								}
+								++id;
+							}
 
+						} else {
+							requestData(
+									DataSource.createRequestURL(source,
+											lat, lon, alt, radius, Locale
+													.getDefault()
+													.getLanguage()),
+									DataSource
+											.dataFormatFromDataSource(source),
+									source, "", 0);
+						}
 						// Debug notification
 						// Toast.makeText(mixContext, "Downloading from "+ source, Toast.LENGTH_SHORT).show();
 					}
@@ -305,8 +343,8 @@ public class DataView {
 					mixContext.getDownloader().submitJob(dRes.errorRequest);
 					
 					// 토스트로 에러 상황을 알림
-					Toast.makeText(mixContext, dRes.errorRequest.url + " " + mixContext.getResources().getString(R.string.download_error), Toast.LENGTH_SHORT).show();
-					
+					Toast.makeText(mixContext, dRes.errorMsg,
+							Toast.LENGTH_SHORT).show();
 				}
 				
 				// 에러가 없는 경우

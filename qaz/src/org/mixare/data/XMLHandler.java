@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.mixare.Marker;
 import org.mixare.MixView;
-import org.mixare.NavigationMarker;
+import org.mixare.POIMarker;
 import org.mixare.reality.PhysicalPlace;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,7 +42,7 @@ import android.util.Log;
 public class XMLHandler extends DataHandler {
 
 	// OSM(OpenStreetMap) 처리
-	private List<Marker> processOSM(Element root) {
+	private List<Marker> processOSM(Element root, String OSMOriUrl, int OSMOriID) {
 
 		// 마커들과 노드들
     	List<Marker> markers = new ArrayList<Marker>();
@@ -79,14 +79,22 @@ public class XMLHandler extends DataHandler {
 	                	//if(markers.size()<MAX_OBJECTS)
 	                	
 	                	// 할당된 정보로 네비게이션 마커 생성
-	                	Marker ma = new NavigationMarker(
+	                	/* Marker ma = new NavigationMarker(
 	        				name, 
 	        				lat, 
 	        				lon, 
 	        				0,
 	        				// OSM의 데이터를 이용한다
 	        				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
-	        				DataSource.DATASOURCE.OSM);
+	        				DataSource.DATASOURCE.OSM); */
+	                	//Change to use POIMarker instead of NavigationMarker
+	                	Marker ma = new POIMarker(
+		        				name, 
+		        				lat, 
+		        				lon, 
+		        				0, 
+		        				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
+		        				DataSource.DATASOURCE.OSM,OSMOriUrl,OSMOriID);
 	        			markers.add(ma);
 	                	//skip to next node
 	        			continue;
@@ -118,13 +126,13 @@ public class XMLHandler extends DataHandler {
 	}
 	
 	// 도큐먼트를 읽음. OSM데이터를 읽기 위함
-	public List<Marker> load(Document doc) {
+	public List<Marker> load(Document doc,String OSMOriUrl, int OSMOriID) {
         Element root = doc.getDocumentElement();
         
         // If the root tag is called "osm" we got an 
         // openstreetmap .osm xml document
         if ("osm".equals(root.getTagName()))
-        	return processOSM(root);
+        	return processOSM(root,OSMOriUrl,OSMOriID);
         return null;
 	}
 }

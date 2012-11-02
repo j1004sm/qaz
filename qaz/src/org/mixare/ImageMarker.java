@@ -20,8 +20,8 @@ public class ImageMarker extends Marker {
 	private Bitmap image = null;
 
 	public ImageMarker(String title, double latitude, double longitude,
-			double altitude, String URL, DATASOURCE datasource, Bitmap image) {
-		super(title, latitude, longitude, altitude, URL, datasource);
+			double altitude, String URL, DATASOURCE datasource, Bitmap image, String iOSMurl, int iOSMUrlID) {
+		super(title, latitude, longitude, altitude, URL, datasource,iOSMurl,iOSMUrlID);
 		this.image = image;
 
 	}
@@ -54,5 +54,11 @@ public class ImageMarker extends Marker {
 				drawCircle(dw);
 			}
 		}
+	}
+
+	@Override
+	public int getOsmUrlMaxObject() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

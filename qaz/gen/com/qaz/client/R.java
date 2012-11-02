@@ -33,21 +33,22 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070003;
-        public static final int boardLayout=0x7f07001f;
-        public static final int btnCheck=0x7f070026;
-        public static final int btnLayout=0x7f070020;
+        public static final int boardLayout=0x7f070021;
+        public static final int btnCheck=0x7f070028;
+        public static final int btnLayout=0x7f070022;
         public static final int btn_findId=0x7f070013;
         public static final int btn_join=0x7f070012;
         public static final int btn_login=0x7f070011;
         public static final int buttonLayout=0x7f070001;
-        public static final int cancelBtn=0x7f070022;
+        public static final int cancelBtn=0x7f070024;
+        public static final int cb=0x7f07001b;
         public static final int chkAgree=0x7f07000c;
         public static final int closeBtn=0x7f070002;
-        public static final int colorBtn=0x7f07001b;
+        public static final int colorBtn=0x7f07001d;
         public static final int colorGrid=0x7f070000;
         public static final int datasource_icon=0x7f070016;
         public static final int description_text=0x7f070018;
-        public static final int eraserBtn=0x7f07001d;
+        public static final int eraserBtn=0x7f07001f;
         public static final int join_button_check=0x7f07000b;
         public static final int join_id=0x7f070006;
         public static final int join_mail=0x7f07000a;
@@ -58,29 +59,31 @@ public final class R {
         public static final int list_text=0x7f070017;
         public static final int login_id=0x7f07000f;
         public static final int login_pw=0x7f070010;
-        public static final int penBtn=0x7f07001c;
-        public static final int profileList=0x7f070027;
+        public static final int penBtn=0x7f07001e;
+        public static final int profileList=0x7f070029;
         public static final int row_layout=0x7f070015;
-        public static final int saveBtn=0x7f070021;
+        public static final int saveBtn=0x7f070023;
+        public static final int text=0x7f07001a;
         public static final int textView1=0x7f070004;
         public static final int textView2=0x7f070005;
         public static final int textView3=0x7f070014;
-        public static final int toolsLayout=0x7f07001a;
-        public static final int txtNewPw=0x7f070024;
-        public static final int txtNewPwChk=0x7f070025;
-        public static final int txtNowPw=0x7f070023;
+        public static final int toolsLayout=0x7f07001c;
+        public static final int txtNewPw=0x7f070026;
+        public static final int txtNewPwChk=0x7f070027;
+        public static final int txtNowPw=0x7f070025;
         public static final int txtPriv=0x7f07000e;
         public static final int txtTerms=0x7f07000d;
-        public static final int undoBtn=0x7f07001e;
+        public static final int undoBtn=0x7f070020;
     }
     public static final class layout {
         public static final int dialog=0x7f030000;
         public static final int join=0x7f030001;
         public static final int login=0x7f030002;
         public static final int main=0x7f030003;
-        public static final int paint=0x7f030004;
-        public static final int password=0x7f030005;
-        public static final int profile=0x7f030006;
+        public static final int osm=0x7f030004;
+        public static final int paint=0x7f030005;
+        public static final int password=0x7f030006;
+        public static final int profile=0x7f030007;
     }
     public static final class string {
         public static final int E=0x7f050004;
@@ -92,6 +95,7 @@ public final class R {
         public static final int SW=0x7f050007;
         public static final int W=0x7f050008;
         public static final int accuracy=0x7f050025;
+        public static final int add_osm_menu=0x7f05003b;
         public static final int altitude=0x7f050023;
         public static final int app_name=0x7f050000;
         public static final int askExit=0x7f050037;
@@ -114,6 +118,7 @@ public final class R {
         public static final int general_info_text=0x7f050020;
         public static final int general_info_title=0x7f05001f;
         public static final int gps_last_fix=0x7f050026;
+        public static final int insert_osm_url=0x7f05003c;
         public static final int latitude=0x7f050022;
         public static final int license=0x7f05000c;
         public static final int license_title=0x7f05001d;
@@ -134,12 +139,14 @@ public final class R {
         public static final int no_website_available=0x7f05001c;
         public static final int ok_button=0x7f050039;
         public static final int option_not_available=0x7f05000b;
+        public static final int osm_max_object_menu=0x7f05003d;
         public static final int qaz_info=0x7f050035;
         public static final int qaz_info_title=0x7f050036;
         public static final int search_active_1=0x7f050031;
         public static final int search_active_2=0x7f050032;
         public static final int search_failed_notification=0x7f05002f;
         public static final int search_hint=0x7f050001;
+        public static final int set_osm_max_object=0x7f05003e;
         public static final int source_openstreetmap=0x7f050030;
         public static final int speed=0x7f050024;
     }

@@ -68,5 +68,7 @@
     <string name="exitTitle">회원탈퇴</string>
     <string name="ok_button">확인</string>
     <string name="cancel_button">취소</string>
-    
-</resources>
+    <string name="add_osm_menu">Add OpenStreetMap URL</string>
+	<string name="insert_osm_url">Insert OpenStreetMap URL</string>
+	<string name="osm_max_object_menu">Set max POI per URL</string>
+	<string name="set_osm_max_object">Maximum POIs per URL</string></resources>
