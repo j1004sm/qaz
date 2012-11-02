@@ -22,8 +22,12 @@ package org.mixare;
 import org.mixare.data.DataSource;
 import org.mixare.gui.PaintScreen;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+
+import com.qaz.client.R;
 
 /**
  * @author hannes
@@ -69,17 +73,17 @@ public class SocialMarker extends Marker {
 		if (isVisible) {
 			float maxHeight = Math.round(dw.getHeight() / 10f) + 1;	// 최대 높이 계산
 			// 데이터 소스의 비트맵 파일을 읽어온다
-//			Bitmap bitmap = DataSource.getBitmap(datasource);
+			Bitmap bitmap = BitmapFactory.decodeResource(MixView.mixContext.getResources(), R.drawable.twitter);
 			
 			// 비트맵 파일이 읽혔다면 적절한 위치에 출력
-//			if(bitmap!=null) {
-//				dw.paintBitmap(bitmap, cMarker.x - maxHeight/1.5f, cMarker.y - maxHeight/1.5f);				
-//			}
-//			else {	// 비트맵 파일을 갖지 않는 마커의 경우
+			if(bitmap!=null) {
+				dw.paintBitmap(bitmap, cMarker.x - maxHeight/1.5f, cMarker.y - maxHeight/1.5f);				
+			} else {	// 비트맵 파일을 갖지 않는 마커의 경우
 				dw.setStrokeWidth(maxHeight / 10f);
 				dw.setFill(false);
 //				dw.setColor(DataSource.getColor(datasource));
 				dw.paintCircle(cMarker.x, cMarker.y, maxHeight / 1.5f);
+			}
 		}
 	}
 
