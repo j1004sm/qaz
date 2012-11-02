@@ -161,8 +161,8 @@ public class DataSource extends Activity {
 
 	
 	// 각 정보들로 완성된 URL 리퀘스트를 생성
-	public String createRequestParams(double lat, double lon, double alt, float radius,String locale) {
-		String ret="";
+	public String createRequestParams(double lat, double lon, double alt, float radius, String locale) {
+		String ret = "";
 		// 파일로부터 읽는 것이 아니라면
 		if (!ret.startsWith("file://")) {
 			
@@ -171,7 +171,7 @@ public class DataSource extends Activity {
 			// 위키피디아
 			case WIKIPEDIA:
 				float geoNamesRadius = radius > 20 ? 20 : radius; // Free service limited to 20km
-				ret += 
+				ret = 
 				"?lat=" + lat + 
 				"&lng=" + lon +
 				"&radius=" + geoNamesRadius + 
@@ -182,19 +182,19 @@ public class DataSource extends Activity {
 			
 			// 트위터
 			case TWITTER: 
-				ret+=
+				ret =
 				"?geocode=" + lat + "%2C" + lon + "%2C" + 
 				Math.max(radius, 1.0) + "km" ;				
 			break;
 			
 			// OSM(OpenStreetMap)
 			case OSM: 
-				ret+= XMLHandler.getOSMBoundingBox(lat, lon, radius);
+				ret = XMLHandler.getOSMBoundingBox(lat, lon, radius);
 			break;
 			
 			// 자체 URL
 			case DOR:
-				ret+=
+				ret =
 				"?latitude=" + Double.toString(lat) + 
 				"&longitude=" + Double.toString(lon) + 
 				"&altitude=" + Double.toString(alt) +

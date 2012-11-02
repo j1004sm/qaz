@@ -150,11 +150,17 @@ public class DownloadManager implements Runnable {
 		result.error = true;
 
 		try {
+			
 			if (ctx != null
-					&& request != null
-					&& ctx.getHttpGETInputStream(request.source.getUrl()) != null) {
-				is = ctx.getHttpGETInputStream(request.source.getUrl()
-						+ request.params);
+					&& request != null) {
+				
+				String reqUrl = request.source.getUrl()
+						+ request.params;
+				is = ctx.getHttpGETInputStream(reqUrl);
+				
+				//Log.e("requestUrl", reqUrl);
+				//완성된 URL을 로그캣에 오류로 표시
+				
 				String tmp = ctx.getHttpInputString(is); // 스트링 형태로 변환
 
 				Json layer = new Json(); // JSON 파일을 다룰 객체
@@ -255,7 +261,7 @@ public class DownloadManager implements Runnable {
 			jobId = "ID_" + (id++);	// ID를 할당. 'ID_번호' 형태이다
 			todoList.put(jobId, job);	// ID와 함께 작업을 요청 리스트에 등록
 			Log.i(MixView.TAG, "Submitted Job with " + jobId + ", type: "
-					+ job.source.getType() + ", params: " + job.params + ", url: "
+					+ job.source.getType() + ", params:" + job.params + ", url:"
 					+ job.source.getUrl());
 			}
 			return jobId;	// 할당된 ID를 리턴한다
