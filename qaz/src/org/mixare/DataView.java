@@ -28,7 +28,7 @@ import static android.view.KeyEvent.KEYCODE_DPAD_UP;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.mixare.data.DataHandler;
@@ -285,21 +285,19 @@ public class DataView {
 							// Get an iterator
 							Iterator i = set.iterator();
 							int id = 0;
-							while (i.hasNext()) {
-								Map.Entry me = (Map.Entry) i.next();
-								Log.d("DataView", "DataVIew "
-										+ me.getKey().toString());
-								if ((Boolean) me.getValue()) {
+							for (Entry<String, Boolean> entry : mixContext
+									.getOSMURLList().entrySet()) {
+								String key = entry.getKey();
+								Boolean value = entry.getValue();
+								if (value) {
 									requestData(
-											DataSource.createRequestOSMURL(
-													(String) me.getKey(),
+											DataSource.createRequestOSMURL(key,
 													lat, lon, alt, radius,
 													Locale.getDefault()
 															.getLanguage()),
 											DataSource
 													.dataFormatFromDataSource(source),
-											source, me.getKey().toString(),
-											id);
+													source, key, id);
 								}
 								++id;
 							}
@@ -343,9 +341,7 @@ public class DataView {
 					mixContext.getDownloader().submitJob(dRes.errorRequest);
 					
 					// 토스트로 에러 상황을 알림
-					Toast.makeText(mixContext, dRes.errorMsg,
-							Toast.LENGTH_SHORT).show();
-				}
+					Toast.makeText(mixContext, dRes.errorMsg, Toast.LENGTH_SHORT).show();				}
 				
 				// 에러가 없는 경우
 				if(!dRes.error) {

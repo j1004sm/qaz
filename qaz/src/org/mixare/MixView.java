@@ -136,6 +136,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 
 	// 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
 	public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
+	public static final String OSM_DEFAULT_URL="http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
 	public static  int osmMaxObject=5;
 	
 	// 줌 바가 보이는지 리턴
@@ -333,8 +334,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 				editor.commit();	// 변경 사항이 완료되었으면 commit
 				
 				// this is to set one URL in the OSM Shared preference
-				osmEditor.putString("URLStr0",
-						"http://geometa.hsr.ch/xapi/api/0.6/node[indoor=yes]");
+				osmEditor.putString("URLStr0", OSM_DEFAULT_URL);
 				osmEditor.putBoolean("URLBool0", true);
 
 				osmEditor.commit();
