@@ -32,8 +32,7 @@ import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.net.ssl.HostnameVerifier;
@@ -43,7 +42,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.X509TrustManager;
 
 import org.mixare.data.DataSource;
-import org.mixare.data.DataSource.DATASOURCE;
+import org.mixare.data.DataSourceList;
 import org.mixare.render.Matrix;
 
 import android.app.Activity;
@@ -93,11 +92,41 @@ public class MixContext extends ContextWrapper {
 	float declination = 0f;	// 경사, 적위
 	
 	private LocationManager lm;
-	
-	// 각 데이터소스의 선택 여부를 저장할 해쉬맵
-	private HashMap<DataSource.DATASOURCE,Boolean> selectedDataSources=new HashMap<DataSource.DATASOURCE,Boolean>();
-	private LinkedHashMap <String, Boolean> OSMSources=new LinkedHashMap <String,Boolean>();
 
+	private ArrayList<DataSource> allDataSources=new ArrayList<DataSource>();
+
+	public ArrayList<DataSource> getAllDataSources() {
+		return this.allDataSources;
+	}
+
+	public void setAllDataSourcesforLauncher(DataSource datasource) {
+		this.allDataSources.clear();
+		this.allDataSources.add(datasource);
+	}
+
+	public void refreshDataSources() {
+		this.allDataSources.clear();
+		SharedPreferences settings = getSharedPreferences(
+				DataSourceList.SHARED_PREFS, 0);
+		int size = settings.getAll().size();
+		
+		if (size == 0){
+			SharedPreferences.Editor dataSourceEditor = settings.edit();
+			dataSourceEditor.putString("DataSource0", "Wikipedia|http://ws.geonames.org/findNearbyWikipediaJSON|0|0|true");
+			dataSourceEditor.putString("DataSource1", "Twitter|http://search.twitter.com/search.json|2|0|true");
+			dataSourceEditor.putString("DataSource2", "OpenStreetmap|http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]|3|1|true");
+			dataSourceEditor.putString("DataSource3", "DrawOnReal|http://www.manjong.org:8255/qaz/check.jsp|4|0|false");
+			dataSourceEditor.commit();
+			size = settings.getAll().size();
+		}
+		
+		// copy the value from shared preference to adapter
+		for (int i = 0; i < size; i++) {
+			String fields[] = settings.getString("DataSource" + i, "").split("\\|", -1);
+			this.allDataSources.add(new DataSource(fields[0], fields[1], fields[2], fields[3], fields[4]));
+		}
+	}
+	
 	// 생성자. 어플리케이션의 컨텍스트를 받는다
 	public MixContext(Context appCtx) {
 		super(appCtx);
@@ -107,21 +136,17 @@ public class MixContext extends ContextWrapper {
 		this.ctx = appCtx.getApplicationContext();
 
 		// 액티비티의 자체 세팅을 공유할 프레퍼런스
-		SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
+		refreshDataSources();
 		boolean atLeastOneDatasourceSelected = false;	// 최소 하나 이상의 데이터 소스가 선택되었는지 여부
 		
 		// 데이터 소스 전체를 돌며 적용
-		for(DataSource.DATASOURCE source: DataSource.DATASOURCE.values()) {
-			// 선택된 데이터소스의 해쉬맵을 프레퍼런스 세팅값에 따라 설정 
-			selectedDataSources.put(source, settings.getBoolean(source.toString(), false));
-			// 한개라도 선택된 것이 있다면 플래그를 true
-			if(selectedDataSources.get(source))
+		for(DataSource ds: this.allDataSources) {
+			if(ds.getEnabled())
 				atLeastOneDatasourceSelected = true;
 		}
 		// 아무것도 선택된 것이 없을 경우 위키피디아와 Qaz를 기본으로 선택
 		if(!atLeastOneDatasourceSelected) {
-			setDataSource(DATASOURCE.Qaz, true);
-			setDataSource(DATASOURCE.Wikipedia, true);
+			
 		}
 
 		
@@ -510,45 +535,6 @@ public class MixContext extends ContextWrapper {
 		webview.loadUrl(url);
 	}
 
-
-	// 데이터 소스 세팅
-	public void setDataSource(DataSource.DATASOURCE source, Boolean selection){
-		selectedDataSources.put(source,selection);	// 선택된 데이터 소스의 상태를 세팅
-		
-		// 변경된 사항을 프레퍼런스에 세팅하고 적용한다
-		SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(source.toString(), selection);
-		editor.commit();
-	}
-
-	// 특정 데이터 소스가 선택된 상태인지 리턴
-	public Boolean isDataSourceSelected(DataSource.DATASOURCE source) {
-		return selectedDataSources.get(source);
-	}
-	
-	// 데이터 소스의 선택 여부를 토글
-	public void toogleDataSource(DataSource.DATASOURCE source) {
-		setDataSource(source, !selectedDataSources.get(source));
-	}
-	
-	// 선택된 데이터 소스 리스트를 스트링 형태로 리턴
-	public String getDataSourcesStringList() {
-		String ret = "";	// 결과 스트링
-		boolean first = true;	// 첫번째 항목인지 여부(쉼표 찍기위해 구분)
-		// 데이터 소스들을 점검
-		for(DataSource.DATASOURCE source: DataSource.DATASOURCE.values()) {
-			if(isDataSourceSelected(source)) {	// 선택된 경우 결과에 추가
-				if(!first) {
-					ret += ", ";
-				}	
-				ret += source.toString();
-				first = false;
-			}	
-		}
-		return ret;	// 결과 스트링을 리턴
-	}
-
 	// 마지막으로 다운로드된 위치를 리턴
 	public Location getLocationAtLastDownload() {
 		return locationAtLastDownload;
@@ -559,32 +545,21 @@ public class MixContext extends ContextWrapper {
 		this.locationAtLastDownload = locationAtLastDownload;
 	}
 	
-	public LinkedHashMap <String, Boolean> getOSMURLList() {
-		// HashMap<String, Boolean> OSMSources=new HashMap<String,Boolean>();
-		SharedPreferences settings = getSharedPreferences(
-				OSMDataSource.SHARED_PREFS, 0);
-
-		int size = settings.getAll().size();
-		OSMSources.clear();//clear the Hashmap before get the newest URL
-		for (int i = 0; i < (size / 2); i++) {
-			String s = settings.getString("URLStr" + i, "");
-			Boolean b = settings.getBoolean("URLBool" + i, false);
-			OSMSources.put(s, b);// hold string and boolean value
-		}
-		return OSMSources;
-	}
-
-	public Boolean isOSMUrlSelected(String iKey){
-		return OSMSources.get(iKey)!=null ?OSMSources.get(iKey):false;
-	}
-	
 	private LocationListener lbounce = new LocationListener() {
 
 		@Override
 		public void onLocationChanged(Location location) {
+			
+			try {
 			Log.d(TAG, "bounce Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
 			//Toast.makeText(ctx, "BOUNCE: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
 
+			downloadManager.purgeLists();
+			
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			
 			if (location.getAccuracy() < 40) {
 				lm.removeUpdates(lcoarse);
 				lm.removeUpdates(lbounce);			
@@ -614,6 +589,8 @@ public class MixContext extends ContextWrapper {
 			Log.d(TAG, "coarse Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
 			//Toast.makeText(ctx, "COARSE: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
 			lm.removeUpdates(lcoarse);
+			
+			downloadManager.purgeLists();
 		}
 
 		@Override
@@ -638,6 +615,7 @@ public class MixContext extends ContextWrapper {
 			Log.d(TAG, "normal Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
 			//Toast.makeText(ctx, "NORMAL: Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy(), Toast.LENGTH_LONG).show();
 			try {
+				downloadManager.purgeLists();
 				Log.v(TAG,"Location Changed: "+location.getProvider()+" lat: "+location.getLatitude()+" lon: "+location.getLongitude()+" alt: "+location.getAltitude()+" acc: "+location.getAccuracy());
 					synchronized (curLoc) {
 						curLoc = location;

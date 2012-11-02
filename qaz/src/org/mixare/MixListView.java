@@ -21,9 +21,10 @@ package org.mixare;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import com.qaz.client.R;
+
 import org.mixare.data.DataHandler;
-import org.mixare.data.DataSource.DATASOURCE;
+import org.mixare.data.DataSource;
+import org.mixare.data.DataSourceList;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -38,13 +39,13 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -54,6 +55,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.qaz.client.R;
 
 // 리스트 액티비티를 확장하는 리스트 뷰 클래스
 public class MixListView extends ListActivity {
@@ -119,32 +122,6 @@ public class MixListView extends ListActivity {
 		switch(list){
 		case 1:	// 데이터 소스를 선택하는 리스트			
 			//TODO: this needs some cleanup
-			// 메뉴 타이틀을 설정
-			dataSourceMenu = new Vector<String>();
-			dataSourceMenu.add("Wikipedia");
-			dataSourceMenu.add("Twitter");
-			dataSourceMenu.add(getString(DataView.SOURCE_OPENSTREETMAP));
-			dataSourceMenu.add("DrawOnReal");
-
-			// 메뉴 설명을 등록
-			dataSourceDescription = new Vector<String>();
-			dataSourceDescription.add("위키피디아에서 주변 정보를 가져옵니다");
-			dataSourceDescription.add("트위터로부터 주변 트윗들을 가져옵니다");
-			dataSourceDescription.add("주변역 정보들을 가져옵니다");
-			dataSourceDescription.add("Qaz 프로젝트와 연결합니다");
-			
-			// 각 항목의 체크여부를 등록
-			dataSourceChecked = new Vector<Boolean>();
-			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Wikipedia));
-			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Twitter));
-			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.OSM));
-			dataSourceChecked.add(mixContext.isDataSourceSelected(DATASOURCE.Qaz));
-			
-			dataSourceIcon = new Vector<Integer>();
-			dataSourceIcon.add(R.drawable.wikipedia);
-			dataSourceIcon.add(R.drawable.twitter);
-			dataSourceIcon.add(R.drawable.osm);
-			dataSourceIcon.add(R.drawable.ic_launcher);
 
 			// 리스트 어댑터를 생성하고 설정
 			adapter = new ListItemAdapter(this);
@@ -195,7 +172,7 @@ public class MixListView extends ListActivity {
 				// 검색 알림 텍스트. 어떤 데이터 소스로부터 읽어왔는지 출력한다
 				TextView searchNotificationTxt = new TextView(this);
 				searchNotificationTxt.setVisibility(View.VISIBLE);
-				searchNotificationTxt.setText(getString(DataView.SEARCH_ACTIVE_1)+" "+ mixContext.getDataSourcesStringList() + getString(DataView.SEARCH_ACTIVE_2));
+				searchNotificationTxt.setText(getString(DataView.SEARCH_ACTIVE_1) + " " + DataSourceList.getDataSourcesStringList() + getString(DataView.SEARCH_ACTIVE_2));
 				searchNotificationTxt.setWidth(MixView.dWindow.getWidth());
 
 				searchNotificationTxt.setPadding(10, 2, 0, 0);
@@ -376,33 +353,32 @@ public class MixListView extends ListActivity {
 
 	// 리스트의 각 항목(데이터소스들)을 클릭했을 경우
 	public void clickOnDataSource(int position){
-		// 얼려있는 데이터뷰를 해동시킨다
-		if(dataView.isFrozen())
-			dataView.setFrozen(false);
-		
-		// 각 포지션에 따라 데이터소스 사용여부를 토글한다
-		switch(position){
-		/*WIKIPEDIA*/
-		case 0:
-			mixContext.toogleDataSource(DATASOURCE.Wikipedia);
-			break;
-
-		/*TWITTER*/
-		case 1:		
-			mixContext.toogleDataSource(DATASOURCE.Twitter);
-			break;
-
-		/*OSM*/
-		case 2:
-			mixContext.toogleDataSource(DATASOURCE.OSM);
-			break;
-
-		/*Own URL*/
-		case 3:
-			mixContext.toogleDataSource(DATASOURCE.Qaz);
-			break;
+//		// 얼려있는 데이터뷰를 해동시킨다
+//		if(dataView.isFrozen())
+//			dataView.setFrozen(false);
+//		
+//		// 각 포지션에 따라 데이터소스 사용여부를 토글한다
+//		switch(position){
+//		/*WIKIPEDIA*/
+//		case 0:
+//			mixContext.toogleDataSource(DATASOURCE.Wikipedia);
+//			break;
+//
+//		/*TWITTER*/
+//		case 1:		
+//			mixContext.toogleDataSource(DATASOURCE.Twitter);
+//			break;
+//
+//		/*OSM*/
+//		case 2:
+//			mixContext.toogleDataSource(DATASOURCE.OSM);
+//			break;
+//
+//		/*Own URL*/
+//		case 3:
+//			mixContext.toogleDataSource(DATASOURCE.Qaz);
+//			break;
 		}
-	}
 
 
 	// 옵션 메뉴 생성시
@@ -415,8 +391,8 @@ public class MixListView extends ListActivity {
 		/*메뉴 항목 정의*/
 		MenuItem item1 = menu.add(base, base, base, getString(DataView.MENU_ITEM_3)); 
 		MenuItem item2 = menu.add(base, base+1, base+1, getString(DataView.MENU_CAM_MODE));
-		MenuItem item3 = menu.add(base, base+2, base+2, "OpenStreetMap URL List");
-
+		MenuItem item3 = menu.add(base, base+2, base+2, "Add data source");
+		
 		/*메뉴 항목의 아이콘 할당*/
 		item1.setIcon(android.R.drawable.ic_menu_mapmode);
 		item2.setIcon(android.R.drawable.ic_menu_camera);
@@ -439,8 +415,8 @@ public class MixListView extends ListActivity {
 			finish();
 			break;
 		case 3:
-			Intent osm = new Intent(this, OSMDataSource.class);
-			startActivity(osm);
+			Intent addDataSource = new Intent(this, DataSource.class);
+			startActivity(addDataSource);
 			break;
 		}
 		return true;

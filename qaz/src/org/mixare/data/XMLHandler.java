@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.mixare.Marker;
 import org.mixare.MixView;
+import org.mixare.NavigationMarker;
 import org.mixare.POIMarker;
 import org.mixare.reality.PhysicalPlace;
 import org.w3c.dom.Document;
@@ -42,7 +43,7 @@ import android.util.Log;
 public class XMLHandler extends DataHandler {
 
 	// OSM(OpenStreetMap) 처리
-	private List<Marker> processOSM(Element root, String OSMOriUrl, int OSMOriID) {
+	private List<Marker> processOSM(Element root, DataSource datasource) {
 
 		// 마커들과 노드들
     	List<Marker> markers = new ArrayList<Marker>();
@@ -77,25 +78,27 @@ public class XMLHandler extends DataHandler {
 
 	                	// This check will be done inside the createMarker method 
 	                	//if(markers.size()<MAX_OBJECTS)
+	                
+	                	if(datasource.getDisplay() == DataSource.DISPLAY.CIRCLE_MARKER) {
+	                		Marker ma = new POIMarker(
+	                				name, 
+	                				lat, 
+	                				lon, 
+	                				0, 
+	                				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
+	                				datasource);
+		        			markers.add(ma);
+	                	} else {
+		                	Marker ma = new NavigationMarker(
+			        				name, 
+			        				lat, 
+			        				lon, 
+			        				0, 
+			        				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
+			        				datasource);
+		        			markers.add(ma);
+	                	}
 	                	
-	                	// 할당된 정보로 네비게이션 마커 생성
-	                	/* Marker ma = new NavigationMarker(
-	        				name, 
-	        				lat, 
-	        				lon, 
-	        				0,
-	        				// OSM의 데이터를 이용한다
-	        				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
-	        				DataSource.DATASOURCE.OSM); */
-	                	//Change to use POIMarker instead of NavigationMarker
-	                	Marker ma = new POIMarker(
-		        				name, 
-		        				lat, 
-		        				lon, 
-		        				0, 
-		        				"http://www.openstreetmap.org/?node="+att.getNamedItem("id").getNodeValue(), 
-		        				DataSource.DATASOURCE.OSM,OSMOriUrl,OSMOriID);
-	        			markers.add(ma);
 	                	//skip to next node
 	        			continue;
 	        		}
@@ -126,13 +129,13 @@ public class XMLHandler extends DataHandler {
 	}
 	
 	// 도큐먼트를 읽음. OSM데이터를 읽기 위함
-	public List<Marker> load(Document doc,String OSMOriUrl, int OSMOriID) {
+	public List<Marker> load(Document doc, DataSource datasource) {
         Element root = doc.getDocumentElement();
         
         // If the root tag is called "osm" we got an 
         // openstreetmap .osm xml document
         if ("osm".equals(root.getTagName()))
-        	return processOSM(root,OSMOriUrl,OSMOriID);
+        	return processOSM(root,datasource);
         return null;
 	}
 }

@@ -11,6 +11,13 @@
     <string name="SW">SW</string>
     <string name="W">W</string>
     <string name="NW">NW</string>
+    <string name="OSM">Openstreetmap</string>
+    <string name="DOR">DrawOnReal</string>
+    <string name="cancel">Cancel</string>
+	<string name="data_source_edit_err">This data source cannot be edited.</string>
+	<string name="data_source_delete_err">This data source cannot be deleted.</string>
+    <string name="CIRCLE_MARKER">Circles</string>
+    <string name="NAVIGATION_MARKER">Arrows</string>
     <string name="empty_list">죄송합니다. 현재 설정된 반경으로는 위치 정보가 없습니다.\n 좀 더 넓은 반경으로 설정해주십시요.</string>
     <string name="option_not_available">Sorry, We are working on it... \nThis option will be available soon!</string>
     <string name="license">Copyright (C) 2010- Peer internet solutions 
@@ -53,6 +60,7 @@
     <string name="map_menu_cam_mode">카메라</string>
     <string name="map_my_location">내 위치</string>
     <string name="map_current_location_click">현재 위치</string>
+    <string name="data_source_add">Add data source</string>
     <string name="data_source_change_wikipedia">위키피디아로 데이터 소스 변경</string>
     <string name="data_source_change_twitter">트위터로 데이터 소스 변경</string>
     <string name="data_source_change_osm">OpenStreetMap으로 데이터 소스 변경</string>

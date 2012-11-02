@@ -19,13 +19,19 @@
 
 package org.mixare.data;
 
-import org.mixare.MixListView;
-import com.qaz.client.R;
-
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.qaz.client.R;
 
 /**
  * @author hannes
@@ -33,106 +39,137 @@ import android.graphics.Color;
  */
 
 // 데이터 소스를 실질적으로 다루는 클래스
-public class DataSource {
+public class DataSource extends Activity {	
 	
-	// 데이터 소스와 데이터 포맷은 비슷해 보이지만 전혀 다르다.
-	// 데이터 소스는 데이터가 어디서 왔는지, 데이터 포맷은 어떤 형식으로 포맷되었는지를 가르킨다.
-	// 이에 대한 이해는 똑같은 데이터 포맷으로 여러가지의 데이터 소스를 실험하는데에 필수적이다
+	private String name;
+	private String url;
+	public enum TYPE { WIKIPEDIA, BUZZ, TWITTER, OSM, DOR };
+	public enum DISPLAY { CIRCLE_MARKER, NAVIGATION_MARKER };
+	private boolean enabled;
+	private TYPE type;
+	private DISPLAY display;
 	
-	
-	// 데이터 소스와 데이터 포맷의 열거형 변수
-	public enum DATASOURCE {Wikipedia, Twitter, OSM, Qaz};
-	public enum DATAFORMAT {Wikipedia, Twitter, OSM, DOR};	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.datasourcedetails);
+		final EditText nameField = (EditText) findViewById(R.id.name);
+		final EditText urlField = (EditText) findViewById(R.id.url);
+		final Spinner typeSpinner = (Spinner) findViewById(R.id.type);
+		final Spinner displaySpinner = (Spinner) findViewById(R.id.displaytype);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			if (extras.containsKey("DataSourceId")) {
+				SharedPreferences settings = getSharedPreferences(DataSourceList.SHARED_PREFS, 0);
+				String fields[] = settings.getString("DataSource" + extras.getInt("DataSourceId"), "").split("\\|", -1);
+				nameField.setText(fields[0], TextView.BufferType.EDITABLE);
+				urlField.setText(fields[1], TextView.BufferType.EDITABLE);
+				typeSpinner.setSelection(Integer.parseInt(fields[2])-3);
+				displaySpinner.setSelection(Integer.parseInt(fields[3]));
+			}
+		}
 
-	/** 기본 URL */
-	// 위키피디아
-	private static final String WIKI_BASE_URL = "http://ws.geonames.org/findNearbyWikipediaJSON";
-	//private static final String WIKI_BASE_URL =	"file:///sdcard/wiki.json";
+	}
 	
-	// 트위터
-	private static final String TWITTER_BASE_URL = "http://search.twitter.com/search.json";
-	
-	// OSM(OpenStreetMap)
-	// OpenStreetMap API는 http://wiki.openstreetmap.org/wiki/Xapi 를 참고
-	// 예를 들어, 철도만 사용할 경우:
-	//private static final String OSM_BASE_URL =	"http://www.informationfreeway.org/api/0.6/node[railway=station]";
-	//private static final String OSM_BASE_URL =	"http://xapi.openstreetmap.org/api/0.6/node[railway=station]";
-	//private static final String OSM_BASE_URL =	"http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
-	
-	// 주의할것! 방대한 양의 데이터(MB단위 이상)을 산출할 때에는, 작은 반경이나 특정한 쿼리만을 사용해야한다
-	/** URL 부분 끝 */
-	
-	
-	// 아이콘들. 트위터
-	public static Bitmap twitterIcon;
-	
-	// 기본 생성자
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			final EditText nameField = (EditText) findViewById(R.id.name);
+			String name = nameField.getText().toString();
+			final EditText urlField = (EditText) findViewById(R.id.url);
+			String url = urlField.getText().toString();
+			final Spinner typeSpinner = (Spinner) findViewById(R.id.type);
+			int typeId = (int) typeSpinner.getItemIdAtPosition(typeSpinner.getSelectedItemPosition());
+			final Spinner displaySpinner = (Spinner) findViewById(R.id.displaytype);
+			int displayId = (int) displaySpinner.getItemIdAtPosition(displaySpinner.getSelectedItemPosition());
+
+			//TODO: fix the weird hack for type!
+			DataSource newDS = new DataSource(name, url, typeId+3, displayId, true);
+
+			SharedPreferences settings = getSharedPreferences(DataSourceList.SHARED_PREFS, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			int index = settings.getAll().size();
+			Bundle extras = getIntent().getExtras();
+			if (extras != null) {
+				if (extras.containsKey("DataSourceId")) {
+					index = extras.getInt("DataSourceId");
+				}
+			}
+			editor.putString("DataSource"+index, newDS.serialize());
+			editor.commit();
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		int base = Menu.FIRST;
+		menu.add(base, base, base, R.string.cancel);
+		return super.onCreateOptionsMenu(menu);
+
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item){
+		switch(item.getItemId()){
+		case Menu.FIRST:
+			finish();
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
 	public DataSource() {
-		
+
 	}
-	
-	// 리소스로부터 각 아이콘 생성
-	public static void createIcons(Resources res) {
-		twitterIcon=BitmapFactory.decodeResource(res, R.drawable.twitter);
-		
+
+	public DataSource(String name, String url, TYPE type, DISPLAY display, boolean enabled) {
+		this.name = name;
+		this.url = url;
+		this.type = type;
+		this.display = display;
+		this.enabled = enabled;
+		Log.d("mixare", "New Datasource!" + name +" "+url+" "+type+" "+display+" "+ enabled);
 	}
-	
-	// 아이콘 비트맵의 게터
-	public static Bitmap getBitmap(DATASOURCE ds) {
-		Bitmap bitmap=null;
-		switch (ds) {
-			case Twitter: bitmap=twitterIcon; break;
-		}
-		return bitmap;
+
+	public DataSource(String name, String url, int typeInt, int displayInt, boolean enabled) {
+		TYPE typeEnum = TYPE.values()[typeInt];
+		DISPLAY displayEnum = DISPLAY.values()[displayInt];
+		this.name = name;
+		this.url = url;
+		this.type = typeEnum;
+		this.display = displayEnum;
+		this.enabled = enabled;
 	}
-	
-	// 데이터 소스로부터 데이터 포맷을 추출
-	public static DATAFORMAT dataFormatFromDataSource(DATASOURCE ds) {
-		DATAFORMAT ret;
-		// 소스 형식에 따라 포맷을 할당한다
-		switch (ds) {
-			case Wikipedia: ret=DATAFORMAT.Wikipedia; break;
-			case Twitter: ret=DATAFORMAT.Twitter; break;
-			case OSM: ret=DATAFORMAT.OSM; break;
-			case Qaz: ret=DATAFORMAT.DOR; break;
-			default: ret=DATAFORMAT.DOR; break;
-		}
-		return ret;	// 포맷 리턴
+	public DataSource(String name, String url, String typeString, String displayString, String enabledString) {
+		TYPE typeEnum = TYPE.values()[Integer.parseInt(typeString)];
+		DISPLAY displayEnum = DISPLAY.values()[Integer.parseInt(displayString)];
+		Boolean enabledBool = Boolean.parseBoolean(enabledString);
+		this.name = name;
+		this.url = url;
+		this.type = typeEnum;
+		this.display = displayEnum;
+		this.enabled = enabledBool;
 	}
+
 	
 	// 각 정보들로 완성된 URL 리퀘스트를 생성
-	public static String createRequestURL(DATASOURCE source, double lat, double lon, double alt, float radius,String locale) {
-		String ret="";	// 결과 스트링
-		
-		// 소스에 따라 주소 할당. 우선 상수로 설정된 값들을 할당한다
-		switch(source) {
-		
-			case Wikipedia: 
-				ret = WIKI_BASE_URL;
-			break;
-			
-			case Twitter: 
-				ret = TWITTER_BASE_URL;			
-			break;
-			/*
-			case OSM: 
-				ret = OSM_BASE_URL;
-			break;
-			*/
-			
-			case Qaz:
-				ret = MixListView.customizedURL;
-			break;
-			
-		}
-		
+	public String createRequestParams(double lat, double lon, double alt, float radius,String locale) {
+		String ret="";
 		// 파일로부터 읽는 것이 아니라면
 		if (!ret.startsWith("file://")) {
 			
 			// 각 소스에 따른 URL 리퀘스트를 완성한다
-			switch(source) {
+			switch(this.type) {
 			// 위키피디아
-			case Wikipedia:
+			case WIKIPEDIA:
 				float geoNamesRadius = radius > 20 ? 20 : radius; // Free service limited to 20km
 				ret += 
 				"?lat=" + lat + 
@@ -144,57 +181,98 @@ public class DataSource {
 				break;
 			
 			// 트위터
-			case Twitter: 
+			case TWITTER: 
 				ret+=
 				"?geocode=" + lat + "%2C" + lon + "%2C" + 
 				Math.max(radius, 1.0) + "km" ;				
 			break;
 			
-			/*
 			// OSM(OpenStreetMap)
 			case OSM: 
 				ret+= XMLHandler.getOSMBoundingBox(lat, lon, radius);
 			break;
-			*/
 			
 			// 자체 URL
-			case Qaz:
+			case DOR:
 				ret+=
 				"?latitude=" + Double.toString(lat) + 
 				"&longitude=" + Double.toString(lon) + 
 				"&altitude=" + Double.toString(alt) +
 				"&radius=" + Double.toString(radius);
 			break;
-			
 			}
-			
 		}
 		
 		return ret;
 	}
 	
-	public static String createRequestOSMURL(String sourceURL, double lat,
-			double lon, double alt, float radius, String locale) {
-
-		String ret = sourceURL;
-
-		if (!ret.startsWith("file://")) {
-			ret += XMLHandler.getOSMBoundingBox(lat, lon, radius);
-		}
-
-		return ret;
-	}
-	
-	// 각 소스에 따른 색을 리턴
-	public static int getColor(DATASOURCE datasource) {
+	public int getColor() {
 		int ret;
-		switch(datasource) {
-			case Twitter:	ret = Color.rgb(50, 204, 255); break;
-			//case OSM:		ret = Color.rgb(255, 168, 0); break;
-			case Wikipedia:	ret = Color.RED; break;
+		switch(this.type) {
+			case TWITTER:	ret = Color.rgb(50, 204, 255); break;
+			case OSM:		ret = Color.rgb(255, 168, 0); break;
+			case WIKIPEDIA:	ret = Color.RED; break;
 			default:		ret = Color.WHITE; break;
 		}
 		return ret;
+	}
+	
+	public int getDataSourceIcon() {
+		int ret;
+		switch(this.type) {
+			case TWITTER:	
+				ret=R.drawable.twitter; 
+				break;
+			case OSM:		
+				ret=R.drawable.osm;
+				break;
+			case WIKIPEDIA:	
+				ret=R.drawable.wikipedia; 
+				break;
+			default:		
+				ret=R.drawable.ic_launcher; 
+				break;
+		}
+		return ret;
+	}
+
+	public int getDisplayId() {
+		return this.display.ordinal();
+	}
+
+	public int getTypeId() {
+		return this.type.ordinal();
+	}
+
+	public DISPLAY getDisplay() {
+		return this.display;
+	}
+
+	public TYPE getType() {
+		return this.type;
+	}
+
+	public boolean getEnabled() {
+		return this.enabled;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+
+	public String serialize() {
+		return this.getName() + "|"
+		+ this.getUrl() + "|"
+		+ this.getTypeId() + "|"
+		+ this.getDisplayId() + "|"
+		+ this.getEnabled();
+	}
+	public void setEnabled(boolean isChecked) {
+		this.enabled = isChecked;
 	}
 
 }

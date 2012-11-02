@@ -22,7 +22,6 @@ package org.mixare;
 import java.text.DecimalFormat;
 
 import org.mixare.data.DataSource;
-import org.mixare.data.DataSource.DATASOURCE;
 import org.mixare.gui.PaintScreen;
 import org.mixare.gui.TextObj;
 
@@ -42,10 +41,8 @@ public class POIMarker extends Marker {
 
 	// 생성자. 타이틀과 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public POIMarker(String title, double latitude, double longitude,
-			double altitude, String URL, DATASOURCE datasource, String iOSMurl,
-			int iOSMUrlID) {
-		super(title, latitude, longitude, altitude, URL, datasource, iOSMurl,
-				iOSMUrlID);
+			double altitude, String URL, DataSource datasource) {
+		super(title, latitude, longitude, altitude, URL, datasource);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -60,11 +57,6 @@ public class POIMarker extends Marker {
 	public int getMaxObjects() {
 		return MAX_OBJECTS;
 	}
-	
-	@Override
-	public int getOsmUrlMaxObject() {
-		return MixView.osmMaxObject;
-	}
 
 	@Override
 	public void drawCircle(PaintScreen dw) {
@@ -75,12 +67,8 @@ public class POIMarker extends Marker {
 			dw.setStrokeWidth(maxHeight / 100f);
 			dw.setFill(false);
 
-			if (super.getDatasource().equals(DataSource.DATASOURCE.OSM)) {
-				dw.setColor(getColour());
-			} else {
-				dw.setColor(DataSource.getColor(datasource));
-			}
-
+			dw.setColor(getColour());
+	
 			// draw circle with radius depending on distance
 			// 0.44 is approx. vertical fov in radians
 			double angle = 2.0 * Math.atan2(10, distance);
@@ -131,7 +119,7 @@ public class POIMarker extends Marker {
 				textBlock.setBgColor(Color.argb(128, 0, 0, 0));
 				textBlock.setBorderColor(Color.rgb(255, 255, 255));
 			}
-			dw.setColor(DataSource.getColor(datasource));
+			//dw.setColor(DataSource.getColor(type));
 
 			float currentAngle = MixUtils.getAngle(cMarker.x, cMarker.y,
 					signMarker.x, signMarker.y);
@@ -150,12 +138,8 @@ public class POIMarker extends Marker {
 				signMarker.x, signMarker.y);
 		float maxHeight = Math.round(dw.getHeight() / 10f) + 1;
 
+		dw.setColor(getColour());
 		float radius = maxHeight / 1.5f;
-		if (super.getDatasource().equals(DataSource.DATASOURCE.OSM)) {
-			dw.setColor(getColour());
-		} else {
-			dw.setColor(DataSource.getColor(datasource));
-		}
 		dw.setStrokeWidth(dw.getHeight() / 100f);
 		dw.setFill(false);
 

@@ -65,13 +65,7 @@ public class RadarPoints implements ScreenObj {
 			// 최종적으로 색 설정과 출력
 			if (pm.isActive() && (x * x + y * y < RADIUS * RADIUS)) {
 				dw.setFill(true);
-				
-				// if the marker is OSM type
-				if (pm.getDatasource().equals(DataSource.DATASOURCE.OSM)) {
-					dw.setColor(pm.getColour());
-				} else {
-					dw.setColor(DataSource.getColor(pm.getDatasource()));
-				}
+				dw.setColor(pm.getColour());
 				dw.paintRect(x + RADIUS - 1, y + RADIUS - 1, 2, 2);
 			}
 		}

@@ -26,8 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.mixare.data.DataHandler;
-import org.mixare.data.DataSource;
-import org.mixare.data.DataSource.DATASOURCE;
+import org.mixare.data.DataSourceList;
 import org.mixare.gui.PaintScreen;
 import org.mixare.render.Matrix;
 
@@ -136,8 +135,6 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 
 	// 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
 	public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
-	public static final String OSM_DEFAULT_URL="http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]";
-	public static  int osmMaxObject=5;
 	
 	// 줌 바가 보이는지 리턴
 	public boolean isZoombarVisible() {
@@ -205,7 +202,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 					repaint();	// 리페인트 호출     		
 				}
 				catch(Exception ex){	// 실패시 에러 처리
-					doError(ex);
+					//doError(ex);
 				}
 			}
 		});
@@ -234,9 +231,6 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 		
 		mixView = MixView.this;
 		
-		// 데이터 소스로부터 아이콘 생성
-		DataSource.createIcons(getResources());
-		
 		try {
 
 			handleIntent(getIntent());	// 인텐트 제어
@@ -254,13 +248,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();	// 변경사항을 기록할 에디터
 			
-			/*
-			 * Get the preference file PREFS_NAME stored in the internal memory
-			 * of the phone to set the OSM URL
-			 */
-			SharedPreferences osmSetting = getSharedPreferences(
-					OSMDataSource.SHARED_PREFS, 0);
-			SharedPreferences.Editor osmEditor = osmSetting.edit();
+			SharedPreferences DataSourceSettings = getSharedPreferences(DataSourceList.SHARED_PREFS, 0);
 
 			// 줌 바의 생성과 설정
 			myZoomBar = new SeekBar(this);
@@ -329,15 +317,15 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 				alert1.show();
 				
 				editor.putBoolean("firstAccess", true);
-				//value for maximum POI for each selected OSM URL to be active by default is 5
-				editor.putInt("osmMaxObject",5);
 				editor.commit();	// 변경 사항이 완료되었으면 commit
 				
-				// this is to set one URL in the OSM Shared preference
-				osmEditor.putString("URLStr0", OSM_DEFAULT_URL);
-				osmEditor.putBoolean("URLBool0", true);
-
-				osmEditor.commit();
+				//add the default datasources to the preferences file
+				SharedPreferences.Editor dataSourceEditor = DataSourceSettings.edit();
+				dataSourceEditor.putString("DataSource0", "Wikipedia|http://ws.geonames.org/findNearbyWikipediaJSON|0|0|true");
+				dataSourceEditor.putString("DataSource1", "Twitter|http://search.twitter.com/search.json|2|0|true");
+				dataSourceEditor.putString("DataSource2", "OpenStreetmap|http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]|3|1|true");
+				dataSourceEditor.putString("DataSource3", "DrawOnReal|http://www.manjong.org:8255/qaz/check.jsp|4|0|false");
+				dataSourceEditor.commit();
 			} 
 			
 			editor.putString("id", LoginActivity.usrId);
@@ -438,19 +426,21 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 
 			killOnError();	// 에러 여부를 체크한다
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-			osmMaxObject = settings.getInt("osmMaxObject", 5);
 			mixContext.mixView = this;	// 컨텍스트의 믹스뷰를 설정하고
 			dataView.doStart();			// 데이터뷰 활성화
 			dataView.clearEvents();		// 이벤트 클리어
+			
+			mixContext.refreshDataSources();
 
 			double angleX, angleY;		// 앵글의 x, y
 
 			
 			/*연산에 사용될 매트릭스 값들을 설정한다*/
 			angleX = Math.toRadians(-90);
-			m1.set(1f, 0f, 0f, 0f, (float) Math.cos(angleX), (float) -Math
-					.sin(angleX), 0f, (float) Math.sin(angleX), (float) Math
-					.cos(angleX));
+			m1.set(	1f,	0f, 						0f, 
+					0f,	(float) Math.cos(angleX),	(float) -Math.sin(angleX),
+					0f,	(float) Math.sin(angleX),	(float) Math.cos(angleX)
+			);
 
 			angleX = Math.toRadians(-90);
 			angleY = Math.toRadians(-0);
@@ -536,7 +526,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			searchNotificationTxt = new TextView(this);
 			searchNotificationTxt.setWidth(dWindow.getWidth());
 			searchNotificationTxt.setPadding(10, 2, 0, 0);			
-			searchNotificationTxt.setText(getString(DataView.SEARCH_ACTIVE_1)+" "+ mixContext.getDataSourcesStringList()+ getString(DataView.SEARCH_ACTIVE_2));;
+			searchNotificationTxt.setText(getString(DataView.SEARCH_ACTIVE_1)+" "+ DataSourceList.getDataSourcesStringList()+ getString(DataView.SEARCH_ACTIVE_2));;
 			searchNotificationTxt.setBackgroundColor(Color.DKGRAY);
 			searchNotificationTxt.setTextColor(Color.WHITE);
 
@@ -590,7 +580,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			if(!dataView.isLauncherStarted()){
 				// 데이터 소스 리스트를 지정
 				MixListView.setList(1);
-				Intent intent = new Intent(MixView.this, MixListView.class);
+				Intent intent = new Intent(MixView.this, DataSourceList.class);
 				// 설정된 인텐트로 서브 액티비티를 만든다. 두번째 인자는 요청코드 번호
 				startActivityForResult(intent, 40);
 			}
@@ -715,17 +705,7 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 		} else {
 			myout = (30 + (myZoomLevel - 75) * 2f);
 		}
-
-		// 트위터 JSON 파일은 1km 미만의 반경은 허용하지 않으므로 최소값은 1km 이상이어야 한다 
-
-		/*Twitter Json file not available for radius <1km 
-		 *smallest radius is set to 1km*/
-		//should be taken care when downloading from twitter, because multiple 
-		//datasource can be selected
-	/*	if ("Twitter".equals(MixListView.getDataSource()) && myZoomBar.getProgress() < 100) {
-			myout++;
-		}
-*/
+		
 		return myout;	// 계산된 값 리턴
 	}
 
@@ -866,15 +846,11 @@ public class MixView extends Activity implements SensorEventListener, OnTouchLis
 			if (me.getAction() == MotionEvent.ACTION_UP) {
 				dataView.clickEvent(xPress, yPress);
 				
-				//if (dataView.handleClickEvent(null) == true){
-					//DOR 기능(그림 그리기 기능)을 로드. 보드를 띄움. (데이터소스에서 Qaz에 체크되었을 경우에만.)
-					if (mixContext.isDataSourceSelected(DATASOURCE.Qaz) == true) {
-					
+				//if (dataView.handleClickEvent(null) == true){					
 					Intent myIntent = new Intent(getApplicationContext(),QazPaintBoardActivity.class);
 	        		startActivity(myIntent);
 	        		
 	        		Toast.makeText(getApplicationContext(),"그리기 모드로 전환합니다", 1000).show();
-					}
 				//}
 			}
 

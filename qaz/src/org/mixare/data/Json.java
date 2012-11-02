@@ -34,7 +34,6 @@ import org.mixare.Marker;
 import org.mixare.MixView;
 import org.mixare.POIMarker;
 import org.mixare.SocialMarker;
-import org.mixare.data.DataSource.DATAFORMAT;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -45,7 +44,7 @@ public class Json extends DataHandler {
 	public static final int MAX_JSON_OBJECTS=500;	// JSON 객체의 최대 수
 	
 	// 각종 데이터를 로드
-	public List<Marker> load(JSONObject root, DATAFORMAT dataformat) {
+	public List<Marker> load(JSONObject root, DataSource datasource) {
 		// 데이터를 읽는데 사용할 JSON 객체와 데이터행렬, 마커들
 		JSONObject jo = null;
 		JSONArray dataArray = null;
@@ -63,7 +62,7 @@ public class Json extends DataHandler {
 			// 데이터행렬에 데이터들이 있다면
 			if (dataArray != null) {
 				// 일단 로그 생성. 데이터 포맷을 기록한다
-				Log.i(MixView.TAG, "processing "+dataformat+" JSON Data Array");
+				Log.i(MixView.TAG, "processing "+ datasource.getType() +" JSON Data Array");
 				// 최대 객체 수와 실제 데이터 길이를 비교해 최소치를 탑으로 지정 
 				int top = Math.min(MAX_JSON_OBJECTS, dataArray.length());
 
@@ -74,11 +73,11 @@ public class Json extends DataHandler {
 					Marker ma = null;
 					
 					// 데이터 포맷에 따른 처리
-					switch(dataformat) {
-						case DOR: ma = processMixareJSONObject(jo); break;
-						case Twitter: ma = processTwitterJSONObject(jo); break;
-						case Wikipedia: ma = processWikipediaJSONObject(jo); break;
-						default: ma = processMixareJSONObject(jo); break;
+					switch(datasource.getType()) {
+						case DOR: ma = processMixareJSONObject(jo, datasource); break;
+						case TWITTER: ma = processTwitterJSONObject(jo, datasource); break;
+						case WIKIPEDIA: ma = processWikipediaJSONObject(jo, datasource); break;
+						default: ma = processMixareJSONObject(jo, datasource); break;
 					}
 					// 마커 추가
 					if(ma!=null)
@@ -95,7 +94,7 @@ public class Json extends DataHandler {
 	}
 
 	// 트위터 데이터의 처리
-	public Marker processTwitterJSONObject(JSONObject jo) throws NumberFormatException, JSONException {
+	public Marker processTwitterJSONObject(JSONObject jo, DataSource datasource) throws NumberFormatException, JSONException {
 		Marker ma = null;	// 임시객체
 		
 		// 일단 트위터 형식에 맞는지 검사한다
@@ -140,14 +139,14 @@ public class Json extends DataHandler {
 						lat, 
 						lon, 
 						0, url, 
-						DataSource.DATASOURCE.Twitter, "", 0);
+						datasource);
 			}
 		}
 		return ma;	// 마커 리턴
 	}
 
 	// 자체 데이터의 처리
-	public Marker processMixareJSONObject(JSONObject jo) throws JSONException {
+	public Marker processMixareJSONObject(JSONObject jo, DataSource datasource) throws JSONException {
 
 		Marker ma = null;	// 임시객체
 		
@@ -184,8 +183,7 @@ public class Json extends DataHandler {
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
 					unescapeHTML(jo.getString("webpage"), 0),
-					DataSource.DATASOURCE.Qaz,
-					image, "", 0);
+					image, datasource);
 		}
 		return ma;	// 마커 리턴
 	}
@@ -223,7 +221,7 @@ public class Json extends DataHandler {
 //	}
 
 	// 위키피디아 데이터 처리
-	public Marker processWikipediaJSONObject(JSONObject jo) throws JSONException {
+	public Marker processWikipediaJSONObject(JSONObject jo, DataSource datasource) throws JSONException {
 
 		Marker ma = null;	// 임시객체
 		
@@ -239,7 +237,7 @@ public class Json extends DataHandler {
 					jo.getDouble("lng"), 
 					jo.getDouble("elevation"), 
 					"http://"+jo.getString("wikipediaUrl"),		// 위키의 url 을 입력
-					DataSource.DATASOURCE.Wikipedia, "", 0);
+					datasource);
 		}
 		return ma;	// 마커 리턴
 	}

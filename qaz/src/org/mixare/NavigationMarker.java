@@ -20,7 +20,6 @@
 package org.mixare;
 
 import org.mixare.data.DataSource;
-import org.mixare.data.DataSource.DATASOURCE;
 import org.mixare.gui.PaintScreen;
 
 import android.graphics.Path;
@@ -37,8 +36,8 @@ public class NavigationMarker extends Marker {
 
 	// 생성자. 타이틀, 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public NavigationMarker(String title, double latitude, double longitude,
-			double altitude, String URL, DATASOURCE datasource , String iOSMurl, int iOSMUrlID) {
-		super(title, latitude, longitude, altitude, URL, datasource,iOSMurl,iOSMUrlID);
+			double altitude, String URL, DataSource datasource) {
+		super(title, latitude, longitude, altitude, URL, datasource);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -73,7 +72,7 @@ public class NavigationMarker extends Marker {
 			float maxHeight = Math.round(dw.getHeight() / 10f) + 1;
 
 			// 페인트 스크린을 설정하고
-			dw.setColor(DataSource.getColor(datasource));
+			//dw.setColor(DataSource.getColor(datasource));
 			dw.setStrokeWidth(maxHeight / 10f);
 			dw.setFill(false);
 			
@@ -98,10 +97,5 @@ public class NavigationMarker extends Marker {
 	@Override
 	public int getMaxObjects() {
 		return MAX_OBJECTS;
-	}
-	
-	@Override
-	public int getOsmUrlMaxObject(){
-		return 0;
 	}
 }

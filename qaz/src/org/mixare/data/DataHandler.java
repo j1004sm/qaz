@@ -77,31 +77,17 @@ public class DataHandler {
 	public void updateActivationStatus(MixContext mixContext) {
 		// 클래스와 정수형 변수의 해쉬테이블 맵
 		Hashtable<Class, Integer> map = new Hashtable<Class, Integer>();
-		Hashtable<String, Integer> url = new Hashtable<String, Integer>();
 		//update for marker 
 		for (Marker ma : markerList) {
 			Class mClass = ma.getClass();
 			map.put(mClass, (map.get(mClass) != null) ? map.get(mClass) + 1 : 1);
 
-			//additional for OSM marker
-			String strURL=ma.getOSMOriUrl();
-			url.put(strURL, (url.get(strURL) != null) ? url.get(strURL) + 1 : 1);
-			boolean belowURLMax = (url.get(strURL)<=ma.getOsmUrlMaxObject());
-
 			boolean belowMax = (map.get(mClass) <= ma.getMaxObjects());
-			boolean dataSourceSelected = mixContext.isDataSourceSelected(ma
-					.getDatasource());
 
 			/*Log.d("DataHandler","DataHandler " + ma.getOSMOriUrl());
 			Log.d("DataHandler", "DataHandler " + mixContext
 						.isOSMUrlSelected(strURL));*/
-
-			if (ma.getDatasource().equals(DataSource.DATASOURCE.OSM)) {
-				ma.setActive((belowURLMax  && dataSourceSelected && mixContext
-						.isOSMUrlSelected(strURL)));
-			} else {
-				ma.setActive((belowMax && dataSourceSelected));
-			}
+			ma.setActive((belowMax));
 		}
 	}
 	

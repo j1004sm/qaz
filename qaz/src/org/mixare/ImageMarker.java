@@ -3,7 +3,7 @@
  */
 package org.mixare;
 
-import org.mixare.data.DataSource.DATASOURCE;
+import org.mixare.data.DataSource;
 import org.mixare.gui.PaintScreen;
 
 import android.graphics.Bitmap;
@@ -20,8 +20,8 @@ public class ImageMarker extends Marker {
 	private Bitmap image = null;
 
 	public ImageMarker(String title, double latitude, double longitude,
-			double altitude, String URL, DATASOURCE datasource, Bitmap image, String iOSMurl, int iOSMUrlID) {
-		super(title, latitude, longitude, altitude, URL, datasource,iOSMurl,iOSMUrlID);
+			double altitude, String URL, Bitmap image, DataSource datasource) {
+		super(title, latitude, longitude, altitude, URL, datasource);
 		this.image = image;
 
 	}
@@ -54,11 +54,5 @@ public class ImageMarker extends Marker {
 				drawCircle(dw);
 			}
 		}
-	}
-
-	@Override
-	public int getOsmUrlMaxObject() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

@@ -26,15 +26,10 @@ import static android.view.KeyEvent.KEYCODE_DPAD_RIGHT;
 import static android.view.KeyEvent.KEYCODE_DPAD_UP;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
-import org.mixare.data.DataSource.DATAFORMAT;
-import org.mixare.data.DataSource.DATASOURCE;
 import org.mixare.gui.PaintScreen;
 import org.mixare.gui.RadarPoints;
 import org.mixare.gui.ScreenLine;
@@ -233,17 +228,23 @@ public class DataView {
 	}
 	
 	// 데이터 요청
-	public void requestData(String url,DATAFORMAT dataformat, DATASOURCE datasource, String iOSMOriUrl, int iOSMOriID) {
+	public void requestData(String url) {
 		DownloadRequest request = new DownloadRequest();
-		request.format = dataformat;
-		request.source = datasource;
-		request.url = url;
-		request.OSMOriID=iOSMOriID;
-		request.OSMOriUrl=iOSMOriUrl;
-		
-		// 완성된 요청을 다운로더에 제출한다
+		request.source = new DataSource("LAUNCHER", url, DataSource.TYPE.DOR, DataSource.DISPLAY.CIRCLE_MARKER, true);
+		request.params = "";
+		mixContext.setAllDataSourcesforLauncher(request.source);
 		mixContext.getDownloader().submitJob(request);
-		state.nextLStatus = MixState.PROCESSING;	// 다음 상태는 처리중으로
+		state.nextLStatus = MixState.PROCESSING;
+
+	}
+
+	public void requestData(DataSource datasource, double lat, double lon, double alt, float radius, String locale) {
+		DownloadRequest request = new DownloadRequest();
+		request.params = datasource.createRequestParams(lat, lon, alt, radius, locale);
+		request.source = datasource;
+
+		mixContext.getDownloader().submitJob(request);
+		state.nextLStatus = MixState.PROCESSING;
 	}
 
 	// 실제로 스크린에 그려주는 메소드
@@ -259,64 +260,30 @@ public class DataView {
 		// Load Layer
 		// 아직 시작되지 않은 상태이고, 데이터 뷰가 얼어있지 않은 경우 
 		if (state.nextLStatus == MixState.NOT_STARTED && !frozen) {
+			
+		
 			// 컨텍스트의 시작 URL 이 할당 되었을 경우
 			if (mixContext.getStartUrl().length() > 0){
 				// 자체 포맷과 소스로 데이터를 요청한다
-				requestData(mixContext.getStartUrl(),DATAFORMAT.DOR,DATASOURCE.Qaz, "", 0);
+				requestData(mixContext.getStartUrl());
 				isLauncherStarted = true;	// 런쳐는 시작된 상태로
-
-				// 자체 URL이 선택되지 않은 상태라면 선택된 상태로 토글한다
-				if (!mixContext.isDataSourceSelected(DataSource.DATASOURCE.Qaz)) {
-					mixContext.toogleDataSource(DataSource.DATASOURCE.Qaz);
-				}
 			}
+			
 			// URL 이 할당되지 않았을 경우에는
 			else {
 				// 현재의 위치로부터 위도, 경도, 고도 값을 읽고
 				double lat = curFix.getLatitude(), lon = curFix.getLongitude(),alt = curFix.getAltitude();
 				
 				// 각각의 데이터 소스들 모두에 적용
-				for(DataSource.DATASOURCE source: DataSource.DATASOURCE.values()) {
-					// 선택된 데이터 소스로 데이터 요청을 한다
-					if (mixContext.isDataSourceSelected(source)) {
-						if (source.toString().equals("OSM")) {
-							// Get a set of the entries
-							Set set = mixContext.getOSMURLList().entrySet();
-							// Get an iterator
-							Iterator i = set.iterator();
-							int id = 0;
-							for (Entry<String, Boolean> entry : mixContext
-									.getOSMURLList().entrySet()) {
-								String key = entry.getKey();
-								Boolean value = entry.getValue();
-								if (value) {
-									requestData(
-											DataSource.createRequestOSMURL(key,
-													lat, lon, alt, radius,
-													Locale.getDefault()
-															.getLanguage()),
-											DataSource
-													.dataFormatFromDataSource(source),
-													source, key, id);
-								}
-								++id;
-							}
-
-						} else {
-							requestData(
-									DataSource.createRequestURL(source,
-											lat, lon, alt, radius, Locale
-													.getDefault()
-													.getLanguage()),
-									DataSource
-											.dataFormatFromDataSource(source),
-									source, "", 0);
-						}
-						// Debug notification
-						// Toast.makeText(mixContext, "Downloading from "+ source, Toast.LENGTH_SHORT).show();
+				ArrayList<DataSource> allDataSources = mixContext.getAllDataSources();
+				for(DataSource ds: allDataSources) {
+					/*when type is OpenStreetMap
+					 * iterate the URL list and for selected URL send data request 
+					 * */
+					if (ds.getEnabled()) {
+						requestData(ds,lat, lon, alt, radius, Locale.getDefault().getLanguage());
 					}
-				}
-				
+				}	
 			}
 			
 			// 위의 절차를 거치고도 활성화 된 데이터 소스가 아무것도 없는 경우
@@ -341,7 +308,8 @@ public class DataView {
 					mixContext.getDownloader().submitJob(dRes.errorRequest);
 					
 					// 토스트로 에러 상황을 알림
-					Toast.makeText(mixContext, dRes.errorMsg, Toast.LENGTH_SHORT).show();				}
+					//Toast.makeText(mixContext, dRes.errorMsg, Toast.LENGTH_SHORT).show();	
+				}
 				
 				// 에러가 없는 경우
 				if(!dRes.error) {
@@ -353,7 +321,7 @@ public class DataView {
 					dataHandler.onLocationChanged(curFix);	// 위치를 재설정
 					
 					// 특정 데이터 소스로부터 다운로드 받았음을 알림 
-					Toast.makeText(mixContext, dRes.source + mixContext.getResources().getString(R.string.download_received), Toast.LENGTH_SHORT).show();
+					Toast.makeText(mixContext, dRes.source.getName() + mixContext.getResources().getString(R.string.download_received), Toast.LENGTH_SHORT).show();
 
 				}
 			}
