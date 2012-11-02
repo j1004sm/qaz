@@ -1,4 +1,6 @@
-package org.mixare;
+package com.qaz.dor;
+
+import org.mixare.MixView;
 
 import android.app.Activity;
 import android.app.AlertDialog;

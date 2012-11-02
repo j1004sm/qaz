@@ -1,4 +1,4 @@
-package org.mixare;
+package com.qaz.dor;
 
 import com.qaz.client.R;
 

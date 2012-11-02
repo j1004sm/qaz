@@ -1,4 +1,4 @@
-package org.mixare;
+package com.qaz.dor;
 
 /**
  * Interface for pen selection

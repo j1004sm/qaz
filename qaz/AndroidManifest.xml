@@ -19,7 +19,7 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name="org.mixare.LoginActivity"
+            android:name="com.qaz.dor.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.mixare.JoinActivity"
+            android:name="com.qaz.dor.JoinActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -89,33 +89,39 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="org.mixare.ProfileActivity"
+            android:name="com.qaz.dor.ProfileActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.mixare.PwChangeActivity"
+            android:name="com.qaz.dor.PwChangeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.mixare.QazPaintBoardActivity"
+            android:name="com.qaz.dor.QazPaintBoardActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
-            android:name="org.mixare.ColorPaletteDialog"
             android:launchMode="singleTop"
+            android:name="com.qaz.dor.ColorPaletteDialogialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name="org.mixare.PenPaletteDialog"
             android:launchMode="singleTop"
+            android:name="com.qaz.dor.PenPaletteDialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
     </application>
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" ></uses-permission>
-    
-    <supports-screens android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"></supports-screens>
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" >
+    </supports-screens>
 
 </manifest>

@@ -26,6 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.qaz.client.R.*;
+import com.qaz.dor.LoginActivity;
+import com.qaz.dor.ProfileActivity;
+import com.qaz.dor.QazPaintBoardActivity;
+
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
 import org.mixare.data.DataSource.DATASOURCE;

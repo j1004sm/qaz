@@ -1,4 +1,4 @@
-package org.mixare;
+package com.qaz.dor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
