@@ -154,44 +154,28 @@ public class Json extends DataHandler {
 		
 		// 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다
 		if (jo.has("title") && jo.has("lat") && jo.has("lng") && jo.has("elevation") ) {
-	
-			//Log.v(MixView.TAG, "Qaz 데이터 처리중");	// 로그 출력
-			
-			//String link = new String(jo.getString("webpage").getBytes("UTF-8"),"EUC-KR");
-			//String title = new String(unescapeHTML(jo.getString("webpage"), 0).getBytes("UTF-8"),"EUC-KR");
-			//DataSource.qazPic = link;
-	
-			// 웹페이지의 형식을 검사하고 스트링 값을 읽어온다
-			//if(jo.has("has_detail_page") && jo.getInt("has_detail_page")!=0 && jo.has("webpage"))
 			
 			Bitmap image = null;
 			String title = unescapeHTML(jo.getString("title"), 0); 
 			
-			//Log.e("getEncoding",link.getBytes());
-			
-			DownloadImage imgThread = new DownloadImage(title);
-			imgThread.start();
+			DownloadImage downloadImage = new DownloadImage(title);
+			downloadImage.start();
 			
 			try {
-				imgThread.join();
+				downloadImage.join();
 				
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
 				
-				image = BitmapFactory.decodeStream(imgThread.input, null, options);
+				image = BitmapFactory.decodeStream(downloadImage.input, null, options);
+				downloadImage.input.close();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				if (image != null)
 					image.recycle();
+				
+				e.printStackTrace();
 			} 
-			
-//			while (imgThread.doneFlg == 0){
-//				image = imgThread.downImg;
-//			}
-			
-			//image = getBitmapFromURL(title);
 			
 			// 할당된 값들로 마커 생성
 			ma = new ImageMarker(
@@ -205,38 +189,6 @@ public class Json extends DataHandler {
 		}
 		return ma;	// 마커 리턴
 	}
-
-	
-//	public static Bitmap getBitmapFromURL(String src) {
-//		try {
-//			
-//			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-//	        .permitNetwork().build());					//안드로이드 3.0 이상 지원(StrictMode 중 네트워크 처리 제한 해제)
-//			
-//			src = java.net.URLEncoder.encode(new String(src.getBytes("UTF-8")));	//UTF-8로 인코딩 
-//			src = "http://manjong.org:8255/qaz/upload/" + src + ".png";
-//			URL url = new URL(src);
-//			
-//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//			connection.setDoInput(true);
-//			connection.connect();
-//			
-//			int status = connection.getResponseCode();
-//			Log.e("Image Download ErrorCode", Integer.toString(status));
-//			
-//			InputStream input = connection.getInputStream();
-//			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
-//			
-//			BitmapFactory.Options options = new BitmapFactory.Options();
-//			options.inSampleSize = 3;				//이미지 사이즈를 줄임 : 1/3로
-//			Bitmap myBitmap = BitmapFactory.decodeStream(input, null, options);
-//			
-//			return myBitmap;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
 
 	// 위키피디아 데이터 처리
 	public Marker processWikipediaJSONObject(JSONObject jo, DataSource datasource) throws JSONException {

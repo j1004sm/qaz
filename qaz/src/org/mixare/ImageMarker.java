@@ -27,9 +27,8 @@ public class ImageMarker extends Marker {
 			this.image = Bitmap.createScaledBitmap(image, image.getWidth()/2, image.getHeight()/2, true);
 			// this.image = image;
 			image.recycle();
-		} else {
+		} else
 			this.image = null;
-		}
 
 	}
 
