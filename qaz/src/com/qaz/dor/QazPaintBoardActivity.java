@@ -218,7 +218,7 @@ public class QazPaintBoardActivity extends Activity {
         					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요", Toast.LENGTH_LONG).show();
         				} else {
         				
-        					String ret = "Qaz_Server_Fail";
+        					String ret = "Qaz_Server_Not_Connected";
         					ret = board.SaveBitmapToFileUpload(QazPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
         					
         					if (ret.equals("success")) {
