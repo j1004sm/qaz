@@ -119,7 +119,7 @@ public class PwChangeActivity extends Activity {
 				}
 
 				String result = builder.toString();
-				Log.d("Qaz-HttpPost", "전송결과 : " + result);
+//				Log.d("Qaz-HttpPost", "result : " + result);
 				server_result = Integer.parseInt(result.trim());
 			} catch (Exception e) {
 				e.printStackTrace();
