@@ -13,13 +13,13 @@
     <string name="NW">NW</string>
     <string name="OSM">Openstreetmap</string>
     <string name="DOR">DrawOnReal</string>
-    <string name="cancel">Cancel</string>
-	<string name="data_source_edit_err">This data source cannot be edited.</string>
-	<string name="data_source_delete_err">This data source cannot be deleted.</string>
-    <string name="CIRCLE_MARKER">Circles</string>
-    <string name="NAVIGATION_MARKER">Arrows</string>
+    <string name="cancel">취소</string>
+	<string name="data_source_edit_err">이 데이터소스는 수정할 수 없습니다</string>
+	<string name="data_source_delete_err">이 데이터소스는 지울 수 없습니다</string>
+    <string name="CIRCLE_MARKER">원모양</string>
+    <string name="NAVIGATION_MARKER">화살표모양</string>
     <string name="empty_list">죄송합니다. 현재 설정된 반경으로는 위치 정보가 없습니다.\n 좀 더 넓은 반경으로 설정해주십시요.</string>
-    <string name="option_not_available">Sorry, We are working on it... \nThis option will be available soon!</string>
+    <string name="option_not_available">죄송합니다. 현재는 이 기능을 업데이트하는 중입니다.</string>
     <string name="license">Copyright (C) 2010- Peer internet solutions 
 		\n\nThis program is free software: 	you can redistribute it and/or modify it under the terms of the 
 		GNU General Public License as published by the Free Software Foundation, either version 3 of the License, 
@@ -76,7 +76,7 @@
     <string name="exitTitle">회원탈퇴</string>
     <string name="ok_button">확인</string>
     <string name="cancel_button">취소</string>
-    <string name="add_osm_menu">Add OpenStreetMap URL</string>
-	<string name="insert_osm_url">Insert OpenStreetMap URL</string>
-	<string name="osm_max_object_menu">Set max POI per URL</string>
-	<string name="set_osm_max_object">Maximum POIs per URL</string></resources>
+    <string name="add_osm_menu">OpenStreetMap URL 추가</string>
+	<string name="insert_osm_url">OpenStreetMap URL 편집</string>
+	<string name="osm_max_object_menu">URL 당 최대 POI 마커 수 설정</string>
+	<string name="set_osm_max_object">URL 당 최대 POI들</string></resources>
