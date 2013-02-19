@@ -197,7 +197,6 @@ public class QazPaintBoardActivity extends Activity {
         
         saveBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        	
         		
         		AlertDialog.Builder alert = new AlertDialog.Builder(QazPaintBoardActivity.this);
 
@@ -219,15 +218,15 @@ public class QazPaintBoardActivity extends Activity {
         					Toast.makeText(getApplicationContext(),"하나 이상의 문자를 입력해주십시요", Toast.LENGTH_LONG).show();
         				} else {
         				
-        					String resServer = new String();
-        					resServer = board.SaveBitmapToFileUpload(QazPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
+        					String ret = "Qaz_Server_Fail";
+        					ret = board.SaveBitmapToFileUpload(QazPaintBoardActivity.this.getFileStreamPath(value.toString() + ".png"), value.toString(), lat, lon, alt, usrId);
         					
-        					if (resServer.equals("success")) {
+        					if (ret.equals("success")) {
         						Toast.makeText(getApplicationContext(), value.toString() + "이(가) 저장되었습니다", Toast.LENGTH_SHORT).show();
         						finish();
-        					} else if (resServer.equals("fail") || resServer.equals("Qaz_Server_Fail")){
+        					} else if (ret.equals("fail") || ret.equals("Qaz_Server_Fail")){
         						Toast.makeText(getApplicationContext(), "서버와의 연결에 실패했습니다", Toast.LENGTH_LONG).show();
-        					} else if (resServer.equals("Qaz_Server_Not_Connected")){
+        					} else if (ret.equals("Qaz_Server_Not_Connected")){
         						Toast.makeText(getApplicationContext(), "서버와의 연결에 실패했습니다. 인터넷 연결 상태를 점검해주세요.", Toast.LENGTH_LONG).show();
         					}
         					

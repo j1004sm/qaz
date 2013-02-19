@@ -476,7 +476,17 @@ public class QazPaintBoard extends View {
 			e.printStackTrace();
 		}
 		
-		response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
+		UploadMarkerImage uploadMarkerImage = new UploadMarkerImage(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
+		uploadMarkerImage.start();
+		
+		try {
+			uploadMarkerImage.join();
+			response = UploadMarkerImage.ret;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+//		response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
 		
 		return response;
 
