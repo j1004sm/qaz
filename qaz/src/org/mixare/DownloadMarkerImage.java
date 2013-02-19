@@ -1,25 +1,17 @@
 package org.mixare;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
 import com.qaz.dor.QazHttpServer;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-public class DownloadImage extends Thread {
+public class DownloadMarkerImage extends Thread {
 	private String mUrl = "";
-	public static InputStream input = null;
+	public InputStream input = null;
 
-	public DownloadImage(String title) {
+	public DownloadMarkerImage(String title) {
 		mUrl = title;
 	}
 
@@ -39,11 +31,12 @@ public class DownloadImage extends Thread {
 			connection.setDoInput(true);
 			connection.connect();
 
-			int status = connection.getResponseCode();
+//			int status = connection.getResponseCode();
 			input = connection.getInputStream();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 
 	}

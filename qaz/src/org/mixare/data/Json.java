@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mixare.DownloadImage;
+import org.mixare.DownloadMarkerImage;
 import org.mixare.ImageMarker;
 import org.mixare.Marker;
 import org.mixare.MixView;
@@ -43,7 +43,7 @@ import android.util.Log;
 // JSON 파일을 다루는 클래스
 public class Json extends DataHandler {
 
-	public static final int MAX_JSON_OBJECTS=500;	// JSON 객체의 최대 수
+	public static final int MAX_JSON_OBJECTS=250;	// JSON 객체의 최대 수
 	
 	// 각종 데이터를 로드
 	public List<Marker> load(JSONObject root, DataSource datasource) {
@@ -158,23 +158,22 @@ public class Json extends DataHandler {
 			Bitmap image = null;
 			String title = unescapeHTML(jo.getString("title"), 0); 
 			
-			DownloadImage downloadImage = new DownloadImage(title);
+			DownloadMarkerImage downloadImage = new DownloadMarkerImage(title);
 			downloadImage.start();
 			
 			try {
 				
 				downloadImage.join();
 				
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
-				
-				image = BitmapFactory.decodeStream(downloadImage.input, null, options);
-				downloadImage.input.close();
+				if (downloadImage.input != null) {
+					BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inSampleSize = 4;
+
+					image = BitmapFactory.decodeStream(downloadImage.input, null, options);
+					downloadImage.input.close();
+				}
 
 			} catch (Exception e) {
-				if (image != null)
-					image.recycle();
-				
 				e.printStackTrace();
 			} 
 			
