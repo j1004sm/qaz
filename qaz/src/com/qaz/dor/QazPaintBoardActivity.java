@@ -225,7 +225,7 @@ public class QazPaintBoardActivity extends Activity {
         					if (resServer.equals("success")) {
         						Toast.makeText(getApplicationContext(), value.toString() + "이(가) 저장되었습니다", Toast.LENGTH_SHORT).show();
         						finish();
-        					} else if (resServer.equals("fail")){
+        					} else if (resServer.equals("fail") || resServer.equals("Qaz_Server_Fail")){
         						Toast.makeText(getApplicationContext(), "서버와의 연결에 실패했습니다", Toast.LENGTH_LONG).show();
         					} else if (resServer.equals("Qaz_Server_Not_Connected")){
         						Toast.makeText(getApplicationContext(), "서버와의 연결에 실패했습니다. 인터넷 연결 상태를 점검해주세요.", Toast.LENGTH_LONG).show();
