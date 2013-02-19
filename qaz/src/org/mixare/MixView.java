@@ -334,17 +334,17 @@ public class MixView extends Activity implements SensorEventListener,
 						.edit();
 				dataSourceEditor
 						.putString("DataSource0",
-								"Wikipedia|http://ws.geonames.org/findNearbyWikipediaJSON|0|0|true");
+								"위키피디아|http://ws.geonames.org/findNearbyWikipediaJSON|0|0|true");
 				dataSourceEditor
 						.putString("DataSource1",
-								"Twitter|http://search.twitter.com/search.json|2|0|false");
+								"트위터|http://search.twitter.com/search.json|2|0|false");
 				dataSourceEditor
 						.putString(
 								"DataSource2",
 								"OpenStreetmap|http://open.mapquestapi.com/xapi/api/0.6/node[railway=station]|3|1|false");
 				dataSourceEditor
 						.putString("DataSource3",
-								"DrawOnReal|http://www.manjong.org:8255/qaz/check.jsp|4|0|true");
+								"드로우온리얼|http://www.manjong.org:8255/qaz/check.jsp|4|0|true");
 				dataSourceEditor.commit();
 			}
 
