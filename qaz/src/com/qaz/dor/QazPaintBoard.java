@@ -469,7 +469,7 @@ public class QazPaintBoard extends View {
 
 			mBitmap.compress(CompressFormat.PNG, 100, out);
 			out.close();
-			
+			mBitmap.recycle();
 
 			response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
 
