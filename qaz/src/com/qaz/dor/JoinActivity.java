@@ -1,11 +1,5 @@
 package com.qaz.dor;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -38,7 +31,6 @@ public class JoinActivity extends Activity {
 	EditText join_mail_EditText;
 	Button btn_check;
 
-	int server_result;
 	String join_pw;
 	String join_pwc;
 	String join_email;
@@ -131,7 +123,7 @@ public class JoinActivity extends Activity {
 		txtTerms.setOnClickListener(new TextView.OnClickListener(){
         	public void onClick(View v) {
         		Intent i = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.manjong.org:8255/qaz/terms.html"));
+						.parse(QazHttpServer.QAZ_URL_TERMS));
 				startActivity(i);
         	}
         });
@@ -139,7 +131,7 @@ public class JoinActivity extends Activity {
 		txtPriv.setOnClickListener(new TextView.OnClickListener(){
         	public void onClick(View v) {
         		Intent i = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.manjong.org:8255/qaz/privacy.html"));
+						.parse(QazHttpServer.QAZ_URL_PRIVACY));
 				startActivity(i);
         	}
         });
@@ -188,72 +180,24 @@ public class JoinActivity extends Activity {
 	}
 
 	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
+		int ret = QazHttpServer.QAZ_SERVER_FAIL;
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			// TODO Auto-generated method stub
+			ret = QazHttpServer.RequestJoin(QazHttpServer.QAZ_URL_JOIN, join_id, join_pw_code, join_name, join_email);
 			
-			server_result = 0;
-
-			try {
-
-				URL url = new URL("http://www.manjong.org:8255/qaz/join.jsp");
-
-				HttpURLConnection http = (HttpURLConnection) url
-						.openConnection();
-
-				http.setDefaultUseCaches(false);
-				http.setDoInput(true);
-				http.setDoOutput(true);
-				http.setRequestMethod("POST");
-
-				http.setRequestProperty("Content-type",
-						"application/x-www-form-urlencoded");
-
-				StringBuffer buffer = new StringBuffer();
-
-				buffer.append("id").append("=").append(join_id).append("&");
-				buffer.append("encpw").append("=").append(join_pw_code)
-						.append("&");
-				buffer.append("name").append("=").append(join_name).append("&");
-				buffer.append("email").append("=").append(join_email);
-
-				OutputStreamWriter outStream = new OutputStreamWriter(
-						http.getOutputStream(), "UTF-8");
-
-				PrintWriter writer = new PrintWriter(outStream);
-				writer.write(buffer.toString());
-
-				writer.flush();
-
-				InputStreamReader inputStream = new InputStreamReader(
-						http.getInputStream(), "UTF-8");
-				BufferedReader bufferReader = new BufferedReader(inputStream);
-				StringBuilder builder = new StringBuilder();
-				String str;
-				while ((str = bufferReader.readLine()) != null) {
-					builder.append(str + "\n");
-				}
-
-				String result = builder.toString();
-//				Log.d("Qaz-HttpPost", "result : " + result);
-				server_result = Integer.parseInt(result.trim());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			return null;
 		}
 
 		protected void onPostExecute(Void params) {
-			if (server_result == 0) {
+			if (ret == QazHttpServer.QAZ_SERVER_FAIL) {
 				Toast.makeText(getApplicationContext(),
 						"가입에 실패했습니다. 다른 아이디나 다른 이메일 주소로 다시 시도해보세요.", Toast.LENGTH_LONG)
 						.show();
 
 				btn_check.setEnabled(true);
 				btn_check.setText("약관 동의 및 가입");
-			} else {
+			} else if (ret == QazHttpServer.QAZ_SERVER_SUCCESS) {
 				Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!", Toast.LENGTH_LONG)
 						.show();
 

@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import com.qaz.dor.QazHttpServer;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -29,7 +31,7 @@ public class DownloadImage extends Thread {
 		try {
 
 			mUrl = URLEncoder.encode(new String(mUrl.getBytes("UTF-8"))); // UTF-8로
-			mUrl = "http://manjong.org:8255/qaz/upload/" + mUrl + ".png";
+			mUrl = QazHttpServer.QAZ_URL_IMAGEDIR + mUrl + ".png";
 			myFileUrl = new URL(mUrl);
 
 			HttpURLConnection connection = (HttpURLConnection) myFileUrl

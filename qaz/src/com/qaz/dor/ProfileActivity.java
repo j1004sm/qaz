@@ -26,7 +26,6 @@ import com.qaz.client.R;
 
 public class ProfileActivity extends Activity {
 	
-	int server_result = 0;
 	remoteRequestTask server_request;
 
 	private ListView _listview;
@@ -91,63 +90,22 @@ public class ProfileActivity extends Activity {
 	
 
 	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
-
+		int ret = QazHttpServer.QAZ_SERVER_FAIL;
+		
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
-			try {
-				// URL설정, 접속
-				URL url = new URL(
-						"http://www.manjong.org:8255/qaz/secession.jsp");
-
-				HttpURLConnection http = (HttpURLConnection) url
-						.openConnection();
-
-				http.setDefaultUseCaches(false);
-				http.setDoInput(true);
-				http.setDoOutput(true);
-				http.setRequestMethod("POST");
-
-				http.setRequestProperty("Content-type",
-						"application/x-www-form-urlencoded");
-
-				StringBuffer buffer = new StringBuffer();
-
-				buffer.append("id").append("=").append(LoginActivity.usrId);
-
-				OutputStreamWriter outStream = new OutputStreamWriter(
-						http.getOutputStream(), "UTF-8");
-
-				PrintWriter writer = new PrintWriter(outStream);
-				writer.write(buffer.toString());
-
-				writer.flush();
-
-				InputStreamReader inputStream = new InputStreamReader(
-						http.getInputStream(), "UTF-8");
-				BufferedReader bufferReader = new BufferedReader(inputStream);
-				StringBuilder builder = new StringBuilder();
-				String str;
-				while ((str = bufferReader.readLine()) != null) {
-					builder.append(str + "\n");
-				}
-
-				String result = builder.toString();
-//				Log.d("Qaz-HttpPost", "result : " + result);
-				server_result = Integer.parseInt(result.trim());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ret = QazHttpServer.RequestSecession(QazHttpServer.QAZ_URL_SECESSION);
 
 			return null;
 		}
 
 		protected void onPostExecute(Void params) {
-			if (server_result == 0) {
+			if (ret == QazHttpServer.QAZ_SERVER_FAIL) {
 				Toast.makeText(getApplicationContext(), "회원탈퇴에 실패했습니다. 나중에 다시시도 해주십시요.",
 						Toast.LENGTH_LONG).show();
 
-			} else {
+			} else if (ret == QazHttpServer.QAZ_SERVER_SUCCESS) {
 				Toast.makeText(getApplicationContext(), "회원탈퇴에 성공했습니다. 어플리케이션을 종료합니다.",
 						Toast.LENGTH_LONG).show();
 				

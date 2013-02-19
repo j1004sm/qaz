@@ -457,7 +457,7 @@ public class QazPaintBoard extends View {
 	public String SaveBitmapToFileUpload(File strFilePath, String fileName,
 			double lat, double lon, double alt, String user) {
 
-		String response = "fail";
+		String response = "Qaz_Server_Not_Connected";
 		
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 		.permitDiskWrites()
@@ -469,9 +469,9 @@ public class QazPaintBoard extends View {
 
 			mBitmap.compress(CompressFormat.PNG, 100, out);
 			out.close();
+			
 
-			response = this.HttpFileUpload("http://www.manjong.org:8255/qaz/upload.jsp",
-					strFilePath, fileName, lat, lon, alt, user);
+			response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -481,119 +481,5 @@ public class QazPaintBoard extends View {
 
 	}
 
-	public String HttpFileUpload(String urlString, File fileName,
-			String realName, double lat, double lon, double alt, String user) {
-
-		String lineEnd = "\r\n";
-		String twoHyphens = "--";
-		String boundary = "*****";
-		String response = "fail";
-		
-		try {
-		
-			FileInputStream mFileInputStream = new FileInputStream(fileName);
-			URL connectUrl = new URL(urlString);
-			Log.d("Qaz-ImageUpload", "mFileInputStream  is " + mFileInputStream);
-
-			// open connection
-			HttpURLConnection conn = (HttpURLConnection) connectUrl
-					.openConnection();
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
-			conn.setUseCaches(false);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Connection", "Keep-Alive");
-			conn.setRequestProperty("Content-Type",
-					"multipart/form-data;boundary=" + boundary);
-
-			// write data
-			DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-
-			// utf-8로 변환해서 보냄
-			StringBuffer pd = new StringBuffer();
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append(lineEnd);
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"name\"" + lineEnd
-					+ lineEnd + realName);
-			pd.append(lineEnd);
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"latitude\""
-					+ lineEnd + lineEnd + Double.toString(lat));
-			pd.append(lineEnd);
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"longitude\""
-					+ lineEnd + lineEnd + Double.toString(lon));
-			pd.append(lineEnd);
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"altitude\""
-					+ lineEnd + lineEnd + Double.toString(alt));
-			pd.append(lineEnd);
-			
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"user\""
-					+ lineEnd + lineEnd + user);
-			pd.append(lineEnd);
-
-			pd.append(twoHyphens + boundary + lineEnd);
-			pd.append("Content-Disposition: form-data; name=\"image\"; filename=\""
-					+ fileName + "\"" + lineEnd);
-			pd.append(lineEnd);
-
-			dos.writeUTF(pd.toString());
-
-			int bytesAvailable = mFileInputStream.available();
-			int maxBufferSize = 1024;
-			int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-
-			byte[] buffer = new byte[bufferSize];
-			int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
-
-			Log.d("Qaz-ImageUpload", "image byte is " + bytesRead);
-
-			// read image
-			while (bytesRead > 0) {
-				dos.write(buffer, 0, bufferSize);
-				bytesAvailable = mFileInputStream.available();
-				bufferSize = Math.min(bytesAvailable, maxBufferSize);
-				bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
-			}
-
-			dos.writeBytes(lineEnd);
-			dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-			// close streams
-			Log.d("Qaz-ImageUpload", "File is written");
-			mFileInputStream.close();
-			dos.flush(); // finish upload...
-			dos.close();
-
-			// get response
-			BufferedReader rd = null;
-			rd = new BufferedReader(new InputStreamReader(
-					conn.getInputStream(), "UTF-8"));
-			String line = null;
-			while ((line = rd.readLine()) != null) {
-				Log.d("Qaz-ImageUpload", line);
-				response = line.trim();
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	
-			return response;
-	}
 
 }

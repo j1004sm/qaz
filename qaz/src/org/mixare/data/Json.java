@@ -162,6 +162,7 @@ public class Json extends DataHandler {
 			downloadImage.start();
 			
 			try {
+				
 				downloadImage.join();
 				
 				BitmapFactory.Options options = new BitmapFactory.Options();

@@ -26,8 +26,6 @@ public class PwChangeActivity extends Activity {
 	EditText txtNewPwChk;
 
 	Button btnCheck;
-
-	int server_result = 0;
 	String encPw;
 
 	remoteRequestTask server_request;
@@ -74,70 +72,25 @@ public class PwChangeActivity extends Activity {
 	}
 
 	class remoteRequestTask extends AsyncTask<Void, Void, Void> {
+		int ret = QazHttpServer.QAZ_SERVER_FAIL;
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			// TODO Auto-generated method stub
-			server_result = 0;
-			try {
-				// URL설정, 접속
-				URL url = new URL(
-						"http://www.manjong.org:8255/qaz/pwchange.jsp");
-
-				HttpURLConnection http = (HttpURLConnection) url
-						.openConnection();
-
-				http.setDefaultUseCaches(false);
-				http.setDoInput(true);
-				http.setDoOutput(true);
-				http.setRequestMethod("POST");
-
-				http.setRequestProperty("Content-type",
-						"application/x-www-form-urlencoded");
-
-				StringBuffer buffer = new StringBuffer();
-
-				buffer.append("id").append("=").append(LoginActivity.usrId)
-						.append("&");
-				buffer.append("encpw").append("=").append(encPw);
-
-				OutputStreamWriter outStream = new OutputStreamWriter(
-						http.getOutputStream(), "UTF-8");
-
-				PrintWriter writer = new PrintWriter(outStream);
-				writer.write(buffer.toString());
-
-				writer.flush();
-
-				InputStreamReader inputStream = new InputStreamReader(
-						http.getInputStream(), "UTF-8");
-				BufferedReader bufferReader = new BufferedReader(inputStream);
-				StringBuilder builder = new StringBuilder();
-				String str;
-				while ((str = bufferReader.readLine()) != null) {
-					builder.append(str + "\n");
-				}
-
-				String result = builder.toString();
-//				Log.d("Qaz-HttpPost", "result : " + result);
-				server_result = Integer.parseInt(result.trim());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ret = QazHttpServer.RequestPasswordChanging(QazHttpServer.QAZ_URL_PWCHANGE, encPw);
 
 			return null;
 		}
 
 		protected void onPostExecute(Void params) {
-			if (server_result == 0) {
+			if (ret == QazHttpServer.QAZ_SERVER_FAIL) {
 				Toast.makeText(getApplicationContext(),
-						"비밀번호 변경에 실패했습니다. 나중에 다시시도 해주십시요.", Toast.LENGTH_LONG)
+						"비밀번호 변경에 실패했습니다. 나중에 다시 시도해주십시요.", Toast.LENGTH_LONG)
 						.show();
 
 				btnCheck.setEnabled(true);
 				btnCheck.setText("확인");
 
-			} else {
+			} else if (ret == QazHttpServer.QAZ_SERVER_SUCCESS) {
 				Toast.makeText(getApplicationContext(), "비밀번호가 성공적으로 변경되었습니다",
 						Toast.LENGTH_LONG).show();
 
