@@ -22,7 +22,14 @@ public class ImageMarker extends Marker {
 	public ImageMarker(String title, double latitude, double longitude,
 			double altitude, String URL, Bitmap image, DataSource datasource) {
 		super(title, latitude, longitude, altitude, URL, datasource);
-		this.image = image;
+		
+		if (image != null) {
+			this.image = Bitmap.createScaledBitmap(image, image.getWidth()/2, image.getHeight()/2, true);
+			// this.image = image;
+			image.recycle();
+		} else {
+			this.image = null;
+		}
 
 	}
 
@@ -44,15 +51,11 @@ public class ImageMarker extends Marker {
 	}
 
 	public void drawImage(PaintScreen dw) {
-		if (isVisible) {
-			if (image != null) {
-				int rectangleBackgroundColor = Color.argb(255, 255, 255, 255);
-				dw.setColor(rectangleBackgroundColor);
-				dw.paintBitmap(image, signMarker.x - (image.getWidth() / 2),
-						signMarker.y - (image.getHeight() / 2));
-			} else {
-				drawCircle(dw);
-			}
+		if ((isVisible) && (image != null)) {
+			int rectangleBackgroundColor = Color.argb(255, 255, 255, 255);
+			dw.setColor(rectangleBackgroundColor);
+			dw.paintBitmap(image, signMarker.x - (image.getWidth() / 2),
+					signMarker.y - (image.getHeight() / 2));
 		}
 	}
 }

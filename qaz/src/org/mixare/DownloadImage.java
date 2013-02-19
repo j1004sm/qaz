@@ -14,14 +14,15 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class DownloadImage extends Thread {
-	private String mUrl;
-	public Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
-	public int doneFlg = 0;
+	private String mUrl = "";
+	public static InputStream input = null;
+//	public Bitmap downImg = null; // 다운받은 이미지가 저장될 공간
+//	public static int doneGetImage = 0;
 
 	public DownloadImage(String title) {
 		mUrl = title;
-		doneFlg = 0;
-		setDaemon(true);
+//		doneFlg = 0;
+//		setDaemon(true);
 	}
 
 	@Override
@@ -50,24 +51,20 @@ public class DownloadImage extends Thread {
 			int status = connection.getResponseCode();
 			//Log.e("Image Download ErrorCode", Integer.toString(status));
 			
-			InputStream input = connection.getInputStream();
+			input = connection.getInputStream();
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input);
 			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
-			downImg = BitmapFactory.decodeStream(input, null, options);
-			
-			doneFlg = 1;
+//			doneFlg = 1;
 			
 		}catch (FileNotFoundException e) {
 			e.printStackTrace();
-			doneFlg = 2;
+//			doneFlg = 2;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-			doneFlg = 1;
+//			doneFlg = 1;
 		} catch (IOException e) {
 			e.printStackTrace();
-			doneFlg = 1;
+//			doneFlg = 1;
 		}
 		// 핸들러에 완료 알림
 		//mHandler.sendEmptyMessage(0);

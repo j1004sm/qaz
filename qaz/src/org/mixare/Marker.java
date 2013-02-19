@@ -43,6 +43,7 @@ abstract public class Marker implements Comparable<Marker> {
 	private String URL; // 연동될 URL
 	protected PhysicalPlace mGeoLoc; // 물리적 공간 객체. 실제 장소값을 저장
 	// 유저와 물리적 공간 간의 거리(미터 단위)
+	
 	protected double distance;
 	// 이 마커가 생성된 데이터소스
 	protected DataSource datasource;

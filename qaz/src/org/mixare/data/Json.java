@@ -19,6 +19,7 @@
 package org.mixare.data;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.mixare.POIMarker;
 import org.mixare.SocialMarker;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 // JSON 파일을 다루는 클래스
@@ -169,10 +171,25 @@ public class Json extends DataHandler {
 			
 			DownloadImage imgThread = new DownloadImage(title);
 			imgThread.start();
+			
+			try {
+				imgThread.join();
+				
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 4;				//이미지 사이즈를 줄임 : 1/4로
+				
+				image = BitmapFactory.decodeStream(imgThread.input, null, options);
 
-			while (imgThread.doneFlg == 0){
-				image = imgThread.downImg;
-			}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				if (image != null)
+					image.recycle();
+			} 
+			
+//			while (imgThread.doneFlg == 0){
+//				image = imgThread.downImg;
+//			}
 			
 			//image = getBitmapFromURL(title);
 			
@@ -184,6 +201,7 @@ public class Json extends DataHandler {
 					jo.getDouble("elevation"), 
 					unescapeHTML(jo.getString("webpage"), 0),
 					image, datasource);
+			
 		}
 		return ma;	// 마커 리턴
 	}
