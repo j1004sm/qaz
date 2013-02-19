@@ -45,7 +45,7 @@
     <string name="connection_GPS_dialog_button1">계속</string>
     <string name="connection_GPS_dialog_button2">종료</string>
     <string name="no_website_available">죄송합니다. 더 이상 정보가 존재하지 않습니다.</string>
-    <string name="license_title">저작권</string>
+    <string name="license_title">오픈소스 저작권 고지</string>
     <string name="close_button">닫기</string>
     <string name="general_info_title">정보</string>
     <string name="general_info_text">GPS 정보 : </string>
