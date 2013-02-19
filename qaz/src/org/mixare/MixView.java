@@ -325,6 +325,9 @@ public class MixView extends Activity implements SensorEventListener,
 				AlertDialog alert1 = builder1.create();
 				alert1.setTitle(getString(DataView.LICENSE_TITLE));
 				alert1.show();
+				
+				Toast.makeText(getApplicationContext(),
+						"화면의 빈 곳을 더블(연속 두번) 터치해보세요!", Toast.LENGTH_LONG).show();
 
 				editor.putBoolean("firstAccess", true);
 				editor.commit(); // 변경 사항이 완료되었으면 commit
