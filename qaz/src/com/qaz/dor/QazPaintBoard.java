@@ -459,23 +459,24 @@ public class QazPaintBoard extends View {
 
 		String response = "Qaz_Server_Not_Connected";
 		
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-		.permitDiskWrites()
-		.detectDiskReads()
-        .permitNetwork().build());					//안드로이드 3.0 이상 지원
+//		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//		.permitDiskWrites()
+//		.detectDiskReads()
+//        .permitNetwork().build());					//안드로이드 3.0 이상 지원
 
 		try {
+			
 			OutputStream out = new FileOutputStream(strFilePath);
 
 			mBitmap.compress(CompressFormat.PNG, 100, out);
 			out.close();
 			mBitmap.recycle();
 
-			response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		response = QazHttpServer.UploadImageText(QazHttpServer.QAZ_URL_UPLOAD, strFilePath, fileName, lat, lon, alt, user);
 		
 		return response;
 
