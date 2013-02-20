@@ -105,6 +105,7 @@ public class PaintScreen {
 	// 비트맵을 출력한다. 비트맵 객체와 출력지점 좌표 두 개를 인자로 받는다
 	public void paintBitmap(Bitmap bitmap, float left, float top) {
 		canvas.drawBitmap(bitmap, left, top, paint);
+		System.gc();
 	}
 
 	// 경로(패스)를 그린다. 패스 객체와 x, y, 넓이와 높이, 회전과 확대에 대한 값을 받는다

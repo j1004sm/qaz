@@ -34,7 +34,7 @@ public class QazPaintBoardActivity extends Activity {
 	Button colorLegendBtn;
 	TextView sizeLegendTxt;
 
-	String usrId = LoginActivity.usrId;
+	final String usrId = LoginActivity.usrId;
 	
 	int mColor = 0xff000000;
 	int mSize = 2;

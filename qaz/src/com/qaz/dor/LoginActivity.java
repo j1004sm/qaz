@@ -53,6 +53,8 @@ public class LoginActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		dalvik.system.VMRuntime.getRuntime().setTargetHeapUtilization(0.7f);
+		
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 

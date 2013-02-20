@@ -38,6 +38,7 @@ import org.mixare.gui.RadarPoints;
 import org.mixare.gui.ScreenLine;
 import org.mixare.render.Camera;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
@@ -75,10 +76,6 @@ public class DataView {
 	private Location curFix;	// 수정된 현재 위치
 	private DataHandler dataHandler = new DataHandler();	// 데이터 핸들러	
 	private float radius = 20;	// 검색 반경
-	
-	/** timer to refresh the browser */
-	private Timer refresh = null;
-	private final long refreshDelay = 45 * 1000; //refresh every 45 seconds
 	
 	/** MixView 클래스의 메뉴 항목과 메뉴 옵션들에 사용될 스트링의 상수값 **/
 	public static final int EMPTY_LIST_STRING_ID = R.string.empty_list;
@@ -336,19 +333,6 @@ public class DataView {
 				retry = 0;	// 재시도 횟수 초기화
 				state.nextLStatus = MixState.DONE;	// 다음 상태는 완료로
 				
-				if (refresh == null) { // start the refresh timer if it is null
-					refresh = new Timer(false);
-					Date date = new Date(System.currentTimeMillis()
-							+ refreshDelay);
-					refresh.schedule(new TimerTask() {
-
-						@Override
-						public void run() {
-							callRefreshToast();
-							refresh();
-						}
-					}, date, refreshDelay);
-				}
 			}
 		}
 
@@ -498,16 +482,20 @@ public class DataView {
 		}
 	}
 	
-	public void cancelRefreshTimer(){
-		if( refresh != null) {
-			refresh.cancel();
-		}
-	}
-	
 	/**
 	 * Re-downloads the markers, and draw them on the map.
 	 */
-	public void refresh(){
+	public void refresh() {
+		if (!ImageMarker.bitmapMarkerImage.isEmpty()) {
+			for (Bitmap bMI : ImageMarker.bitmapMarkerImage)
+				bMI.recycle();
+
+			ImageMarker.bitmapMarkerImage.clear();
+		}
+		dataHandler = null;
+		
+		mixContext.downloadManager.stop();
+		
 		dataHandler = new DataHandler();
 		state.nextLStatus = MixState.NOT_STARTED;
 	}

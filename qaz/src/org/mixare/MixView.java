@@ -474,10 +474,6 @@ public class MixView extends Activity implements SensorEventListener,
 				mixContext.unregisterLocationManager();
 				mixContext.downloadManager.stop();
 				
-				if(dataView != null){
-					dataView.cancelRefreshTimer();
-				}
-				
 			} catch (Exception ignore) {
 			}
 

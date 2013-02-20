@@ -3,6 +3,8 @@
  */
 package org.mixare;
 
+import java.util.ArrayList;
+
 import org.mixare.data.DataSource;
 import org.mixare.gui.PaintScreen;
 
@@ -16,7 +18,7 @@ import android.location.Location;
 public class ImageMarker extends Marker {
 
 	public static final int MAX_OBJECTS = 15;
-//	public static ArrayList<Bitmap> bitmapMarkerImage = new ArrayList<Bitmap>(); 
+	public static ArrayList<Bitmap> bitmapMarkerImage = new ArrayList<Bitmap>(); 
 	
 	private Bitmap image = null;
 
@@ -28,7 +30,7 @@ public class ImageMarker extends Marker {
 				image.getHeight()/2, true);
 		image.recycle();
 
-		// bitmapMarkerImage.add(this.image);
+		bitmapMarkerImage.add(this.image);
 	}
 
 	@Override

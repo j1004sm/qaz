@@ -56,6 +56,7 @@ public class DownloadManager implements Runnable {
 	private String currJobId = null; // 현재 수행 항목의 ID
 
 	MixContext ctx; // 다운로드 관리자의 컨텍스트
+	String tmp;
 
 	// 생성자. 컨텍스트를 할당
 	public DownloadManager(MixContext ctx) {
@@ -158,11 +159,23 @@ public class DownloadManager implements Runnable {
 						+ request.params;
 				is = ctx.getHttpGETInputStream(reqUrl);
 				
-				//Log.e("requestUrl", reqUrl);
-				//완성된 URL을 로그캣에 오류로 표시
-				
-				String tmp = ctx.getHttpInputString(is); // 스트링 형태로 변환
+				// Log.e("requestUrl", reqUrl);
+				// 완성된 URL을 로그캣에 오류로 표시
 
+				
+				Thread t = new Thread() {
+					public void run() {
+						try {
+							tmp = ctx.getHttpInputString(is); // 스트링 형태로 변환
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				};
+
+				t.start();
+				t.join();
+				
 				Json layer = new Json(); // JSON 파일을 다룰 객체
 
 				// JSON 데이터를 로드한다
