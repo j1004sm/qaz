@@ -1,9 +1,13 @@
 package org.mixare;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import android.util.Log;
 
 import com.qaz.dor.QazHttpServer;
 
@@ -34,10 +38,22 @@ public class DownloadMarkerImage extends Thread {
 //			int status = connection.getResponseCode();
 			input = connection.getInputStream();
 
+		} catch (FileNotFoundException e) {
+			Log.e("Qaz", "Can't download : " + mUrl);
+			CloseInputStream();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			CloseInputStream();
 			
 		}
 
+	}
+	
+	public void CloseInputStream() {
+		if (input != null)
+			try {
+				input.close();
+			} catch (IOException ignore) {}
 	}
 }

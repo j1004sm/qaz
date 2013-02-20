@@ -151,6 +151,21 @@ public class MixContext extends ContextWrapper {
 		// 회전행렬을 일단 단위행렬로 세팅
 		rotationM.toIdentity();
 		
+//		registerLocationManager();
+		
+	}
+
+	// 정확한 위치가 맞는지 리턴
+	public void unregisterLocationManager() {
+		if (lm != null) {
+			lm.removeUpdates(lnormal);
+			lm.removeUpdates(lcoarse);
+			lm.removeUpdates(lbounce);
+			lm = null;
+		}
+	}
+	
+	public void registerLocationManager() {
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 		Criteria c = new Criteria();
@@ -182,15 +197,6 @@ public class MixContext extends ContextWrapper {
 		hardFix.setLatitude(46.480302);
 		hardFix.setLongitude(11.296005);
 		hardFix.setAltitude(300);
-
-		/*New York*/
-//		hardFix.setLatitude(40.731510);
-//		hardFix.setLongitude(-73.991547);
-
-		// TU Wien
-//		hardFix.setLatitude(48.196349);
-//		hardFix.setLongitude(16.368653);
-//		hardFix.setAltitude(180);
 
 		//frequency and minimum distance for update
 		//this values will only be used after there's a good GPS fix
@@ -225,18 +231,7 @@ public class MixContext extends ContextWrapper {
 		}
 		
 		setLocationAtLastDownload(curLoc);
-		
 	}
-
-	// 정확한 위치가 맞는지 리턴
-	public void unregisterLocationManager() {
-	if (lm != null) {
-		lm.removeUpdates(lnormal);
-		lm.removeUpdates(lcoarse);
-		lm.removeUpdates(lbounce);
-		lm = null;
-	}
-}
 
 	// 사용중인 다운로드 관리자 리턴
 	public DownloadManager getDownloader() {

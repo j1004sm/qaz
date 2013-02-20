@@ -37,6 +37,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -170,6 +171,12 @@ public class MixView extends Activity implements SensorEventListener,
 		}
 
 		try {
+//			if (!ImageMarker.bitmapMarkerImage.isEmpty()) {
+//				for (Bitmap bMI : ImageMarker.bitmapMarkerImage)
+//					bMI.recycle();
+//				
+//				ImageMarker.bitmapMarkerImage.clear();
+//			}
 			augScreen.invalidate(); // 스크린의 갱신을 시도
 		} catch (Exception ignore) {
 		}
@@ -235,7 +242,7 @@ public class MixView extends Activity implements SensorEventListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		mixView = MixView.this;
 
 		try {
@@ -249,7 +256,7 @@ public class MixView extends Activity implements SensorEventListener,
 					PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
 
 			killOnError(); // 에러 여부를 체크한다
-			requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 바가 없는 윈도우 형태로
+			requestWindowFeature(Window.FEATURE_ACTION_BAR); // 타이틀 바가 없는 윈도우 형태로
 
 			/* 내부 메모리에 저장된 프레퍼런스를 불러온다 */
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -317,6 +324,9 @@ public class MixView extends Activity implements SensorEventListener,
 				builder1.setNegativeButton(getString(DataView.CLOSE_BUTTON),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
+								Toast.makeText(getApplicationContext(),
+										"화면의 빈 곳을 더블(연속 두번) 터치해보세요!", Toast.LENGTH_LONG).show();
+								
 								dialog.dismiss();
 							}
 						});
@@ -326,9 +336,6 @@ public class MixView extends Activity implements SensorEventListener,
 				alert1.setTitle(getString(DataView.LICENSE_TITLE));
 				alert1.show();
 				
-				Toast.makeText(getApplicationContext(),
-						"화면의 빈 곳을 더블(연속 두번) 터치해보세요!", Toast.LENGTH_LONG).show();
-
 				editor.putBoolean("firstAccess", true);
 				editor.commit(); // 변경 사항이 완료되었으면 commit
 
@@ -364,7 +371,7 @@ public class MixView extends Activity implements SensorEventListener,
 					public boolean onDoubleTap(MotionEvent e) {
 						// TODO Auto-generated method stub
 
-						Log.e("touch", "double");
+						Log.i("touch", "double detected");
 
 						Intent myIntent = new Intent(getApplicationContext(),
 								QazPaintBoardActivity.class);
@@ -385,7 +392,7 @@ public class MixView extends Activity implements SensorEventListener,
 							float yPress = me.getY();
 
 							dataView.clickEvent(xPress, yPress);
-							Log.e("touch", "single");
+							Log.i("touch", "single detected");
 
 							return true;
 
@@ -492,7 +499,8 @@ public class MixView extends Activity implements SensorEventListener,
 			mixContext.mixView = this; // 컨텍스트의 믹스뷰를 설정하고
 			dataView.doStart(); // 데이터뷰 활성화
 			dataView.clearEvents(); // 이벤트 클리어
-
+			
+			mixContext.registerLocationManager();
 			mixContext.refreshDataSources();
 
 			double angleX, angleY; // 앵글의 x, y
@@ -518,7 +526,7 @@ public class MixView extends Activity implements SensorEventListener,
 				histR[i] = new Matrix();
 			}
 			/* 매트릭스 값 설정 완료 */
-
+			
 			// 센서 관리자 설정
 			sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -554,14 +562,15 @@ public class MixView extends Activity implements SensorEventListener,
 						(float) Math.cos(angleY));
 				mixContext.declination = gmf.getDeclination();
 			} catch (Exception ex) {
-				Log.d("Qaz-Mixare", "GPS Initialize Error", ex); // 초기화 에러 로그
+				Log.e("Qaz-Mixare", "GPS Initialize Error", ex); // 초기화 에러 로그
 			}
 			// 다운로드 스레드의 활성화
 			downloadThread = new Thread(mixContext.downloadManager);
 			downloadThread.start();
 		} catch (Exception ex) {
 			doError(ex); // 에러 처리
-
+			Log.e("Qaz-Mixare", "Initialize Error", ex);
+			
 			try {
 				// 각각의 센서를 해제
 				if (sensorMgr != null) {
@@ -580,7 +589,7 @@ public class MixView extends Activity implements SensorEventListener,
 			}
 		}
 
-		Log.d("-------------------------------------------", "resume");
+		Log.d("Qaz-Mixare", "resume");
 
 		// 알림 텍스트의 처리
 		// 데이터 뷰가 얼지 않았을 때(기본 상태일 때) 내용을 표시하고 터치 가능하게 함
@@ -862,13 +871,13 @@ public class MixView extends Activity implements SensorEventListener,
 				grav[0] = evt.values[0];
 				grav[1] = evt.values[1];
 				grav[2] = evt.values[2];
-
+				
 				augScreen.postInvalidate(); // 변경을 알림
 			} else if (evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
 				mag[0] = evt.values[0];
 				mag[1] = evt.values[1];
 				mag[2] = evt.values[2];
-
+				
 				augScreen.postInvalidate(); // 변경을 알림
 			}
 
@@ -955,12 +964,7 @@ public class MixView extends Activity implements SensorEventListener,
 		if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD
 				&& accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE
 				&& compassErrorDisplayed == 0) {
-			for (int i = 0; i < 2; i++) {
-				// 나침반 데이터가 부정확합니다. 나침반을 수정하십시오 Compass data unreliable. Please
-				// recalibrate compass.
-				// Toast.makeText(mixContext, "나침반 데이터가 부정확합니다. 나침반을 수정하십시오.",
-				// Toast.LENGTH_LONG).show();
-			}
+	
 			compassErrorDisplayed++;
 		}
 	}
@@ -1010,6 +1014,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 	// 서페이스 생성시
 	public void surfaceCreated(SurfaceHolder holder) {
+		
 		try {
 			// 카메라가 열려있다면 정지하고 해제
 			if (camera != null) {
@@ -1048,6 +1053,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 	// 서페이스 파괴시
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		
 		try { // 카메라 정지 및 해제
 			if (camera != null) {
 				try {
@@ -1058,11 +1064,13 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 					camera.release();
 				} catch (Exception ignore) {
 				}
+				
 				camera = null;
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
 	}
 
 	// 서페이스 변경시
@@ -1213,7 +1221,7 @@ class AugmentedView extends View {
 				// 거리를 나타낼 스트링 값
 				String startKM, endKM;
 				endKM = "80km";
-				startKM = "0km";
+				startKM = "1km";
 				/*
 				 * if(MixListView.getDataSource().equals("Twitter")){ startKM =
 				 * "1km"; }
@@ -1221,12 +1229,12 @@ class AugmentedView extends View {
 
 				// 거리 정보 텍스트 출력
 				canvas.drawText(startKM, canvas.getWidth() / 100 * 4,
-						canvas.getHeight() / 100 * 85, zoomPaint);
+						canvas.getHeight() / 100 * 100, zoomPaint);
 				canvas.drawText(endKM, canvas.getWidth() / 100 * 99 + 25,
-						canvas.getHeight() / 100 * 85, zoomPaint);
+						canvas.getHeight() / 100 * 100, zoomPaint);
 
 				// 줌 레벨을 출력
-				int height = canvas.getHeight() / 100 * 85;
+				int height = canvas.getHeight() / 100 * 100;
 				int zoomProgress = app.getZoomProgress();
 				if (zoomProgress > 92 || zoomProgress < 6) {
 					height = canvas.getHeight() / 100 * 80;
@@ -1237,6 +1245,7 @@ class AugmentedView extends View {
 
 			// 데이터 뷰의 데이터들을 윈도우에 그린다
 			MixView.dataView.draw(MixView.dWindow);
+			
 		} catch (Exception ex) {
 			app.doError(ex);
 		}

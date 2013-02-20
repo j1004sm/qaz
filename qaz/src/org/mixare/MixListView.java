@@ -36,7 +36,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -57,6 +56,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qaz.client.R;
+import com.qaz.dor.QazHttpServer;
 
 // 리스트 액티비티를 확장하는 리스트 뷰 클래스
 public class MixListView extends ListActivity {
@@ -81,10 +81,10 @@ public class MixListView extends ListActivity {
 	
 	private ListItemAdapter adapter;	// 리스트 아이템 어댑터
 	// 자체 주소로 사용될 커스텀 URL
-	public static String customizedURL = "http://www.manjong.org:8255/qaz/check.jsp";
+	public static String customizedURL = QazHttpServer.QAZ_URL_DOWNLOAD;
 	private static Context ctx;	// 컨텍스트
 	private static String searchQuery = "";	// 검색 쿼리
-	private static SpannableString underlinedTitle;	// 밑줄 쳐진 타이틀
+//	private static SpannableString underlinedTitle;	// 밑줄 쳐진 타이틀
 	public static List<Marker> searchResultMarkers;	// 검색 결과 마커 리스트
 	public static List<Marker> originalMarkerList;	// 오리지널 마커 리스트
 
@@ -148,16 +148,17 @@ public class MixListView extends ListActivity {
 				Marker ma = jLayer.getMarker(i);	// 데이터 핸들러로부터 마커를 읽는다
 				// 마커가 활성화 상태일 때 
 				if(ma.isActive()) {
-					if (ma.getURL()!=null) {
-						/*웹사이트가 가능한 상태라면 타이틀에 밑줄을 친다*/
-							underlinedTitle = new SpannableString(ma.getTitle());
-							underlinedTitle.setSpan(new UnderlineSpan(), 0, underlinedTitle.length(), 0);
-							// 리스트 뷰에 추가한다
-							listViewMenu.add(underlinedTitle);
-						} else {
-							// 그 외의 경우엔 그대로 추가
-							listViewMenu.add(new SpannableString(ma.getTitle()));
-						}
+//					if (ma.getURL()!=null) {
+//						/*웹사이트가 가능한 상태라면 타이틀에 밑줄을 친다*/
+//							underlinedTitle = new SpannableString(ma.getTitle());
+//							underlinedTitle.setSpan(new UnderlineSpan(), 0, underlinedTitle.length(), 0);
+//							// 리스트 뷰에 추가한다
+//							listViewMenu.add(underlinedTitle);
+//						} else {
+//							// 그 외의 경우엔 그대로 추가
+//							listViewMenu.add(new SpannableString(ma.getTitle()));
+//					}
+					listViewMenu.add(new SpannableString(ma.getTitle()));
 					/*타이틀이 일치하는 웹사이트를 등록*/
 					if (ma.getURL()!=null)
 						selectedItemURL.add(ma.getURL());
@@ -391,7 +392,6 @@ public class MixListView extends ListActivity {
 		/*메뉴 항목 정의*/
 		MenuItem item1 = menu.add(base, base, base, getString(DataView.MENU_ITEM_3)); 
 		MenuItem item2 = menu.add(base, base+1, base+1, getString(DataView.MENU_CAM_MODE));
-		MenuItem item3 = menu.add(base, base+2, base+2, "Add data source");
 		
 		/*메뉴 항목의 아이콘 할당*/
 		item1.setIcon(android.R.drawable.ic_menu_mapmode);

@@ -155,27 +155,8 @@ public class Json extends DataHandler {
 		// 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다
 		if (jo.has("title") && jo.has("lat") && jo.has("lng") && jo.has("elevation") ) {
 			
-			Bitmap image = null;
 			String title = unescapeHTML(jo.getString("title"), 0); 
-			
-			DownloadMarkerImage downloadImage = new DownloadMarkerImage(title);
-			downloadImage.start();
-			
-			try {
-				
-				downloadImage.join();
-				
-				if (downloadImage.input != null) {
-					BitmapFactory.Options options = new BitmapFactory.Options();
-					options.inSampleSize = 4;
-
-					image = BitmapFactory.decodeStream(downloadImage.input, null, options);
-					downloadImage.input.close();
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
+			Bitmap image = getMarkerImage(title);
 			
 			// 할당된 값들로 마커 생성
 			ma = new ImageMarker(
@@ -188,6 +169,31 @@ public class Json extends DataHandler {
 			
 		}
 		return ma;	// 마커 리턴
+	}
+	
+	public Bitmap getMarkerImage(String title) {
+		Bitmap ret = null;
+		DownloadMarkerImage downloadImage = new DownloadMarkerImage(title);
+		downloadImage.start();
+		
+		try {
+			
+			downloadImage.join();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			downloadImage.interrupt();
+		} 
+		
+		if (downloadImage.input != null) {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 4;
+
+			ret = BitmapFactory.decodeStream(downloadImage.input, null, options);
+		}
+		
+		downloadImage.CloseInputStream();
+		return ret;
 	}
 
 	// 위키피디아 데이터 처리

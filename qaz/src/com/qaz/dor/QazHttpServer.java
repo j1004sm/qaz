@@ -26,6 +26,7 @@ public class QazHttpServer {
 	public static String QAZ_URL_FINDID = QAZ_URL_SERVER + "/find_id.jsp";
 	public static String QAZ_URL_PWCHANGE = QAZ_URL_SERVER + "/pwchange.jsp";
 	public static String QAZ_URL_UPLOAD = QAZ_URL_SERVER + "/upload.jsp";
+	public static String QAZ_URL_DOWNLOAD = QAZ_URL_SERVER + "/check.jsp";
 	public static String QAZ_URL_SECESSION = QAZ_URL_SERVER + "/secession.jsp";
 	public static String QAZ_URL_IMAGEDIR = QAZ_URL_SERVER + "/upload/";
 	

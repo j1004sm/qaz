@@ -18,6 +18,8 @@
  */
 package org.mixare.gui;
 
+import org.mixare.ImageMarker;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -92,7 +94,9 @@ public class PaintScreen {
 
 	// 사각형을 그린다. 출력위치 x, y 값과 넓이, 높이를 인자로 받는다
 	public void paintRect(float x, float y, float width, float height) {
-		canvas.drawRect(x, y, x + width, y + height, paint);
+//		canvas.drawRect(x, y, x + width, y + height, paint);
+		 RectF rect = new RectF(x, y, x + width, y + height);
+		 canvas.drawRoundRect(rect, 15F, 15F, paint);
 	}
 
 	public void paintRoundedRect(float x, float y, float width, float height) {
@@ -125,7 +129,7 @@ public class PaintScreen {
 
 	// 텍스트를 출력한다. 출력위치, 텍스트, 밑줄여부를 인자로 받는다
 	public void paintText(float x, float y, String text, boolean underline) {
-		paint.setUnderlineText(underline);
+//		paint.setUnderlineText(underline);
 		canvas.drawText(text, x, y, paint);
 	}
 

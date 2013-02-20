@@ -30,6 +30,7 @@ import org.mixare.reality.PhysicalPlace;
 import org.mixare.render.Camera;
 import org.mixare.render.MixVector;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
@@ -67,9 +68,6 @@ abstract public class Marker implements Comparable<Marker> {
 	// 라벨과 화면에 표시될 텍스트 블록
 	protected Label txtLab = new Label(); // Label 클래스는 하단에서 정의한다
 	protected TextObj textBlock;
-
-	private String OSMUrlMarker = "";
-	private int OSMUrlID = 0;
 
 	// 생성자. 타이틀과 위도, 경고, 고도값, 링크될 주소와 데이터 소스를 인자로 받는다
 	public Marker(String title, double latitude, double longitude,

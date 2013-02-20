@@ -3,6 +3,8 @@
  */
 package org.mixare;
 
+import java.util.ArrayList;
+
 import org.mixare.data.DataSource;
 import org.mixare.gui.PaintScreen;
 
@@ -17,6 +19,8 @@ import android.location.Location;
 public class ImageMarker extends Marker {
 
 	public static final int MAX_OBJECTS = 15;
+//	public static ArrayList<Bitmap> bitmapMarkerImage = new ArrayList<Bitmap>(); 
+	
 	private Bitmap image = null;
 
 	public ImageMarker(String title, double latitude, double longitude,
@@ -24,9 +28,11 @@ public class ImageMarker extends Marker {
 		super(title, latitude, longitude, altitude, URL, datasource);
 		
 		if (image != null) {
-			this.image = Bitmap.createScaledBitmap(image, image.getWidth()/2, image.getHeight()/2, true);
-			// this.image = image;
+		
+			this.image = Bitmap.createScaledBitmap(image, image.getWidth(), image.getHeight(), true);
 			image.recycle();
+			
+//			bitmapMarkerImage.add(this.image);
 		} else
 			this.image = null;
 
@@ -50,11 +56,21 @@ public class ImageMarker extends Marker {
 	}
 
 	public void drawImage(PaintScreen dw) {
-		if ((isVisible) && (image != null)) {
-			int rectangleBackgroundColor = Color.argb(255, 255, 255, 255);
-			dw.setColor(rectangleBackgroundColor);
-			dw.paintBitmap(image, signMarker.x - (image.getWidth() / 2),
-					signMarker.y - (image.getHeight() / 2));
-		}
+		if (image != null) {
+			if (isVisible) {
+				float left = signMarker.x - (image.getWidth()) / 2;
+				float top = signMarker.y - (image.getHeight()) / 2;
+						
+				int rectangleBackgroundColor = Color.argb(255, 255, 255, 255);
+				dw.setColor(rectangleBackgroundColor);
+
+				dw.paintBitmap(image, left, top);
+			} else
+//				image.recycle();
+				System.gc();
+			
+		} else
+			this.drawCircle(dw);
 	}
+	
 }

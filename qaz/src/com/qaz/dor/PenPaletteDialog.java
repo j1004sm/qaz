@@ -1,7 +1,5 @@
 package com.qaz.dor;
 
-import com.qaz.client.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,11 +10,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+
+import com.qaz.client.R;
 
 public class PenPaletteDialog extends Activity {
 
