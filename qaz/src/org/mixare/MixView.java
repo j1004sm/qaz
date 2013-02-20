@@ -37,7 +37,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -567,6 +566,8 @@ public class MixView extends Activity implements SensorEventListener,
 			// 다운로드 스레드의 활성화
 			downloadThread = new Thread(mixContext.downloadManager);
 			downloadThread.start();
+			
+			Toast.makeText(getApplicationContext(), "마커 데이터를 받는 중입니다...", Toast.LENGTH_SHORT).show();
 		} catch (Exception ex) {
 			doError(ex); // 에러 처리
 			Log.e("Qaz-Mixare", "Initialize Error", ex);

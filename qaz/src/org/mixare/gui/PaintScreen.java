@@ -18,8 +18,6 @@
  */
 package org.mixare.gui;
 
-import org.mixare.ImageMarker;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;

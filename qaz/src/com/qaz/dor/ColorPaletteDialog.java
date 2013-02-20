@@ -1,18 +1,18 @@
 package com.qaz.dor;
 
-import com.qaz.client.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+
+import com.qaz.client.R;
 
 public class ColorPaletteDialog extends Activity {
 

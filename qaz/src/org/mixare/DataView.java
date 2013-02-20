@@ -317,6 +317,7 @@ public class DataView {
 
 					// 데이터 핸들러에 마커를 추가 한다 
 					Log.i(MixView.TAG,"Adding Markers");
+					dataHandler = new DataHandler();
 					dataHandler.addMarkers(dRes.getMarkers());
 					dataHandler.onLocationChanged(curFix);	// 위치를 재설정
 					

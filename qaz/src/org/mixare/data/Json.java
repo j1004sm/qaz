@@ -19,7 +19,6 @@
 package org.mixare.data;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,14 +157,17 @@ public class Json extends DataHandler {
 			String title = unescapeHTML(jo.getString("title"), 0); 
 			Bitmap image = getMarkerImage(title);
 			
-			// 할당된 값들로 마커 생성
-			ma = new ImageMarker(
-					title, 
-					jo.getDouble("lat"), 
-					jo.getDouble("lng"), 
-					jo.getDouble("elevation"), 
-					unescapeHTML(jo.getString("webpage"), 0),
-					image, datasource);
+			if (image != null)
+				// 할당된 값들로 마커 생성
+				ma = new ImageMarker(title, jo.getDouble("lat"),
+						jo.getDouble("lng"), jo.getDouble("elevation"),
+						unescapeHTML(jo.getString("webpage"), 0), image,
+						datasource);
+			else
+				ma = new POIMarker(title, jo.getDouble("lat"),
+						jo.getDouble("lng"), jo.getDouble("elevation"),
+						unescapeHTML(jo.getString("webpage"), 0),
+						datasource);
 			
 		}
 		return ma;	// 마커 리턴
@@ -173,26 +175,26 @@ public class Json extends DataHandler {
 	
 	public Bitmap getMarkerImage(String title) {
 		Bitmap ret = null;
-		DownloadMarkerImage downloadImage = new DownloadMarkerImage(title);
-		downloadImage.start();
+		DownloadMarkerImage downloadMarkerImage = new DownloadMarkerImage(title);
+		downloadMarkerImage.start();
 		
 		try {
 			
-			downloadImage.join();
+			downloadMarkerImage.join();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			downloadImage.interrupt();
+			downloadMarkerImage.interrupt();
 		} 
 		
-		if (downloadImage.input != null) {
+		if (downloadMarkerImage.input != null) {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = 4;
 
-			ret = BitmapFactory.decodeStream(downloadImage.input, null, options);
+			ret = BitmapFactory.decodeStream(downloadMarkerImage.input, null, options);
 		}
 		
-		downloadImage.CloseInputStream();
+		downloadMarkerImage.CloseInputStream();
 		return ret;
 	}
 

@@ -22,7 +22,6 @@ package org.mixare;
 import org.mixare.data.DataSource;
 import org.mixare.gui.PaintScreen;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;

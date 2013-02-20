@@ -30,7 +30,6 @@ import org.mixare.reality.PhysicalPlace;
 import org.mixare.render.Camera;
 import org.mixare.render.MixVector;
 
-import android.graphics.Bitmap;
 import android.location.Location;
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
