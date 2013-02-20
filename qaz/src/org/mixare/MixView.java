@@ -568,6 +568,8 @@ public class MixView extends Activity implements SensorEventListener,
 			} catch (Exception ex) {
 				Log.e("Qaz-Mixare", "GPS Initialize Error", ex); // 초기화 에러 로그
 			}
+			
+			dataView.refresh();
 			// 다운로드 스레드의 활성화
 			downloadThread = new Thread(mixContext.downloadManager);
 			downloadThread.start();
