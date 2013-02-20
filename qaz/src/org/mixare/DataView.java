@@ -264,8 +264,6 @@ public class DataView {
 		// 카메라 객체의 회전행렬로 장치각과 방위각을 계산
 		state.calcPitchBearing(cam.transform);
 		
-		dataHandler = new DataHandler();
-
 		// Load Layer
 		// 아직 시작되지 않은 상태이고, 데이터 뷰가 얼어있지 않은 경우 
 		if (state.nextLStatus == MixState.NOT_STARTED && !frozen) {
