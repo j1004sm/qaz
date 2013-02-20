@@ -26,7 +26,10 @@ import static android.view.KeyEvent.KEYCODE_DPAD_RIGHT;
 import static android.view.KeyEvent.KEYCODE_DPAD_UP;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.mixare.data.DataHandler;
 import org.mixare.data.DataSource;
@@ -72,6 +75,10 @@ public class DataView {
 	private Location curFix;	// 수정된 현재 위치
 	private DataHandler dataHandler = new DataHandler();	// 데이터 핸들러	
 	private float radius = 20;	// 검색 반경
+	
+	/** timer to refresh the browser */
+	private Timer refresh = null;
+	private final long refreshDelay = 45 * 1000; //refresh every 45 seconds
 	
 	/** MixView 클래스의 메뉴 항목과 메뉴 옵션들에 사용될 스트링의 상수값 **/
 	public static final int EMPTY_LIST_STRING_ID = R.string.empty_list;
@@ -256,6 +263,8 @@ public class DataView {
 
 		// 카메라 객체의 회전행렬로 장치각과 방위각을 계산
 		state.calcPitchBearing(cam.transform);
+		
+		dataHandler = new DataHandler();
 
 		// Load Layer
 		// 아직 시작되지 않은 상태이고, 데이터 뷰가 얼어있지 않은 경우 
@@ -317,7 +326,6 @@ public class DataView {
 
 					// 데이터 핸들러에 마커를 추가 한다 
 					Log.i(MixView.TAG,"Adding Markers");
-					dataHandler = new DataHandler();
 					dataHandler.addMarkers(dRes.getMarkers());
 					dataHandler.onLocationChanged(curFix);	// 위치를 재설정
 					
@@ -329,6 +337,20 @@ public class DataView {
 			if(dm.isDone()) {	// 다운로드 관리자의 작업이 끝난 경우
 				retry = 0;	// 재시도 횟수 초기화
 				state.nextLStatus = MixState.DONE;	// 다음 상태는 완료로
+				
+				if (refresh == null) { // start the refresh timer if it is null
+					refresh = new Timer(false);
+					Date date = new Date(System.currentTimeMillis()
+							+ refreshDelay);
+					refresh.schedule(new TimerTask() {
+
+						@Override
+						public void run() {
+							callRefreshToast();
+							refresh();
+						}
+					}, date, refreshDelay);
+				}
 			}
 		}
 
@@ -476,6 +498,30 @@ public class DataView {
 		synchronized (uiEvents) {
 			uiEvents.clear();
 		}
+	}
+	
+	public void cancelRefreshTimer(){
+		if( refresh != null) {
+			refresh.cancel();
+		}
+	}
+	
+	/**
+	 * Re-downloads the markers, and draw them on the map.
+	 */
+	public void refresh(){
+		dataHandler = new DataHandler();
+		state.nextLStatus = MixState.NOT_STARTED;
+	}
+
+	private void callRefreshToast() {
+		MixView.mixView.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Toast.makeText(mixContext, mixContext.getResources().getString(R.string.refreshing), Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 }
 

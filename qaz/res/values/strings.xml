@@ -79,4 +79,5 @@
     <string name="add_osm_menu">OpenStreetMap URL 추가</string>
 	<string name="insert_osm_url">OpenStreetMap URL 편집</string>
 	<string name="osm_max_object_menu">URL 당 최대 POI 마커 수 설정</string>
-	<string name="set_osm_max_object">URL 당 최대 POI들</string></resources>
+	<string name="set_osm_max_object">URL 당 최대 POI들</string>
+	<string name="refreshing">새로고침 중...</string></resources>

@@ -162,6 +162,7 @@ public final class R {
         public static final int osm_max_object_menu=0x7f060045;
         public static final int qaz_info=0x7f06003d;
         public static final int qaz_info_title=0x7f06003e;
+        public static final int refreshing=0x7f060047;
         public static final int search_active_1=0x7f060039;
         public static final int search_active_2=0x7f06003a;
         public static final int search_failed_notification=0x7f060037;

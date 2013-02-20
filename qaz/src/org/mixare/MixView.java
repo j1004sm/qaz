@@ -473,6 +473,11 @@ public class MixView extends Activity implements SensorEventListener,
 				// 다운로드 관리자를 중지
 				mixContext.unregisterLocationManager();
 				mixContext.downloadManager.stop();
+				
+				if(dataView != null){
+					dataView.cancelRefreshTimer();
+				}
+				
 			} catch (Exception ignore) {
 			}
 

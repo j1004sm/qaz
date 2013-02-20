@@ -24,8 +24,8 @@ public class ImageMarker extends Marker {
 			double altitude, String URL, Bitmap image, DataSource datasource) {
 		
 		super(title, latitude, longitude, altitude, URL, datasource);
-		this.image = Bitmap.createScaledBitmap(image, image.getWidth(),
-				image.getHeight(), true);
+		this.image = Bitmap.createScaledBitmap(image, image.getWidth()/2,
+				image.getHeight()/2, true);
 		image.recycle();
 
 		// bitmapMarkerImage.add(this.image);
@@ -56,6 +56,6 @@ public class ImageMarker extends Marker {
 
 		}
 		
-		System.gc();
+//		System.gc();
 	}
 }
