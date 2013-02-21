@@ -255,7 +255,7 @@ public class MixView extends Activity implements SensorEventListener,
 					PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
 
 			killOnError(); // 에러 여부를 체크한다
-			requestWindowFeature(Window.FEATURE_ACTION_BAR); // 타이틀 바가 없는 윈도우 형태로
+//			requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 바가 없는 윈도우 형태로
 
 			/* 내부 메모리에 저장된 프레퍼런스를 불러온다 */
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
