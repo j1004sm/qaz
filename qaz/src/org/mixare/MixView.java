@@ -620,7 +620,7 @@ public class MixView extends Activity implements SensorEventListener,
 	// 옵션 메뉴의 생성
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
+		super.onCreateOptionsMenu(menu);
 		// 메뉴 버튼을 눌렀을 때 출력될 메뉴를 설정한다.
 
 		int base = Menu.FIRST;
@@ -1101,8 +1101,8 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 				// holder for the best form factor and size
 				// 최적의 형태의 팩터와 사이즈의 홀더를 구한다
 				float bff = 0;
-				int bestw = 0;
-				int besth = 0;
+				int bestw = 480;
+				int besth = 800;
 				Iterator<Camera.Size> itr = supportedSizes.iterator();
 
 				// 우리는 최적의 프리뷰 사이즈를 찾을 것이고
@@ -1143,12 +1143,12 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 				// 이런 경우에는 디폴트 값(480*800)을 주도록 한다
 				if ((bestw == 0) || (besth == 0)) {
 					Log.d("Qaz-Mixare", "Using default camera parameters!");
-					bestw = 800;
-					besth = 480;
+					bestw = 480;
+					besth = 800;
 				}
 				parameters.setPreviewSize(bestw, besth); // 프리뷰 사이즈 최종 설정
 			} catch (Exception ex) { // 예외 발생시에도 디폴트 값으로...
-				parameters.setPreviewSize(800, 480);
+				parameters.setPreviewSize(480, 800);
 			}
 
 			// 모든 값이 입력된 파라메터를 카메라에 적용하고

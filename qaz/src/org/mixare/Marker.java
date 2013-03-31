@@ -188,6 +188,7 @@ abstract public class Marker implements Comparable<Marker> {
 		// location
 		// 유저 위치로부터 POI 위치 까지의 관계 지점의 벡터를 계산한다
 		PhysicalPlace.convLocToVec(curGPSFix, mGeoLoc, locationVector);
+		
 	}
 
 	// 그려질 위치를 계산
@@ -238,6 +239,7 @@ abstract public class Marker implements Comparable<Marker> {
 	public void draw(PaintScreen dw) {
 		drawCircle(dw);
 		drawTextBlock(dw);
+		
 	}
 
 	// 스크린에 원을 그린다

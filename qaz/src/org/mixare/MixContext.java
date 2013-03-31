@@ -167,37 +167,36 @@ public class MixContext extends ContextWrapper {
 	
 	public void registerLocationManager() {
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
 		Criteria c = new Criteria();
+		
+		String coarseProvider = lm.getBestProvider(c, true);
+		String fineProvider = lm.getBestProvider(c, true);
+		
 		//try to use the coarse provider first to get a rough position
 		c.setAccuracy(Criteria.ACCURACY_COARSE);
-		String coarseProvider = lm.getBestProvider(c, true);
 		try {
 			lm.requestLocationUpdates(coarseProvider, 0 , 0, lcoarse);
 		} catch (Exception e) {
 			Log.d(TAG, "Could not initialize the coarse provider");
 		}
-
-		//need to be precise
-		c.setAccuracy(Criteria.ACCURACY_FINE);				
-		//fineProvider will be used for the initial phase (requesting fast updates)
-		//as well as during normal program usage
-		//NB: using "true" as second parameters means we get the provider only if it's enabled
-		String fineProvider = lm.getBestProvider(c, true);
-		try {
-			lm.requestLocationUpdates(fineProvider, 0 , 0, lbounce);
-		} catch (Exception e) {
-			Log.d(TAG, "Could not initialize the bounce provider");
-		}
-
-		//fallback for the case where GPS and network providers are disabled
-		Location hardFix = new Location("reverseGeocoded");
-
-		//Frangart, Eppan, Bozen, Italy
-		hardFix.setLatitude(46.480302);
-		hardFix.setLongitude(11.296005);
-		hardFix.setAltitude(300);
-
+		
+		if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			 Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+	    } else {
+			//need to be precise
+			c.setAccuracy(Criteria.ACCURACY_FINE);				
+			//fineProvider will be used for the initial phase (requesting fast updates)
+			//as well as during normal program usage
+			//NB: using "true" as second parameters means we get the provider only if it's enabled
+			
+			try {
+				lm.requestLocationUpdates(fineProvider, 0 , 0, lbounce);
+			} catch (Exception e) {
+				Log.d(TAG, "Could not initialize the bounce provider");
+			}
+	    	
+	    }
+		
 		//frequency and minimum distance for update
 		//this values will only be used after there's a good GPS fix
 		//see back-off pattern discussion 
@@ -209,8 +208,16 @@ public class MixContext extends ContextWrapper {
 			lm.requestLocationUpdates(fineProvider, lFreq , lDist, lnormal);
 		} catch (Exception e) {
 			Log.d(TAG, "Could not initialize the normal provider");
-			Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+			Toast.makeText( this, "현재 위치를 찾는데 실패했습니다", Toast.LENGTH_LONG ).show();
 		}
+		
+		//fallback for the case where GPS and network providers are disabled
+		Location hardFix = new Location("reverseGeocoded");
+
+		//강남대학교 후생관(개발된 장소)을 기준점으로 지정
+		hardFix.setLatitude(37.276819);
+		hardFix.setLongitude(127.13297);
+		hardFix.setAltitude(0);
 		
 		try {
 			
@@ -227,10 +234,11 @@ public class MixContext extends ContextWrapper {
 			ex2.printStackTrace();
 			curLoc = hardFix;
 			
-			Toast.makeText( this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG ).show();
+			Toast.makeText( this, "현재 위치를 찾는데 실패했습니다", Toast.LENGTH_LONG ).show();
 		}
 		
 		setLocationAtLastDownload(curLoc);
+
 	}
 
 	// 사용중인 다운로드 관리자 리턴

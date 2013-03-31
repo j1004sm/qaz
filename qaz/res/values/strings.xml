@@ -41,7 +41,7 @@
     <string name="connection_error_dialog_button1">계속</string>
     <string name="connection_error_dialog_button2">설정</string>
     <string name="connection_error_dialog_button3">종료</string>
-    <string name="connection_GPS_dialog_text">GPS가 켜져 있는지 점검해주세요</string>
+    <string name="connection_GPS_dialog_text">실외라면 GPS를 켜주세요</string>
     <string name="connection_GPS_dialog_button1">계속</string>
     <string name="connection_GPS_dialog_button2">종료</string>
     <string name="no_website_available">죄송합니다. 더 이상 정보가 존재하지 않습니다.</string>
@@ -70,7 +70,7 @@
     <string name="search_active_2">. 검색을 종료하려면 터치하세요</string>
     <string name="download_error">에서 데이터를 받던 중에 문제가 생겼습니다.</string>
     <string name="download_received">에서 데이터를 받았습니다</string>
-    <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따릅니다. \n\n강남대학교 컴퓨터미디어정보공학부 \n 한만종, 안훈민, 이영기 \n\n 어플리케이션에 관한 문의는 aksmj8855@hotmail.com으로 해주시기 바랍니다. \n\n 앱 아이콘 라이센스 : GPL / Sergio Sánchez López - http://www.kde-look.org/usermanager/search.php?username=Sephiroth6779</string>
+    <string name="qaz_info">DrawOnReal은 오픈소스 증강현실 엔진인 Mixare를 기반으로 한 새로운 개념의 증강현실 어플리케이션입니다. DrawOnReal은 GPLv3 라이센스를 따릅니다.\n\n강남대학교 컴퓨터미디어정보공학부\n안훈민, 이영기, 한만종\n\n어플리케이션에 관한 문의는 aksmj8855@hotmail.com으로 해주시기 바랍니다.\n\n앱 아이콘 라이센스 : GPL / Sergio Sánchez López - http://www.kde-look.org/usermanager/search.php?username=Sephiroth6779</string>
     <string name="qaz_info_title">어플리케이션 정보</string>
     <string name="askExit">정말로 탈퇴하시겠습니까?</string>
     <string name="exitTitle">회원탈퇴</string>

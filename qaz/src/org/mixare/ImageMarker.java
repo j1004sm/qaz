@@ -57,7 +57,7 @@ public class ImageMarker extends Marker {
 			dw.paintBitmap(image, left, top);
 
 		}
+			
 		
-//		System.gc();
 	}
 }
